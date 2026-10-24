@@ -1,4 +1,4 @@
-import { pgTable, serial, text, integer, doublePrecision, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, varchar, integer, doublePrecision, timestamp } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
 // ==============================================================================
@@ -7,7 +7,9 @@ import { relations } from "drizzle-orm";
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
+  fullName: text("full_name"),
   email: text("email").unique().notNull(),
+  phone: varchar("phone", { length: 256 }),
   passwordHash: text("password_hash").notNull(),
   salt: text("salt").notNull(),
   role: text("role").default("Researcher").notNull(),

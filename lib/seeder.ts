@@ -40,7 +40,9 @@ export async function seedSupabaseDatabase(): Promise<{
     CREATE TABLE IF NOT EXISTS users (
       id SERIAL PRIMARY KEY,
       name TEXT NOT NULL,
+      full_name TEXT,
       email TEXT UNIQUE NOT NULL,
+      phone VARCHAR(256),
       password_hash TEXT NOT NULL,
       salt TEXT NOT NULL,
       role TEXT NOT NULL DEFAULT 'Researcher',
