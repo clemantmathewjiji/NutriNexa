@@ -10,15 +10,18 @@ const globalForDb = global as unknown as {
   supabaseClient?: SupabaseClient;
 };
 
-const databaseUrl = process.env.DATABASE_URL?.trim();
+export function getDatabaseUrl(): string | undefined {
+  return process.env.DATABASE_URL?.trim();
+}
 
 export function isDbConnected(): boolean {
+  const url = getDatabaseUrl();
   return Boolean(
-    databaseUrl &&
-      databaseUrl.length > 10 &&
-      (databaseUrl.startsWith("postgres://") || databaseUrl.startsWith("postgresql://")) &&
-      !databaseUrl.includes("[YOUR-PASSWORD]") &&
-      !databaseUrl.includes("[PASSWORD]")
+    url &&
+      url.length > 10 &&
+      (url.startsWith("postgres://") || url.startsWith("postgresql://")) &&
+      !url.includes("[YOUR-PASSWORD]") &&
+      !url.includes("[PASSWORD]")
   );
 }
 
@@ -27,16 +30,18 @@ export function getDb(): PostgresJsDatabase<typeof schema> | null {
     return null;
   }
 
+  const url = getDatabaseUrl()!;
+
   if (!globalForDb.drizzleDb) {
     try {
       const client =
         globalForDb.sqlClient ||
-        postgres(databaseUrl!, {
+        postgres(url, {
           max: 10,
           idle_timeout: 20,
           connect_timeout: 10,
           prepare: false,
-          ssl: databaseUrl!.includes("localhost") ? false : "prefer",
+          ssl: url.includes("localhost") ? false : "prefer",
         });
 
       globalForDb.sqlClient = client;
