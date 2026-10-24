@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { projectsApi } from "../api";
-import { ProjectRecord, DescriptiveStat } from "../types";
+import { ProjectRecord } from "../types";
 import {
-  FlaskConical, Plus, Upload, FileSpreadsheet,
-  CheckCircle2, ArrowRight, Table, BarChart2, Info
+  FlaskConical, Plus, Upload,
+  BarChart2, X
 } from "lucide-react";
+import { useTranslation } from "../i18n/LanguageContext";
 
 export const ResearchProjectsView: React.FC = () => {
+  const { t, formatNumber, formatDate } = useTranslation();
   const [projects, setProjects] = useState<ProjectRecord[]>([]);
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
   const [projectDetail, setProjectDetail] = useState<any>(null);
@@ -70,7 +72,6 @@ export const ResearchProjectsView: React.FC = () => {
 
   const handleSimulateDatasetUpload = async () => {
     if (!selectedProjectId) return;
-    // Real synthetic data matrix for 20 subjects
     const mockData = [
       { subject: "S01", energy_kcal: 2150, protein_g: 72.5, fiber_g: 22.0, bmi: 23.4 },
       { subject: "S02", energy_kcal: 1890, protein_g: 65.0, fiber_g: 18.5, bmi: 21.8 },
@@ -102,21 +103,21 @@ export const ResearchProjectsView: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-[#E2E8E2] shadow-xs">
         <div>
-          <h1 className="text-xl font-bold text-[#174C3A] flex items-center space-x-2">
+          <h1 className="text-xl font-bold text-[#174C3A] flex items-center gap-2">
             <FlaskConical className="w-5 h-5 text-[#2D8C83]" />
-            <span>Research Projects & Scientific Datasets</span>
+            <span>{t("projectsTitle")}</span>
           </h1>
           <p className="text-xs text-[#52635C] mt-1">
-            Organize academic study cohorts, link nutrient calculations, and compute descriptive statistics (Mean, Median, SD, Range).
+            {t("projectsSubtitle")}
           </p>
         </div>
 
         <button
           onClick={() => setShowNewProjModal(true)}
-          className="bg-[#174C3A] hover:bg-[#123C2E] text-white text-xs font-semibold px-4 py-2 rounded-lg shadow-xs flex items-center space-x-1.5 transition"
+          className="bg-[#174C3A] hover:bg-[#123C2E] text-white text-xs font-semibold px-4 py-2 rounded-lg shadow-xs flex items-center gap-1.5 transition"
         >
           <Plus className="w-4 h-4" />
-          <span>New Research Project</span>
+          <span>{t("newResearchProject")}</span>
         </button>
       </div>
 
@@ -124,7 +125,7 @@ export const ResearchProjectsView: React.FC = () => {
         {/* Left: Project Selector List */}
         <div className="bg-white rounded-xl border border-[#E2E8E2] p-4 shadow-xs space-y-3">
           <div className="text-xs font-bold uppercase tracking-wider text-[#7D9087] pb-2 border-b border-[#E2E8E2]">
-            Academic Projects ({projects.length})
+            {t("academicProjects")} ({projects.length})
           </div>
 
           <div className="space-y-2">
@@ -173,10 +174,10 @@ export const ResearchProjectsView: React.FC = () => {
                   </span>
                   <button
                     onClick={() => setShowDatasetModal(true)}
-                    className="bg-[#2D8C83] hover:bg-[#237069] text-white text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center space-x-1.5 transition"
+                    className="bg-[#2D8C83] hover:bg-[#237069] text-white text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition"
                   >
                     <Upload className="w-3.5 h-3.5" />
-                    <span>Import Research Dataset</span>
+                    <span>{t("importDataset")}</span>
                   </button>
                 </div>
 
@@ -184,10 +185,10 @@ export const ResearchProjectsView: React.FC = () => {
 
                 <div className="text-xs space-y-2 text-[#52635C]">
                   <div>
-                    <strong>Scientific Objectives:</strong> {projectDetail.project.objectives || "Not specified"}
+                    <strong>{t("scientificObjectives")}:</strong> {projectDetail.project.objectives || "Not specified"}
                   </div>
                   <div>
-                    <strong>Methodology:</strong> {projectDetail.project.methodology_notes || "Standardized dietary assessments"}
+                    <strong>{t("methodologyNotes")}:</strong> {projectDetail.project.methodology_notes || "Standardized dietary assessments"}
                   </div>
                 </div>
               </div>
@@ -196,12 +197,12 @@ export const ResearchProjectsView: React.FC = () => {
               <div className="bg-white rounded-xl border border-[#E2E8E2] shadow-xs overflow-hidden">
                 <div className="p-4 border-b border-[#E2E8E2] bg-[#F7F9F7] flex items-center justify-between">
                   <div>
-                    <h3 className="text-sm font-bold text-[#174C3A] flex items-center space-x-1.5">
+                    <h3 className="text-sm font-bold text-[#174C3A] flex items-center gap-1.5">
                       <BarChart2 className="w-4 h-4 text-[#2D8C83]" />
-                      <span>Quantitative Datasets & Descriptive Statistics</span>
+                      <span>{t("quantitativeDatasets")}</span>
                     </h3>
                     <p className="text-xs text-[#52635C]">
-                      Real computed Mean, Median, Standard Deviation, and Min-Max ranges.
+                      {t("descriptiveStatsSubtitle")}
                     </p>
                   </div>
                   <span className="text-xs text-[#7D9087]">
@@ -216,39 +217,47 @@ export const ResearchProjectsView: React.FC = () => {
                         <div className="flex justify-between items-center">
                           <div>
                             <span className="font-bold text-xs text-[#192520]">{ds.dataset_name}</span>
-                            <span className="text-[11px] text-[#7D9087] ml-2">
-                              (Sample Size N = {ds.row_count} observations)
+                            <span className="text-[11px] text-[#7D9087] mx-2">
+                              ({t("sampleSizeN")} = {ds.row_count} observations)
                             </span>
                           </div>
                           <span className="text-[10px] text-[#7D9087]">
-                            Uploaded {new Date(ds.uploaded_at).toLocaleDateString()}
+                            Uploaded {formatDate(ds.uploaded_at)}
                           </span>
                         </div>
 
                         {/* Descriptive Statistics Table */}
                         <div className="overflow-x-auto text-xs">
-                          <table className="w-full text-left border border-[#E2E8E2] rounded-lg overflow-hidden">
+                          <table className="w-full text-left rtl:text-right border border-[#E2E8E2] rounded-lg overflow-hidden">
                             <thead className="bg-[#F1F5F2] font-semibold text-[#192520]">
                               <tr>
                                 <th className="py-2 px-3">Variable</th>
-                                <th className="py-2 px-3 text-right">N</th>
-                                <th className="py-2 px-3 text-right">Mean</th>
-                                <th className="py-2 px-3 text-right">Median</th>
-                                <th className="py-2 px-3 text-right">Std Dev (SD)</th>
-                                <th className="py-2 px-3 text-right">Min</th>
-                                <th className="py-2 px-3 text-right">Max</th>
+                                <th className="py-2 px-3 text-right rtl:text-left">{t("sampleSizeN")}</th>
+                                <th className="py-2 px-3 text-right rtl:text-left">{t("mean")}</th>
+                                <th className="py-2 px-3 text-right rtl:text-left">{t("median")}</th>
+                                <th className="py-2 px-3 text-right rtl:text-left">{t("stdDev")}</th>
+                                <th className="py-2 px-3 text-right rtl:text-left">{t("minVal")}</th>
+                                <th className="py-2 px-3 text-right rtl:text-left">{t("maxVal")}</th>
                               </tr>
                             </thead>
                             <tbody className="divide-y divide-[#E2E8E2]">
-                              {Object.entries(ds.descriptive_stats || {}).map(([varName, stat]: [string, any]) => (
-                                <tr key={varName} className="hover:bg-[#F7F9F7]">
-                                  <td className="py-2 px-3 font-semibold font-mono text-[#174C3A]">{varName}</td>
-                                  <td className="py-2 px-3 text-right text-[#52635C]">{stat.n}</td>
-                                  <td className="py-2 px-3 text-right font-bold text-[#192520]">{stat.mean}</td>
-                                  <td className="py-2 px-3 text-right text-[#52635C]">{stat.median}</td>
-                                  <td className="py-2 px-3 text-right text-[#7D9087]">±{stat.std_dev}</td>
-                                  <td className="py-2 px-3 text-right text-[#52635C]">{stat.min}</td>
-                                  <td className="py-2 px-3 text-right text-[#52635C]">{stat.max}</td>
+                              {ds.descriptive_stats?.map((stat: any) => (
+                                <tr key={stat.variable} className="hover:bg-[#F7F9F7]">
+                                  <td className="py-2 px-3 font-semibold text-[#192520] capitalize">
+                                    {stat.variable.replace(/_/g, " ")}
+                                  </td>
+                                  <td className="py-2 px-3 text-right rtl:text-left text-[#52635C] ltr-only">{stat.n}</td>
+                                  <td className="py-2 px-3 text-right rtl:text-left font-bold text-[#174C3A] ltr-only">
+                                    {formatNumber(stat.mean, 2)}
+                                  </td>
+                                  <td className="py-2 px-3 text-right rtl:text-left font-medium text-[#2D8C83] ltr-only">
+                                    {formatNumber(stat.median, 2)}
+                                  </td>
+                                  <td className="py-2 px-3 text-right rtl:text-left text-[#52635C] ltr-only">
+                                    &plusmn;{formatNumber(stat.std_dev, 2)}
+                                  </td>
+                                  <td className="py-2 px-3 text-right rtl:text-left text-[#7D9087] ltr-only">{formatNumber(stat.min, 1)}</td>
+                                  <td className="py-2 px-3 text-right rtl:text-left text-[#7D9087] ltr-only">{formatNumber(stat.max, 1)}</td>
                                 </tr>
                               ))}
                             </tbody>
@@ -258,15 +267,15 @@ export const ResearchProjectsView: React.FC = () => {
                     ))}
                   </div>
                 ) : (
-                  <div className="p-8 text-center text-[#7D9087] text-xs">
-                    No research datasets uploaded yet for this protocol.
+                  <div className="p-8 text-center text-xs text-[#7D9087]">
+                    No quantitative dataset uploaded yet. Click "Import Research Dataset" to import observations.
                   </div>
                 )}
               </div>
             </div>
           ) : (
             <div className="bg-white rounded-xl border border-[#E2E8E2] p-12 text-center text-[#7D9087] text-xs">
-              Select an academic project from the left or create a new study.
+              Select an academic project from the left or create a new study protocol.
             </div>
           )}
         </div>
@@ -276,15 +285,20 @@ export const ResearchProjectsView: React.FC = () => {
       {showNewProjModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
           <div className="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-[#E2E8E2] p-6 space-y-4 text-xs animate-in fade-in zoom-in-95">
-            <h3 className="text-sm font-bold text-[#174C3A]">Create New Research Project</h3>
+            <div className="flex justify-between items-center">
+              <h3 className="text-sm font-bold text-[#174C3A]">{t("newResearchProject")}</h3>
+              <button onClick={() => setShowNewProjModal(false)} className="text-[#7D9087] hover:text-[#192520]">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
             <form onSubmit={handleCreateProject} className="space-y-3">
               <div>
-                <label className="block font-semibold mb-1">Study Title *</label>
+                <label className="block font-semibold mb-1">{t("studyTitle")} *</label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Dietary Fiber & Glycemic Response in Undergraduate Students"
+                  placeholder="e.g. Bioavailability of Plant Micronutrients in Young Adults"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   className="w-full px-3 py-2 border rounded-lg"
@@ -292,52 +306,52 @@ export const ResearchProjectsView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-semibold mb-1">Protocol / IRB Code *</label>
+                <label className="block font-semibold mb-1">{t("protocolCode")} *</label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. NUTRI-2026-B"
+                  placeholder="e.g. BIO-2026-B"
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-lg font-mono"
+                  className="w-full px-3 py-2 border rounded-lg font-mono uppercase"
                 />
               </div>
 
               <div>
-                <label className="block font-semibold mb-1">Research Objectives</label>
+                <label className="block font-semibold mb-1">{t("scientificObjectives")}</label>
                 <textarea
                   rows={2}
-                  placeholder="Specific scientific aims and nutritional hypotheses."
                   value={objectives}
                   onChange={(e) => setObjectives(e.target.value)}
                   className="w-full px-3 py-2 border rounded-lg"
-                />
+                  placeholder="Primary and secondary study hypotheses..."
+                ></textarea>
               </div>
 
               <div>
-                <label className="block font-semibold mb-1">Methodology Notes</label>
+                <label className="block font-semibold mb-1">{t("methodologyNotes")}</label>
                 <textarea
                   rows={2}
-                  placeholder="Assessment method (24h recall, weighed record, sample size)."
                   value={methodology}
                   onChange={(e) => setMethodology(e.target.value)}
                   className="w-full px-3 py-2 border rounded-lg"
-                />
+                  placeholder="Sampling protocol, analytical procedures..."
+                ></textarea>
               </div>
 
-              <div className="flex justify-end space-x-2 pt-2">
+              <div className="flex justify-end gap-2 pt-2">
                 <button
                   type="button"
                   onClick={() => setShowNewProjModal(false)}
                   className="px-3 py-1.5 border rounded-lg"
                 >
-                  Cancel
+                  {t("cancel")}
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-1.5 bg-[#174C3A] text-white font-bold rounded-lg"
+                  className="px-4 py-1.5 bg-[#174C3A] text-white rounded-lg font-bold"
                 >
-                  Initialize Study
+                  {t("save")}
                 </button>
               </div>
             </form>
@@ -345,27 +359,30 @@ export const ResearchProjectsView: React.FC = () => {
         </div>
       )}
 
-      {/* DATASET IMPORT MODAL */}
+      {/* IMPORT DATASET MODAL */}
       {showDatasetModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
           <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-[#E2E8E2] p-6 space-y-4 text-xs animate-in fade-in zoom-in-95">
-            <h3 className="text-sm font-bold text-[#174C3A]">Import Academic Study Dataset</h3>
-            <p className="text-xs text-[#52635C]">
-              NutriNexa automatically validates variable columns and calculates real descriptive statistics (Mean, Median, SD, Range).
-            </p>
+            <div className="flex justify-between items-center">
+              <h3 className="text-sm font-bold text-[#174C3A]">{t("importDataset")}</h3>
+              <button onClick={() => setShowDatasetModal(false)} className="text-[#7D9087] hover:text-[#192520]">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
             <div className="space-y-3">
               <div>
-                <label className="block font-semibold mb-1">Dataset Label</label>
+                <label className="block font-semibold mb-1">Dataset Matrix Name</label>
                 <input
                   type="text"
                   value={datasetName}
                   onChange={(e) => setDatasetName(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-lg"
+                  className="w-full px-3 py-2 border rounded-lg font-mono"
                 />
               </div>
+
               <div>
-                <label className="block font-semibold mb-1">Cohort Description</label>
+                <label className="block font-semibold mb-1">{t("description")}</label>
                 <input
                   type="text"
                   value={datasetDesc}
@@ -373,27 +390,27 @@ export const ResearchProjectsView: React.FC = () => {
                   className="w-full px-3 py-2 border rounded-lg"
                 />
               </div>
-            </div>
 
-            <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-[11px] text-[#174C3A]">
-              ✓ Ready to process 10 subject observations with variables: <code>energy_kcal</code>, <code>protein_g</code>, <code>fiber_g</code>, <code>bmi</code>.
-            </div>
+              <div className="p-3 bg-[#F7F9F7] border border-[#E2E8E2] rounded-lg text-[11px] text-[#52635C]">
+                Ready to parse CSV array (Energy, Protein, Fiber, BMI) across 10 subject records.
+              </div>
 
-            <div className="flex justify-end space-x-2 pt-2">
-              <button
-                type="button"
-                onClick={() => setShowDatasetModal(false)}
-                className="px-3 py-1.5 border rounded-lg"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleSimulateDatasetUpload}
-                className="px-4 py-1.5 bg-[#174C3A] text-white font-bold rounded-lg"
-              >
-                Upload & Calculate Statistics
-              </button>
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowDatasetModal(false)}
+                  className="px-3 py-1.5 border rounded-lg"
+                >
+                  {t("cancel")}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSimulateDatasetUpload}
+                  className="px-4 py-1.5 bg-[#2D8C83] text-white rounded-lg font-bold"
+                >
+                  Confirm & Calculate
+                </button>
+              </div>
             </div>
           </div>
         </div>

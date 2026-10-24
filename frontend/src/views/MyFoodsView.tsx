@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { foodsApi, recipesApi } from "../api";
-import { FoodItem, RecipeRecord } from "../types";
-import { BookOpen, UtensilsCrossed, Database, Plus, Trash2, ExternalLink } from "lucide-react";
+import { recipesApi } from "../api";
+import { RecipeRecord } from "../types";
+import { BookOpen, UtensilsCrossed, Plus } from "lucide-react";
 import { NavSection } from "../components/Sidebar";
+import { useTranslation } from "../i18n/LanguageContext";
 
 interface MyFoodsViewProps {
   onNavigate: (section: NavSection) => void;
 }
 
 export const MyFoodsView: React.FC<MyFoodsViewProps> = ({ onNavigate }) => {
+  const { t, formatNumber } = useTranslation();
   const [recipes, setRecipes] = useState<RecipeRecord[]>([]);
-  const [activeTab, setActiveTab] = useState<"recipes" | "custom_foods">("recipes");
 
   useEffect(() => {
     loadData();
@@ -29,44 +30,39 @@ export const MyFoodsView: React.FC<MyFoodsViewProps> = ({ onNavigate }) => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-[#E2E8E2] shadow-xs">
         <div>
-          <h1 className="text-xl font-bold text-[#174C3A] flex items-center space-x-2">
+          <h1 className="text-xl font-bold text-[#174C3A] flex items-center gap-2">
             <BookOpen className="w-5 h-5 text-[#2D8C83]" />
-            <span>My Foods & Recipes Workspace</span>
+            <span>{t("navMyFoods")}</span>
           </h1>
           <p className="text-xs text-[#52635C] mt-1">
             User-formulated food records, laboratory items, and customized recipe batches.
           </p>
         </div>
 
-        <div className="flex space-x-2">
+        <div className="flex gap-2">
           <button
             onClick={() => onNavigate("foods")}
-            className="bg-[#2D8C83] hover:bg-[#237069] text-white text-xs font-semibold px-3.5 py-2 rounded-lg flex items-center space-x-1.5 transition"
+            className="bg-[#2D8C83] hover:bg-[#237069] text-white text-xs font-semibold px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition"
           >
             <Plus className="w-4 h-4" />
-            <span>Add Custom Food</span>
+            <span>{t("addCustomFood")}</span>
           </button>
           <button
             onClick={() => onNavigate("recipes")}
-            className="bg-[#174C3A] hover:bg-[#123C2E] text-white text-xs font-semibold px-3.5 py-2 rounded-lg flex items-center space-x-1.5 transition"
+            className="bg-[#174C3A] hover:bg-[#123C2E] text-white text-xs font-semibold px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition"
           >
             <Plus className="w-4 h-4" />
-            <span>Build Recipe</span>
+            <span>{t("newRecipe")}</span>
           </button>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-[#E2E8E2] space-x-3 bg-white p-2 rounded-xl shadow-xs">
-        <button
-          onClick={() => setActiveTab("recipes")}
-          className={`px-4 py-2 rounded-lg text-xs font-bold transition flex items-center space-x-2 ${
-            activeTab === "recipes" ? "bg-[#174C3A] text-white" : "text-[#52635C] hover:bg-[#F1F5F2]"
-          }`}
-        >
+      <div className="flex border-b border-[#E2E8E2] gap-3 bg-white p-2 rounded-xl shadow-xs">
+        <div className="px-4 py-2 rounded-lg text-xs font-bold bg-[#174C3A] text-white flex items-center gap-2">
           <UtensilsCrossed className="w-4 h-4" />
-          <span>My Formulated Recipes ({recipes.length})</span>
-        </button>
+          <span>{t("standardizedRecipes")} ({recipes.length})</span>
+        </div>
       </div>
 
       {/* Content */}
@@ -85,17 +81,17 @@ export const MyFoodsView: React.FC<MyFoodsViewProps> = ({ onNavigate }) => {
                     {r.category}
                   </span>
                 </div>
-                <p className="text-xs text-[#52635C] line-clamp-2">{r.description || "Formulated recipe"}</p>
+                <p className="text-xs text-[#52635C] line-clamp-2">{r.description || "—"}</p>
                 <div className="text-[11px] text-[#7D9087] flex justify-between pt-2 border-t border-[#E2E8E2]">
-                  <span>Servings: {r.servings}</span>
-                  <span>{r.total_weight_grams}g yield</span>
+                  <span>{t("servingsCount")}: {formatNumber(r.servings)}</span>
+                  <span className="ltr-only">{formatNumber(r.total_weight_grams)}g yield</span>
                 </div>
               </div>
             ))}
           </div>
         ) : (
           <div className="text-center py-10 text-xs text-[#7D9087]">
-            No user-created recipes found. Click "Build Recipe" to begin.
+            No user-created recipes found. Click "{t("newRecipe")}" to begin.
           </div>
         )}
       </div>

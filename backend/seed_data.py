@@ -39,7 +39,7 @@ FOOD_RECORDS = [
     {
         "code": "FDC-168878",
         "name": "Oats, rolled, raw",
-        "alt_names": "Rolled oats, Porridge oats",
+        "alt_names": "Rolled oats, Porridge oats | ml: ഓട്സ് | id: Havermut, Gandum haver | ru: Овсяные хлопья, Овсянка | ar: الشوفان | hi: जई, ओट्स | ta: ஓட்ஸ், காடைக்கண்ணி | kn: ಓಟ್ಸ್ | te: ఓట్స్, యవలు | bn: ওটস, যব | fr: Flocons d'avoine | es: Avena en hojuelas",
         "food_group": "Cereal Grains & Pasta",
         "category": "Whole Grains",
         "scientific_name": "Avena sativa",
@@ -64,7 +64,7 @@ FOOD_RECORDS = [
     {
         "code": "FDC-169704",
         "name": "Rice, brown, long-grain, raw",
-        "alt_names": "Whole grain brown rice",
+        "alt_names": "Whole grain brown rice | ml: തവിടുള്ള അരി, ചുവന്ന അരി | id: Beras merah, Beras cokelat | ru: Коричневый рис, Бурый рис | ar: الأرز البني | hi: भूरा चावल, ब्राउन राइस | ta: கைக்குத்தல் அரிசி, பழுப்பு அரிசி | kn: ಕುಚ್ಚಲಕ್ಕಿ, ಕಂದು ಅಕ್ಕಿ | te: దంపుడు బియ్యం | bn: ঢেঁকি ছাঁটা চাল, বাদামী চাল | fr: Riz complet | es: Arroz integral",
         "food_group": "Cereal Grains & Pasta",
         "category": "Whole Grains",
         "scientific_name": "Oryza sativa",
@@ -89,7 +89,7 @@ FOOD_RECORDS = [
     {
         "code": "FDC-170417",
         "name": "Lentils, mature seeds, raw",
-        "alt_names": "Brown lentils, Masoor dal raw",
+        "alt_names": "Brown lentils, Masoor dal raw | ml: പരിപ്പ്, മസൂർ പരിപ്പ് | id: Kacang lentil, Miju-miju | ru: Чечевица | ar: عدس | hi: दाल, मसूर दाल | ta: பருப்பு, மைசூர் பருப்பு | kn: ತೊಗರಿ ಬೇಳೆ, ಮಸೂರ್ ಬೇಳೆ | te: పప్పు, మసూర్ పప్పు | bn: মসুর ডাল | fr: Lentilles | es: Lentejas",
         "food_group": "Legumes and Legume Products",
         "category": "Pulses",
         "scientific_name": "Lens culinaris",
@@ -114,7 +114,7 @@ FOOD_RECORDS = [
     {
         "code": "FDC-171077",
         "name": "Chicken breast, meat only, raw",
-        "alt_names": "Skinless chicken breast, Boneless poultry",
+        "alt_names": "Skinless chicken breast, Boneless poultry | ml: കോഴിയിറച്ചി, ചിക്കൻ ബ്രെസ്റ്റ് | id: Dada ayam fillet | ru: Куриная грудка | ar: صدر الدجاج | hi: चिकन ब्रेस्ट, मुर्ग़ी का सीना | ta: கோழி இறைச்சி, கோழி நெஞ்சுக்கறி | kn: ಕೋಳಿ ಮಾಂಸ | te: కోడి మాంసం | bn: মুরগির বুকের মাংস | fr: Blanc de poulet | es: Pechuga de pollo",
         "food_group": "Poultry Products",
         "category": "Lean Meats",
         "scientific_name": "Gallus gallus domesticus",
@@ -139,7 +139,7 @@ FOOD_RECORDS = [
     {
         "code": "FDC-175167",
         "name": "Salmon, Atlantic, wild, raw",
-        "alt_names": "Wild Atlantic salmon fillet",
+        "alt_names": "Wild Atlantic salmon fillet | ml: സാൽമൺ മത്സ്യം, കോര മീൻ | id: Ikan salmon liar | ru: Атлантический лосось, Сёмга | ar: سمك السلمون الأطلسي | hi: सामन मछली, सैल्मन | ta: சால்மன் மீன், கிழங்கா மீன் | kn: ಸಾಲ್ಮನ್ ಮೀನು | te: సాల్మన్ చేప | bn: স্যামন মাছ | fr: Saumon de l'Atlantique | es: Salmón salvaje",
         "food_group": "Finfish and Shellfish Products",
         "category": "Fish",
         "scientific_name": "Salmo salar",
@@ -163,7 +163,7 @@ FOOD_RECORDS = [
     {
         "code": "FDC-171055",
         "name": "Egg, whole, raw, fresh",
-        "alt_names": "Hen's egg, Grade A large egg",
+        "alt_names": "Hen's egg, Grade A large egg | ml: മുട്ട, കോഴിമുട്ട | id: Telur ayam negeri | ru: Куриное яйцо | ar: بيض دجاج طازج, بيضة | hi: अंडा, मुर्गी का अंडा | ta: முட்டை, கோழி முட்டை | kn: ಮೊಟ್ಟೆ | te: గుడ్డు, కోడి గుడ్డు | bn: ডিম, মুরগির ডিম | fr: Œuf de poule frais | es: Huevo de gallina fresco",
         "food_group": "Dairy and Egg Products",
         "category": "Eggs",
         "scientific_name": "Gallus gallus",
@@ -188,7 +188,7 @@ FOOD_RECORDS = [
     {
         "code": "FDC-170379",
         "name": "Spinach, raw",
-        "alt_names": "Baby spinach leaves",
+        "alt_names": "Baby spinach leaves | ml: ചീര, പാലക് ചീര | id: Bayam segar | ru: Шпинат свежий | ar: سبانخ طازجة | hi: पालक, हरी पालक | ta: கீரை, பசலைக்கீரை | kn: ಪಾಲಕ್ ಸೊಪ್ಪು | te: పాలకూర | bn: পালং শাক | fr: Épinards frais | es: Espinacas frescas",
         "food_group": "Vegetables and Vegetable Products",
         "category": "Leafy Greens",
         "scientific_name": "Spinacia oleracea",
@@ -213,7 +213,7 @@ FOOD_RECORDS = [
     {
         "code": "FDC-170393",
         "name": "Broccoli, raw",
-        "alt_names": "Calabrese broccoli florets",
+        "alt_names": "Calabrese broccoli florets | ml: ബ്രോക്കോളി, പച്ച കോളിഫ്ലവർ | id: Brokoli hijau segar | ru: Брокколи | ar: بروكلي طازج | hi: ब्रोकोली, हरी गोभी | ta: பச்சை பூக்கோசு, புரோக்கோலி | kn: ಬ್ರೊಕೊಲಿ | te: బ్రోకలీ | bn: ব্রকলি | fr: Brocoli cru | es: Brócoli fresco",
         "food_group": "Vegetables and Vegetable Products",
         "category": "Cruciferous",
         "scientific_name": "Brassica oleracea var. italica",
@@ -237,7 +237,7 @@ FOOD_RECORDS = [
     {
         "code": "FDC-171688",
         "name": "Apple, raw, with skin",
-        "alt_names": "Red delicious / Gala apple",
+        "alt_names": "Red delicious / Gala apple | ml: ആപ്പിൾ, ആപ്പിൾ പഴം | id: Apel merah segar | ru: Яблоко свежее | ar: تفاح طازج بالقشر | hi: सेब | ta: ஆப்பிள் பழம் | kn: ಸೇಬು ಹಣ್ಣು | te: యాపిల్ పండు | bn: আপেল | fr: Pomme fraîche avec peau | es: Manzana fresca",
         "food_group": "Fruits and Fruit Juices",
         "category": "Pome Fruit",
         "scientific_name": "Malus domestica",
@@ -262,7 +262,7 @@ FOOD_RECORDS = [
     {
         "code": "FDC-173944",
         "name": "Banana, raw",
-        "alt_names": "Cavendish banana",
+        "alt_names": "Cavendish banana | ml: വാഴപ്പഴം, നേന്ത്രപ്പഴം, പഴം | id: Pisang cavendish | ru: Банан свежий | ar: موز طازج | hi: केला | ta: வாழைப்பழம் | kn: ಬಾಳೆಹಣ್ಣು | te: అరటిపండు | bn: কলা, পাকা কলা | fr: Banane fraîche | es: Plátano, Banana",
         "food_group": "Fruits and Fruit Juices",
         "category": "Tropical Fruit",
         "scientific_name": "Musa acuminata",
@@ -287,7 +287,7 @@ FOOD_RECORDS = [
     {
         "code": "FDC-170567",
         "name": "Almonds, raw",
-        "alt_names": "Whole raw almond kernels",
+        "alt_names": "Whole raw almond kernels | ml: ബദാം, വാൽനട്ട് ബദാം | id: Kacang almond mentah | ru: Миндаль сырой | ar: لوز نيء | hi: बादाम | ta: பாதாம் பருப்பு | kn: ಬಾದಾಮಿ | te: బాదం పప్పు | bn: বাদাম, কাঠবাদাম | fr: Amandes crues | es: Almendras crudas",
         "food_group": "Nut and Seed Products",
         "category": "Tree Nuts",
         "scientific_name": "Prunus dulcis",
@@ -312,7 +312,7 @@ FOOD_RECORDS = [
     {
         "code": "FDC-171413",
         "name": "Oil, olive, extra virgin",
-        "alt_names": "EVOO, Cold pressed olive oil",
+        "alt_names": "EVOO, Cold pressed olive oil | ml: ഒലിവ് എണ്ണ | id: Minyak zaitun extra virgin | ru: Оливковое масло первого отжима | ar: زيت زيتون بكر ممتاز | hi: जैतून का तेल | ta: ஆலிவ் எண்ணெய் | kn: ಆಲಿವ್ ಎಣ್ಣೆ | te: ఆలివ్ నూనె | bn: জলপাই তেল | fr: Huile d'olive extra vierge | es: Aceite de oliva virgen extra",
         "food_group": "Fats and Oils",
         "category": "Vegetable Oils",
         "scientific_name": "Olea europaea",
@@ -336,7 +336,7 @@ FOOD_RECORDS = [
     {
         "code": "FDC-170884",
         "name": "Yogurt, Greek, plain, nonfat",
-        "alt_names": "Strained skim milk yogurt",
+        "alt_names": "Strained skim milk yogurt | ml: തൈര്, ഗ്രീക്ക് തൈര് | id: Yogurt yunani kental | ru: Греческий йогурт | ar: زبادي يوناني قليل الدسم, لبن | hi: दही, ग्रीक योगर्ट | ta: தயிர், யோகர்ட் | kn: ಮೊಸರು | te: పెరుగు | bn: দই | fr: Yaourt à la grecque | es: Yogur griego natural",
         "food_group": "Dairy and Egg Products",
         "category": "Fermented Dairy",
         "scientific_name": "Lactobacillus bulgaricus culture",
@@ -360,7 +360,7 @@ FOOD_RECORDS = [
     {
         "code": "FDC-170438",
         "name": "Tofu, firm, prepared with calcium sulfate",
-        "alt_names": "Soybean curd, firm style",
+        "alt_names": "Soybean curd, firm style | ml: ടോഫു, സോയ പനീർ | id: Tahu kedelai padat | ru: Тофу соевый сыр | ar: توفو, جبن الصويا | hi: टोफू, सोया पनीर | ta: டோஃபு, சோயா பனீர் | kn: ಟೋಫು | te: టోఫు, సోయా పన్నీరు | bn: টোফু, সয়াবিন পনির | fr: Tofu ferme | es: Tofu firme de soja",
         "food_group": "Legumes and Legume Products",
         "category": "Soy Products",
         "scientific_name": "Glycine max",
@@ -379,6 +379,55 @@ FOOD_RECORDS = [
             "phosphorus": 97.0, "potassium": 121.0, "sodium": 7.0, "zinc": 0.80, "copper": 0.19,
             "vitamin_c": 0.1, "thiamin": 0.08, "riboflavin": 0.05, "niacin": 0.20, "vitamin_b6": 0.05,
             "folate": 15.0, "vitamin_b12": 0.0, "vitamin_a": 0.0, "vitamin_e": 0.01, "vitamin_d": 0.0
+        }
+    },
+    {
+        "code": "FDC-171265",
+        "name": "Milk, whole, 3.25% milkfat",
+        "alt_names": "Whole cow milk | ml: പാൽ, പശുവിൻ പാൽ | id: Susu sapi murni segar | ru: Коровье молоко цельное | ar: حليب بقر كامل الدسم, اللبن | hi: दूध, गाय का दूध | ta: பால், பசுவின் பால் | kn: ಹಾಲು | te: పాలు, ఆవు పాలు | bn: দুধ, গরুর দুধ | fr: Lait entier de vache | es: Leche entera de vaca",
+        "food_group": "Dairy and Egg Products",
+        "category": "Fluid Milk",
+        "scientific_name": "Bos taurus",
+        "description": "Standardized whole cow's milk with 3.25% butterfat.",
+        "source_name": "USDA FoodData Central SR Legacy",
+        "source_citation": "USDA FDC ID: 171265",
+        "source_year": "2019",
+        "portions": [
+            {"name": "1 cup (244g)", "weight": 244.0},
+            {"name": "1 glass (200g)", "weight": 200.0},
+            {"name": "1 fl oz (30.5g)", "weight": 30.5}
+        ],
+        "nutrients": {
+            "energy_kcal": 61.0, "energy_kj": 257.0, "water": 88.13, "protein": 3.15, "fat": 3.25,
+            "sat_fat": 1.86, "mufa": 0.81, "pufa": 0.20, "cholesterol": 10.0, "carbs": 4.80,
+            "fiber": 0.0, "sugars": 5.05, "calcium": 113.0, "iron": 0.03, "magnesium": 10.0,
+            "phosphorus": 84.0, "potassium": 132.0, "sodium": 43.0, "zinc": 0.37, "copper": 0.01,
+            "vitamin_c": 0.0, "thiamin": 0.04, "riboflavin": 0.16, "niacin": 0.08, "vitamin_b6": 0.03,
+            "folate": 5.0, "vitamin_b12": 0.45, "vitamin_a": 46.0, "vitamin_e": 0.07, "vitamin_d": 1.2
+        }
+    },
+    {
+        "code": "FDC-168482",
+        "name": "Sweet potato, raw, unprepared",
+        "alt_names": "Raw sweetpotato, orange flesh | ml: മധുരക്കിഴങ്ങ് | id: Ubi jalar manis | ru: Батат, Сладкий картофель | ar: بطاطا حلوة نيئة | hi: शकरकंद | ta: சர்க்கரைவள்ளிக்கிழங்கு | kn: ಸಿಹಿಗೆಣಸು | te: చిలగడదుంప | bn: মিষ্টি আলু | fr: Patate douce crue | es: Batata, Boniato, Camote",
+        "food_group": "Vegetables and Vegetable Products",
+        "category": "Root Tubers",
+        "scientific_name": "Ipomoea batatas",
+        "description": "Orange-fleshed raw root tuber rich in beta-carotene (provitamin A).",
+        "source_name": "USDA FoodData Central SR Legacy",
+        "source_citation": "USDA FDC ID: 168482",
+        "source_year": "2019",
+        "portions": [
+            {"name": "1 medium tuber (114g)", "weight": 114.0},
+            {"name": "1 cup cubed (133g)", "weight": 133.0}
+        ],
+        "nutrients": {
+            "energy_kcal": 86.0, "energy_kj": 359.0, "water": 77.28, "protein": 1.57, "fat": 0.05,
+            "sat_fat": 0.02, "mufa": 0.00, "pufa": 0.01, "cholesterol": 0.0, "carbs": 20.12,
+            "fiber": 3.0, "sugars": 4.18, "calcium": 30.0, "iron": 0.61, "magnesium": 25.0,
+            "phosphorus": 47.0, "potassium": 337.0, "sodium": 55.0, "zinc": 0.30, "copper": 0.15,
+            "vitamin_c": 2.4, "thiamin": 0.08, "riboflavin": 0.06, "niacin": 0.56, "vitamin_b6": 0.21,
+            "folate": 11.0, "vitamin_b12": 0.0, "vitamin_a": 709.0, "vitamin_e": 0.26, "vitamin_d": 0.0
         }
     }
 ]
@@ -480,6 +529,7 @@ def seed_database():
         existing = cursor.fetchone()
         if existing:
             food_id = existing["id"]
+            cursor.execute("UPDATE foods SET alt_names = ?, scientific_name = ? WHERE id = ?", (food["alt_names"], food["scientific_name"], food_id))
         else:
             cursor.execute("""
                 INSERT INTO foods (

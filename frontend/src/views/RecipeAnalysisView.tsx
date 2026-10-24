@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { recipesApi, foodsApi } from "../api";
 import { FoodItem, RecipeRecord } from "../types";
 import {
-  UtensilsCrossed, Plus, Trash2, Save, Scale,
-  Info, AlertCircle, ChefHat, CheckCircle2, ChevronRight
+  UtensilsCrossed, Plus, Trash2
 } from "lucide-react";
+import { useTranslation } from "../i18n/LanguageContext";
 
 interface IngredientSlot {
   food_id: number;
@@ -13,6 +13,7 @@ interface IngredientSlot {
 }
 
 export const RecipeAnalysisView: React.FC = () => {
+  const { t, formatNumber } = useTranslation();
   const [recipes, setRecipes] = useState<RecipeRecord[]>([]);
   const [allFoods, setAllFoods] = useState<FoodItem[]>([]);
   const [selectedRecipeId, setSelectedRecipeId] = useState<number | null>(null);
@@ -104,12 +105,12 @@ export const RecipeAnalysisView: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-[#E2E8E2] shadow-xs">
         <div>
-          <h1 className="text-xl font-bold text-[#174C3A] flex items-center space-x-2">
+          <h1 className="text-xl font-bold text-[#174C3A] flex items-center gap-2">
             <UtensilsCrossed className="w-5 h-5 text-[#2D8C83]" />
-            <span>Recipe Analysis & Batch Modeling</span>
+            <span>{t("recipeTitle")}</span>
           </h1>
           <p className="text-xs text-[#52635C] mt-1">
-            Calculates raw aggregate nutrients, per-serving amounts, and density per 100g prepared yield.
+            {t("recipeSubtitle")}
           </p>
         </div>
 
@@ -120,10 +121,10 @@ export const RecipeAnalysisView: React.FC = () => {
               { food_id: allFoods[0]?.id || 1, quantity_grams: 150, preparation_note: "Prepped fresh" }
             ]);
           }}
-          className="bg-[#174C3A] hover:bg-[#123C2E] text-white text-xs font-semibold px-4 py-2 rounded-lg shadow-xs flex items-center space-x-1.5 transition"
+          className="bg-[#174C3A] hover:bg-[#123C2E] text-white text-xs font-semibold px-4 py-2 rounded-lg shadow-xs flex items-center gap-1.5 transition"
         >
           <Plus className="w-4 h-4" />
-          <span>New Recipe</span>
+          <span>{t("newRecipe")}</span>
         </button>
       </div>
 
@@ -131,7 +132,7 @@ export const RecipeAnalysisView: React.FC = () => {
         {/* Left Column: Recipe Selector List */}
         <div className="bg-white rounded-xl border border-[#E2E8E2] p-4 shadow-xs space-y-3">
           <div className="text-xs font-bold uppercase tracking-wider text-[#7D9087] pb-2 border-b border-[#E2E8E2]">
-            Standardized Recipes ({recipes.length})
+            {t("standardizedRecipes")} ({recipes.length})
           </div>
 
           <div className="space-y-2">
@@ -162,15 +163,15 @@ export const RecipeAnalysisView: React.FC = () => {
                     selectedRecipeId === r.id && !isCreating ? "text-white/80" : "text-[#7D9087]"
                   }`}
                 >
-                  {r.description || "No description"}
+                  {r.description || "—"}
                 </div>
                 <div
                   className={`text-[10px] mt-1.5 flex items-center justify-between ${
                     selectedRecipeId === r.id && !isCreating ? "text-white/70" : "text-[#7D9087]"
                   }`}
                 >
-                  <span>Servings: {r.servings}</span>
-                  <span>{r.ingredient_count || 3} ingredients</span>
+                  <span>{t("servingsCount")}: {formatNumber(r.servings)}</span>
+                  <span>{r.ingredient_count || 3} items</span>
                 </div>
               </div>
             ))}
@@ -182,11 +183,11 @@ export const RecipeAnalysisView: React.FC = () => {
           {isCreating ? (
             /* Creation Form */
             <form onSubmit={handleCreateRecipe} className="bg-white rounded-xl border border-[#E2E8E2] p-6 shadow-xs space-y-4 text-xs">
-              <h3 className="text-sm font-bold text-[#174C3A]">Create New Recipe Formulation</h3>
+              <h3 className="text-sm font-bold text-[#174C3A]">{t("recipeFormTitle")}</h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-semibold mb-1">Recipe Name *</label>
+                  <label className="block font-semibold mb-1">{t("recipeName")} *</label>
                   <input
                     type="text"
                     required
@@ -197,7 +198,7 @@ export const RecipeAnalysisView: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold mb-1">Category</label>
+                  <label className="block font-semibold mb-1">{t("category")}</label>
                   <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full px-3 py-2 border rounded-lg bg-white">
                     <option value="Entrée">Entrée</option>
                     <option value="Breakfast">Breakfast</option>
@@ -209,7 +210,7 @@ export const RecipeAnalysisView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-semibold mb-1">Description & Culinary Target</label>
+                <label className="block font-semibold mb-1">{t("description")}</label>
                 <input
                   type="text"
                   placeholder="e.g. Plant-based formulation rich in essential amino acids and soluble fiber."
@@ -221,7 +222,7 @@ export const RecipeAnalysisView: React.FC = () => {
 
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block font-semibold mb-1">Number of Servings *</label>
+                  <label className="block font-semibold mb-1">{t("servingsCount")} *</label>
                   <input
                     type="number"
                     min="1"
@@ -232,7 +233,7 @@ export const RecipeAnalysisView: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold mb-1">Cooked Yield Weight (g)</label>
+                  <label className="block font-semibold mb-1">{t("cookedYieldWeight")} (g)</label>
                   <input
                     type="number"
                     min="1"
@@ -242,7 +243,7 @@ export const RecipeAnalysisView: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold mb-1">Allergens</label>
+                  <label className="block font-semibold mb-1">{t("allergensLabel")}</label>
                   <input
                     type="text"
                     placeholder="e.g. Fish, Dairy, Soy"
@@ -255,7 +256,7 @@ export const RecipeAnalysisView: React.FC = () => {
 
               {/* Ingredients Slot Builder */}
               <div className="space-y-2 pt-2">
-                <label className="block font-bold uppercase text-[#7D9087]">Ingredients</label>
+                <label className="block font-bold uppercase text-[#7D9087]">{t("ingredientsLabel")}</label>
                 {ingredients.map((ing, idx) => (
                   <div key={idx} className="flex items-center gap-2">
                     <select
@@ -281,7 +282,7 @@ export const RecipeAnalysisView: React.FC = () => {
                         copy[idx].quantity_grams = parseFloat(e.target.value) || 0;
                         setIngredients(copy);
                       }}
-                      className="w-24 px-3 py-2 border rounded-lg text-right"
+                      className="w-24 px-3 py-2 border rounded-lg text-right rtl:text-left"
                     />
 
                     <button
@@ -299,23 +300,23 @@ export const RecipeAnalysisView: React.FC = () => {
                   onClick={handleAddIngredient}
                   className="w-full py-2 border border-dashed rounded-lg text-[#2D8C83] font-semibold hover:bg-teal-50"
                 >
-                  + Add Ingredient
+                  + {t("addIngredient")}
                 </button>
               </div>
 
-              <div className="flex justify-end space-x-2 pt-4">
+              <div className="flex justify-end gap-2 pt-4">
                 <button
                   type="button"
                   onClick={() => setIsCreating(false)}
                   className="px-3 py-2 border rounded-lg"
                 >
-                  Cancel
+                  {t("cancel")}
                 </button>
                 <button
                   type="submit"
                   className="px-4 py-2 bg-[#174C3A] text-white rounded-lg font-bold"
                 >
-                  Analyze & Save Recipe
+                  {t("analyzeSaveRecipe")}
                 </button>
               </div>
             </form>
@@ -329,7 +330,7 @@ export const RecipeAnalysisView: React.FC = () => {
                     {recipeDetail.recipe.category}
                   </span>
                   <span className="text-xs text-[#7D9087]">
-                    Yield Factor: {recipeDetail.breakdown.yield_factor}
+                    Yield Factor: {formatNumber(recipeDetail.breakdown.yield_factor, 2)}
                   </span>
                 </div>
                 <h2 className="text-lg font-bold text-[#192520] mt-1.5">{recipeDetail.recipe.name}</h2>
@@ -337,15 +338,15 @@ export const RecipeAnalysisView: React.FC = () => {
 
                 <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-[#E2E8E2] text-center">
                   <div>
-                    <div className="text-[10px] text-[#7D9087] uppercase font-semibold">Yield Servings</div>
+                    <div className="text-[10px] text-[#7D9087] uppercase font-semibold">{t("servingsCount")}</div>
                     <div className="text-sm font-bold text-[#192520] mt-0.5">{recipeDetail.recipe.servings} Servings</div>
                   </div>
                   <div>
-                    <div className="text-[10px] text-[#7D9087] uppercase font-semibold">Cooked Final Mass</div>
-                    <div className="text-sm font-bold text-[#192520] mt-0.5">{recipeDetail.recipe.total_weight_grams} g</div>
+                    <div className="text-[10px] text-[#7D9087] uppercase font-semibold">{t("cookedYieldWeight")}</div>
+                    <div className="text-sm font-bold text-[#192520] mt-0.5 ltr-only">{formatNumber(recipeDetail.recipe.total_weight_grams)} g</div>
                   </div>
                   <div>
-                    <div className="text-[10px] text-[#7D9087] uppercase font-semibold">Allergens</div>
+                    <div className="text-[10px] text-[#7D9087] uppercase font-semibold">{t("allergensLabel")}</div>
                     <div className="text-sm font-bold text-[#2D8C83] mt-0.5">{recipeDetail.recipe.allergens || "None"}</div>
                   </div>
                 </div>
@@ -354,18 +355,18 @@ export const RecipeAnalysisView: React.FC = () => {
               {/* Per-Serving vs Total Nutrients Table */}
               <div className="bg-white rounded-xl border border-[#E2E8E2] shadow-xs overflow-hidden">
                 <div className="p-4 border-b border-[#E2E8E2] bg-[#F7F9F7]">
-                  <h3 className="text-sm font-bold text-[#174C3A]">Nutritional Content per Serving & per 100g Cooked</h3>
+                  <h3 className="text-sm font-bold text-[#174C3A]">{t("perServing")} &bull; {t("per100gCooked")}</h3>
                   <p className="text-xs text-[#52635C]">Calculated across all standardized raw and cooked recipe components.</p>
                 </div>
 
                 <div className="overflow-x-auto text-xs">
-                  <table className="w-full text-left">
+                  <table className="w-full text-left rtl:text-right">
                     <thead className="bg-[#F1F5F2] text-[#192520] font-semibold border-b border-[#E2E8E2]">
                       <tr>
                         <th className="py-2.5 px-4">Nutrient</th>
-                        <th className="py-2.5 px-4 text-right">Per Serving ({Math.round(recipeDetail.recipe.total_weight_grams / recipeDetail.recipe.servings)}g)</th>
-                        <th className="py-2.5 px-4 text-right">Per 100g Cooked</th>
-                        <th className="py-2.5 px-4 text-right">Total Batch Amount</th>
+                        <th className="py-2.5 px-4 text-right rtl:text-left">{t("perServing")} ({Math.round(recipeDetail.recipe.total_weight_grams / recipeDetail.recipe.servings)}g)</th>
+                        <th className="py-2.5 px-4 text-right rtl:text-left">{t("per100gCooked")}</th>
+                        <th className="py-2.5 px-4 text-right rtl:text-left">{t("total")}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#E2E8E2]">
@@ -377,14 +378,14 @@ export const RecipeAnalysisView: React.FC = () => {
                         return (
                           <tr key={code} className="hover:bg-[#F7F9F7]">
                             <td className="py-2.5 px-4 font-semibold text-[#192520] capitalize">{tot.name}</td>
-                            <td className="py-2.5 px-4 text-right font-bold text-[#174C3A]">
-                              {serv !== null ? `${serv} ${tot.unit}` : "N/A"}
+                            <td className="py-2.5 px-4 text-right rtl:text-left font-bold text-[#174C3A] ltr-only">
+                              {serv !== null ? `${formatNumber(serv)} ${tot.unit}` : "N/A"}
                             </td>
-                            <td className="py-2.5 px-4 text-right font-medium text-[#52635C]">
-                              {per100 !== null ? `${per100} ${tot.unit}` : "—"}
+                            <td className="py-2.5 px-4 text-right rtl:text-left font-medium text-[#52635C] ltr-only">
+                              {per100 !== null ? `${formatNumber(per100)} ${tot.unit}` : "—"}
                             </td>
-                            <td className="py-2.5 px-4 text-right text-[#7D9087]">
-                              {tot.amount} {tot.unit}
+                            <td className="py-2.5 px-4 text-right rtl:text-left text-[#7D9087] ltr-only">
+                              {formatNumber(tot.amount)} {tot.unit}
                             </td>
                           </tr>
                         );
@@ -397,7 +398,7 @@ export const RecipeAnalysisView: React.FC = () => {
               {/* Cooking Instructions & Culinary Notes */}
               {recipeDetail.recipe.cooking_instructions && (
                 <div className="bg-white rounded-xl border border-[#E2E8E2] p-5 shadow-xs space-y-2 text-xs">
-                  <h3 className="font-bold text-[#174C3A]">Standardized Preparation Protocol</h3>
+                  <h3 className="font-bold text-[#174C3A]">{t("preparationProtocol")}</h3>
                   <p className="text-[#52635C] leading-relaxed whitespace-pre-wrap">
                     {recipeDetail.recipe.cooking_instructions}
                   </p>

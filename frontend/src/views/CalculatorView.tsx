@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { calculatorApi, foodsApi } from "../api";
 import { FoodItem, AggregatedCalculation, CalculationItemResult, CalculationRecord } from "../types";
 import {
-  Calculator, Plus, Trash2, Save, Copy, FileDown,
-  Info, Sparkles, CheckCircle2, RefreshCw, ChevronDown,
-  PieChart as PieIcon, ArrowRight, FolderOpen
+  Calculator, Plus, Trash2, Save,
+  PieChart as PieIcon, FolderOpen, X
 } from "lucide-react";
+import { useTranslation } from "../i18n/LanguageContext";
 
 interface ItemSlot {
   food_id: number;
@@ -15,6 +15,7 @@ interface ItemSlot {
 }
 
 export const CalculatorView: React.FC = () => {
+  const { t, formatNumber } = useTranslation();
   const [allFoods, setAllFoods] = useState<FoodItem[]>([]);
   const [slots, setSlots] = useState<ItemSlot[]>([]);
   const [calcResult, setCalcResult] = useState<AggregatedCalculation | null>(null);
@@ -100,39 +101,32 @@ export const CalculatorView: React.FC = () => {
     runPreview(updated);
   };
 
-  const handleFoodChange = (index: number, newFoodId: number) => {
-    const f = allFoods.find((food) => food.id === newFoodId);
+  const handleFoodChange = (index: number, foodId: number) => {
+    const food = allFoods.find((f) => f.id === foodId);
     const updated = [...slots];
-    updated[index] = {
-      ...updated[index],
-      food_id: newFoodId,
-      food: f,
-      portion_unit_name: "100g",
-    };
+    updated[index] = { ...updated[index], food_id: foodId, food };
     setSlots(updated);
     runPreview(updated);
   };
 
   const handleQuantityChange = (index: number, grams: number) => {
     const updated = [...slots];
-    updated[index] = {
-      ...updated[index],
-      quantity_grams: Math.max(0, grams),
-    };
+    updated[index] = { ...updated[index], quantity_grams: grams };
     setSlots(updated);
     runPreview(updated);
   };
 
   const handleSaveCalculation = async () => {
-    if (slots.length === 0) {
-      alert("Add at least one food item to save.");
+    const valid = slots.filter((s) => s.food_id > 0 && s.quantity_grams > 0);
+    if (valid.length === 0) {
+      alert("Add at least one food item with quantity.");
       return;
     }
     try {
       await calculatorApi.save({
         name: calcName,
         notes: calcNotes,
-        items: slots.map((s) => ({
+        items: valid.map((s) => ({
           food_id: s.food_id,
           quantity_grams: s.quantity_grams,
           portion_unit_name: s.portion_unit_name,
@@ -140,8 +134,8 @@ export const CalculatorView: React.FC = () => {
       });
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
-      const res = await calculatorApi.list();
-      setSavedCalculations(res.calculations);
+      const calcsRes = await calculatorApi.list();
+      setSavedCalculations(calcsRes.calculations);
     } catch (err) {
       alert("Failed to save calculation.");
     }
@@ -181,30 +175,30 @@ export const CalculatorView: React.FC = () => {
       {/* View Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-[#E2E8E2] shadow-xs">
         <div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-2">
             <Calculator className="w-5 h-5 text-[#2D8C83]" />
-            <h1 className="text-xl font-bold text-[#174C3A]">Nutrient Calculator</h1>
+            <h1 className="text-xl font-bold text-[#174C3A]">{t("calcTitle")}</h1>
           </div>
           <p className="text-xs text-[#52635C] mt-1">
-            Dynamic aggregation formula: <code>Amount = (Nutrient / 100g) × Quantity(g)</code>
+            {t("calcSubtitle")} &bull; <code>Amount = (Nutrient / 100g) × Quantity(g)</code>
           </p>
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center gap-2">
           <button
             onClick={() => setShowSavedDrawer(true)}
-            className="border border-[#E2E8E2] hover:bg-[#F7F9F7] text-[#192520] text-xs font-semibold px-3.5 py-2 rounded-lg flex items-center space-x-1.5 transition"
+            className="border border-[#E2E8E2] hover:bg-[#F7F9F7] text-[#192520] text-xs font-semibold px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition"
           >
             <FolderOpen className="w-4 h-4 text-[#7D9087]" />
-            <span>Saved Calculations ({savedCalculations.length})</span>
+            <span>{t("savedCalculations")} ({savedCalculations.length})</span>
           </button>
 
           <button
             onClick={handleSaveCalculation}
-            className="bg-[#174C3A] hover:bg-[#123C2E] text-white text-xs font-semibold px-4 py-2 rounded-lg shadow-xs flex items-center space-x-1.5 transition"
+            className="bg-[#174C3A] hover:bg-[#123C2E] text-white text-xs font-semibold px-4 py-2 rounded-lg shadow-xs flex items-center gap-1.5 transition"
           >
             <Save className="w-4 h-4 text-[#84CC16]" />
-            <span>{saveSuccess ? "Saved Successfully!" : "Save Calculation"}</span>
+            <span>{saveSuccess ? t("calcSavedSuccess") : t("saveCalculation")}</span>
           </button>
         </div>
       </div>
@@ -213,7 +207,7 @@ export const CalculatorView: React.FC = () => {
       <div className="bg-white rounded-xl border border-[#E2E8E2] p-5 shadow-xs space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-[#192520] mb-1">Formulation / Batch Name</label>
+            <label className="block text-xs font-semibold text-[#192520] mb-1">{t("batchName")}</label>
             <input
               type="text"
               value={calcName}
@@ -222,7 +216,7 @@ export const CalculatorView: React.FC = () => {
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-[#192520] mb-1">Research Notes & Protocol</label>
+            <label className="block text-xs font-semibold text-[#192520] mb-1">{t("researchProtocolNotes")}</label>
             <input
               type="text"
               placeholder="e.g. Standardized study breakfast composite (Subject Group A)"
@@ -236,8 +230,8 @@ export const CalculatorView: React.FC = () => {
         {/* Selected Foods List */}
         <div className="space-y-2.5 pt-2">
           <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-[#7D9087] pb-1 border-b border-[#E2E8E2]">
-            <span>Contributing Foods ({slots.length})</span>
-            <span>Edible Weight</span>
+            <span>{t("contributingFoods")} ({slots.length})</span>
+            <span>{t("edibleWeight")}</span>
           </div>
 
           {slots.map((slot, index) => (
@@ -261,7 +255,7 @@ export const CalculatorView: React.FC = () => {
               </div>
 
               {/* Portion Descriptor / Grams Input */}
-              <div className="flex items-center space-x-2 w-full sm:w-auto">
+              <div className="flex items-center gap-2 w-full sm:w-auto">
                 <div className="relative">
                   <input
                     type="number"
@@ -269,9 +263,9 @@ export const CalculatorView: React.FC = () => {
                     step="1"
                     value={slot.quantity_grams}
                     onChange={(e) => handleQuantityChange(index, parseFloat(e.target.value) || 0)}
-                    className="w-24 px-3 py-2 text-xs font-bold text-right border border-[#E2E8E2] rounded-lg bg-white"
+                    className="w-24 px-3 py-2 text-xs font-bold text-right rtl:text-left border border-[#E2E8E2] rounded-lg bg-white"
                   />
-                  <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-[#7D9087] pointer-events-none">
+                  <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-[#7D9087] pointer-events-none rtl:left-2 rtl:right-auto">
                     g
                   </span>
                 </div>
@@ -289,10 +283,10 @@ export const CalculatorView: React.FC = () => {
 
           <button
             onClick={handleAddSlot}
-            className="w-full py-2.5 border-2 border-dashed border-[#2D8C83]/40 hover:border-[#2D8C83] bg-teal-50/50 hover:bg-teal-50 text-[#174C3A] rounded-xl text-xs font-bold flex items-center justify-center space-x-2 transition"
+            className="w-full py-2.5 border-2 border-dashed border-[#2D8C83]/40 hover:border-[#2D8C83] bg-teal-50/50 hover:bg-teal-50 text-[#174C3A] rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition"
           >
             <Plus className="w-4 h-4" />
-            <span>Add Another Food to Calculation</span>
+            <span>{t("addAnotherFood")}</span>
           </button>
         </div>
       </div>
@@ -303,49 +297,49 @@ export const CalculatorView: React.FC = () => {
           {/* Key Metrics Banner */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div className="bg-white p-4 rounded-xl border border-[#E2E8E2] shadow-xs">
-              <span className="text-[11px] font-semibold text-[#52635C] uppercase">Total Edible Mass</span>
-              <div className="text-xl font-bold text-[#174C3A] mt-1">
-                {calcResult.total_edible_weight_grams} g
+              <span className="text-[11px] font-semibold text-[#52635C] uppercase">{t("totalEdibleMass")}</span>
+              <div className="text-xl font-bold text-[#174C3A] mt-1 ltr-only">
+                {formatNumber(calcResult.total_edible_weight_grams)} g
               </div>
               <div className="text-[10px] text-[#7D9087]">From {calcResult.items_count} selected item(s)</div>
             </div>
 
             <div className="bg-white p-4 rounded-xl border border-[#E2E8E2] shadow-xs">
-              <span className="text-[11px] font-semibold text-[#52635C] uppercase">Total Energy</span>
-              <div className="text-xl font-bold text-[#192520] mt-1">
-                {calcResult.totals.energy_kcal?.amount ?? 0} kcal
+              <span className="text-[11px] font-semibold text-[#52635C] uppercase">{t("totalEnergy")}</span>
+              <div className="text-xl font-bold text-[#192520] mt-1 ltr-only">
+                {formatNumber(calcResult.totals.energy_kcal?.amount ?? 0)} kcal
               </div>
-              <div className="text-[10px] text-[#7D9087]">
-                {calcResult.totals.energy_kj?.amount ?? 0} kJ
-              </div>
-            </div>
-
-            <div className="bg-white p-4 rounded-xl border border-[#E2E8E2] shadow-xs">
-              <span className="text-[11px] font-semibold text-[#52635C] uppercase">Total Protein</span>
-              <div className="text-xl font-bold text-[#2D8C83] mt-1">
-                {calcResult.totals.protein?.amount ?? 0} g
-              </div>
-              <div className="text-[10px] text-[#7D9087]">
-                {calcResult.per_100g.protein ?? 0} g / 100g concentration
+              <div className="text-[10px] text-[#7D9087] ltr-only">
+                {formatNumber(calcResult.totals.energy_kj?.amount ?? 0)} kJ
               </div>
             </div>
 
             <div className="bg-white p-4 rounded-xl border border-[#E2E8E2] shadow-xs">
-              <span className="text-[11px] font-semibold text-[#52635C] uppercase">Total Dietary Fiber</span>
-              <div className="text-xl font-bold text-[#84CC16] mt-1">
-                {calcResult.totals.fiber?.amount ?? 0} g
+              <span className="text-[11px] font-semibold text-[#52635C] uppercase">{t("totalProtein")}</span>
+              <div className="text-xl font-bold text-[#2D8C83] mt-1 ltr-only">
+                {formatNumber(calcResult.totals.protein?.amount ?? 0)} g
               </div>
-              <div className="text-[10px] text-[#7D9087]">
-                {calcResult.per_100g.fiber ?? 0} g / 100g
+              <div className="text-[10px] text-[#7D9087] ltr-only">
+                {formatNumber(calcResult.per_100g.protein ?? 0)} g / 100g
+              </div>
+            </div>
+
+            <div className="bg-white p-4 rounded-xl border border-[#E2E8E2] shadow-xs">
+              <span className="text-[11px] font-semibold text-[#52635C] uppercase">{t("totalDietaryFiber")}</span>
+              <div className="text-xl font-bold text-[#84CC16] mt-1 ltr-only">
+                {formatNumber(calcResult.totals.fiber?.amount ?? 0)} g
+              </div>
+              <div className="text-[10px] text-[#7D9087] ltr-only">
+                {formatNumber(calcResult.per_100g.fiber ?? 0)} g / 100g
               </div>
             </div>
           </div>
 
           {/* Macronutrient Energy Contribution Split */}
           <div className="bg-white rounded-xl border border-[#E2E8E2] p-5 shadow-xs">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[#192520] mb-3 flex items-center space-x-2">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-[#192520] mb-3 flex items-center gap-2">
               <PieIcon className="w-4 h-4 text-[#2D8C83]" />
-              <span>Atwater Energy Distribution (% of Total Kcal)</span>
+              <span>{t("atwaterTitle")}</span>
             </h3>
 
             <div className="space-y-3">
@@ -368,20 +362,20 @@ export const CalculatorView: React.FC = () => {
               </div>
 
               <div className="flex flex-wrap items-center justify-between text-xs gap-3">
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-[#2D8C83]"></div>
-                  <span className="font-semibold text-[#192520]">Protein: {calcResult.macro_distribution.protein_pct}%</span>
-                  <span className="text-[#7D9087]">({calcResult.totals.protein?.amount ?? 0} g)</span>
+                  <span className="font-semibold text-[#192520]">{t("termProtein")}: {formatNumber(calcResult.macro_distribution.protein_pct, 1)}%</span>
+                  <span className="text-[#7D9087] ltr-only">({formatNumber(calcResult.totals.protein?.amount ?? 0)} g)</span>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-[#84CC16]"></div>
-                  <span className="font-semibold text-[#192520]">Carbs: {calcResult.macro_distribution.carbs_pct}%</span>
-                  <span className="text-[#7D9087]">({calcResult.totals.carbs?.amount ?? 0} g)</span>
+                  <span className="font-semibold text-[#192520]">{t("termCarbohydrates")}: {formatNumber(calcResult.macro_distribution.carbs_pct, 1)}%</span>
+                  <span className="text-[#7D9087] ltr-only">({formatNumber(calcResult.totals.carbs?.amount ?? 0)} g)</span>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-amber-400"></div>
-                  <span className="font-semibold text-[#192520]">Fat: {calcResult.macro_distribution.fat_pct}%</span>
-                  <span className="text-[#7D9087]">({calcResult.totals.fat?.amount ?? 0} g)</span>
+                  <span className="font-semibold text-[#192520]">{t("termTotalFat")}: {formatNumber(calcResult.macro_distribution.fat_pct, 1)}%</span>
+                  <span className="text-[#7D9087] ltr-only">({formatNumber(calcResult.totals.fat?.amount ?? 0)} g)</span>
                 </div>
               </div>
             </div>
@@ -391,8 +385,8 @@ export const CalculatorView: React.FC = () => {
           <div className="bg-white rounded-xl border border-[#E2E8E2] shadow-xs overflow-hidden">
             <div className="p-4 border-b border-[#E2E8E2] bg-[#F7F9F7] flex flex-wrap items-center justify-between gap-3">
               <div>
-                <h3 className="text-sm font-bold text-[#174C3A]">Complete Scientific Nutrient Profile</h3>
-                <p className="text-xs text-[#52635C]">Total mixture values & standardized density per 100g composite.</p>
+                <h3 className="text-sm font-bold text-[#174C3A]">{t("completeNutrientProfile")}</h3>
+                <p className="text-xs text-[#52635C]">{t("mixtureValuesSubtitle")}</p>
               </div>
 
               {/* Category Filter Pills */}
@@ -414,14 +408,14 @@ export const CalculatorView: React.FC = () => {
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
+              <table className="w-full text-left rtl:text-right text-xs">
                 <thead className="bg-[#F1F5F2] text-[#192520] font-semibold border-b border-[#E2E8E2]">
                   <tr>
                     <th className="py-2.5 px-4">Nutrient</th>
                     <th className="py-2.5 px-4">Category</th>
-                    <th className="py-2.5 px-4 text-right">Composite Total</th>
-                    <th className="py-2.5 px-4 text-right">Per 100g Mixture</th>
-                    <th className="py-2.5 px-4">Quality / Notes</th>
+                    <th className="py-2.5 px-4 text-right rtl:text-left">{t("compositeTotal")}</th>
+                    <th className="py-2.5 px-4 text-right rtl:text-left">{t("per100gMixture")}</th>
+                    <th className="py-2.5 px-4">{t("dataQualityNotes")}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#E2E8E2]">
@@ -432,11 +426,11 @@ export const CalculatorView: React.FC = () => {
                       <tr key={code} className="hover:bg-[#F7F9F7] transition">
                         <td className="py-2.5 px-4 font-semibold text-[#192520]">{nut.name}</td>
                         <td className="py-2.5 px-4 text-[#7D9087]">{nut.category}</td>
-                        <td className="py-2.5 px-4 text-right font-bold text-[#174C3A]">
-                          {nut.is_missing ? "N/A" : `${nut.amount} ${nut.unit}`}
+                        <td className="py-2.5 px-4 text-right rtl:text-left font-bold text-[#174C3A] ltr-only">
+                          {nut.is_missing ? "N/A" : `${formatNumber(nut.amount)} ${nut.unit}`}
                         </td>
-                        <td className="py-2.5 px-4 text-right font-medium text-[#52635C]">
-                          {per100 !== null && per100 !== undefined ? `${per100} ${nut.unit}` : "—"}
+                        <td className="py-2.5 px-4 text-right rtl:text-left font-medium text-[#52635C] ltr-only">
+                          {per100 !== null && per100 !== undefined ? `${formatNumber(per100)} ${nut.unit}` : "—"}
                         </td>
                         <td className="py-2.5 px-4 text-[#7D9087]">
                           {nut.has_partial_missing ? (
@@ -460,9 +454,9 @@ export const CalculatorView: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
           <div className="bg-white rounded-2xl max-w-xl w-full max-h-[80vh] flex flex-col shadow-2xl border border-[#E2E8E2]">
             <div className="px-6 py-4 border-b border-[#E2E8E2] bg-[#F7F9F7] flex items-center justify-between">
-              <h3 className="text-base font-bold text-[#174C3A]">Saved Calculations Repository</h3>
+              <h3 className="text-base font-bold text-[#174C3A]">{t("savedCalculations")}</h3>
               <button onClick={() => setShowSavedDrawer(false)} className="text-[#7D9087] hover:text-[#192520]">
-                ✕
+                <X className="w-5 h-5" />
               </button>
             </div>
             <div className="p-6 overflow-y-auto divide-y divide-[#E2E8E2] text-xs">

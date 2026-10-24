@@ -16,6 +16,8 @@ import {
   ChevronRight,
   ShieldCheck
 } from "lucide-react";
+import { useTranslation } from "../i18n/LanguageContext";
+import { TranslationDictionary } from "../i18n/types";
 
 export type NavSection =
   | "dashboard"
@@ -38,26 +40,26 @@ interface SidebarProps {
   onToggleCollapse: () => void;
 }
 
-interface NavItem {
+interface NavItemConfig {
   id: NavSection;
-  label: string;
+  key: keyof TranslationDictionary;
   icon: React.ComponentType<{ className?: string }>;
   tag?: string;
 }
 
-const NAV_ITEMS: NavItem[] = [
-  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { id: "foods", label: "Food Database", icon: Database, tag: "USDA FDC" },
-  { id: "calculator", label: "Nutrient Calculator", icon: Calculator },
-  { id: "recipes", label: "Recipe Analysis", icon: UtensilsCrossed },
-  { id: "dietary", label: "Dietary Assessment", icon: CalendarCheck, tag: "Recall" },
-  { id: "meal-planner", label: "Meal Planner", icon: CalendarDays },
-  { id: "anthropometrics", label: "Anthropometrics", icon: Activity, tag: "BMI/WHtR" },
-  { id: "projects", label: "Research Projects", icon: FlaskConical },
-  { id: "reports", label: "Reports & Exports", icon: FileText },
-  { id: "my-foods", label: "My Foods & Recipes", icon: BookOpen },
-  { id: "settings", label: "Settings & DRVs", icon: Sliders },
-  { id: "help", label: "Help & Documentation", icon: HelpCircle },
+const NAV_CONFIGS: NavItemConfig[] = [
+  { id: "dashboard", key: "navDashboard", icon: LayoutDashboard },
+  { id: "foods", key: "navFoods", icon: Database, tag: "USDA FDC" },
+  { id: "calculator", key: "navCalculator", icon: Calculator },
+  { id: "recipes", key: "navRecipes", icon: UtensilsCrossed },
+  { id: "dietary", key: "navDietary", icon: CalendarCheck, tag: "Recall" },
+  { id: "meal-planner", key: "navMealPlanner", icon: CalendarDays },
+  { id: "anthropometrics", key: "navAnthropometrics", icon: Activity, tag: "BMI/WHtR" },
+  { id: "projects", key: "navProjects", icon: FlaskConical },
+  { id: "reports", key: "navReports", icon: FileText },
+  { id: "my-foods", key: "navMyFoods", icon: BookOpen },
+  { id: "settings", key: "navSettings", icon: Sliders },
+  { id: "help", key: "navHelp", icon: HelpCircle },
 ];
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -66,33 +68,41 @@ export const Sidebar: React.FC<SidebarProps> = ({
   collapsed,
   onToggleCollapse,
 }) => {
+  const { t, dir } = useTranslation();
+
   return (
     <aside
-      className={`bg-white border-r border-[#E2E8E2] flex flex-col justify-between transition-all duration-300 z-30 select-none ${
+      className={`bg-white border-r rtl:border-r-0 rtl:border-l border-[#E2E8E2] flex flex-col justify-between transition-all duration-300 z-30 select-none ${
         collapsed ? "w-18" : "w-64"
       }`}
     >
       {/* Navigation Links */}
       <div className="py-4 px-3 space-y-1 overflow-y-auto">
         <div className="px-3 pb-2 flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-[#7D9087]">
-          {!collapsed && <span>Academic Modules</span>}
+          {!collapsed && <span>{t("academicModules")}</span>}
           <button
             onClick={onToggleCollapse}
             title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-            className="p-1 rounded-md hover:bg-[#F1F5F2] text-[#52635C] transition ml-auto"
+            className="p-1 rounded-md hover:bg-[#F1F5F2] text-[#52635C] transition ml-auto rtl:ml-0 rtl:mr-auto"
           >
-            {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+            {collapsed ? (
+              dir === "rtl" ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />
+            ) : (
+              dir === "rtl" ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />
+            )}
           </button>
         </div>
 
-        {NAV_ITEMS.map((item) => {
+        {NAV_CONFIGS.map((item) => {
           const Icon = item.icon;
           const isActive = currentSection === item.id;
+          const label = t(item.key);
+
           return (
             <button
               key={item.id}
               onClick={() => onSelectSection(item.id)}
-              title={collapsed ? item.label : undefined}
+              title={collapsed ? label : undefined}
               className={`w-full flex items-center ${
                 collapsed ? "justify-center px-2" : "justify-between px-3"
               } py-2.5 rounded-lg text-sm font-medium transition group ${
@@ -101,18 +111,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : "text-[#52635C] hover:bg-[#F1F5F2] hover:text-[#192520]"
               }`}
             >
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center gap-3 min-w-0">
                 <Icon
                   className={`w-5 h-5 flex-shrink-0 transition ${
                     isActive ? "text-[#84CC16]" : "text-[#7D9087] group-hover:text-[#174C3A]"
                   }`}
                 />
-                {!collapsed && <span className="truncate">{item.label}</span>}
+                {!collapsed && <span className="truncate">{label}</span>}
               </div>
 
               {!collapsed && item.tag && (
                 <span
-                  className={`text-[10px] uppercase font-bold px-1.5 py-0.5 rounded ${
+                  className={`text-[10px] uppercase font-bold px-1.5 py-0.5 rounded shrink-0 ${
                     isActive
                       ? "bg-white/20 text-white"
                       : "bg-[#E2E8E2] text-[#52635C]"
@@ -130,9 +140,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <div className="p-3 border-t border-[#E2E8E2] bg-[#F7F9F7]/80">
         {!collapsed ? (
           <div className="space-y-1">
-            <div className="flex items-center space-x-2 text-[11px] font-semibold text-[#174C3A]">
+            <div className="flex items-center gap-2 text-[11px] font-semibold text-[#174C3A]">
               <ShieldCheck className="w-3.5 h-3.5 text-[#2D8C83]" />
-              <span>Scientific Core v2.0</span>
+              <span>{t("scientificCore")} v2.0</span>
             </div>
             <div className="text-[10px] text-[#7D9087]">
               USDA SR Legacy &bull; ICMR 2020 &bull; WHO

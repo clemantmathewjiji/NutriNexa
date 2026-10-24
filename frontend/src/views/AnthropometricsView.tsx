@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { anthropometricsApi } from "../api";
 import { AnthropometricRecord } from "../types";
 import {
-  Activity, Plus, Save, Scale, AlertCircle,
-  CheckCircle2, Info, User, HeartPulse, History
+  Activity, Save, Info, HeartPulse
 } from "lucide-react";
+import { useTranslation } from "../i18n/LanguageContext";
 
 export const AnthropometricsView: React.FC = () => {
+  const { t, formatNumber, formatDate } = useTranslation();
   const [records, setRecords] = useState<AnthropometricRecord[]>([]);
 
   // Calculation inputs
@@ -86,12 +87,12 @@ export const AnthropometricsView: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-[#E2E8E2] shadow-xs">
         <div>
-          <h1 className="text-xl font-bold text-[#174C3A] flex items-center space-x-2">
+          <h1 className="text-xl font-bold text-[#174C3A] flex items-center gap-2">
             <Activity className="w-5 h-5 text-[#2D8C83]" />
-            <span>Anthropometric Assessment & Body Composition</span>
+            <span>{t("anthroTitle")}</span>
           </h1>
           <p className="text-xs text-[#52635C] mt-1">
-            Calculates BMI, WHO & Asian-Pacific classification standards, and Waist-to-Height Ratio (WHtR).
+            {t("anthroSubtitle")}
           </p>
         </div>
       </div>
@@ -100,12 +101,12 @@ export const AnthropometricsView: React.FC = () => {
         {/* Left Column: Input Form (1 col) */}
         <form onSubmit={handleSave} className="bg-white rounded-xl border border-[#E2E8E2] p-5 shadow-xs space-y-4 text-xs">
           <div className="flex items-center justify-between pb-2 border-b border-[#E2E8E2]">
-            <span className="font-bold text-sm text-[#192520]">Subject Measurements</span>
+            <span className="font-bold text-sm text-[#192520]">{t("subjectMeasurements")}</span>
             <span className="text-[10px] text-[#7D9087]">Units: cm &bull; kg</span>
           </div>
 
           <div>
-            <label className="block font-semibold mb-1">Subject ID / Research Code *</label>
+            <label className="block font-semibold mb-1">{t("subjectId")} *</label>
             <input
               type="text"
               required
@@ -117,7 +118,7 @@ export const AnthropometricsView: React.FC = () => {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block font-semibold mb-1">Age (Years) *</label>
+              <label className="block font-semibold mb-1">{t("ageYears")} *</label>
               <input
                 type="number"
                 min="1"
@@ -128,7 +129,7 @@ export const AnthropometricsView: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block font-semibold mb-1">Biological Sex *</label>
+              <label className="block font-semibold mb-1">{t("biologicalSex")} *</label>
               <select
                 value={sex}
                 onChange={(e) => setSex(e.target.value)}
@@ -142,7 +143,7 @@ export const AnthropometricsView: React.FC = () => {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block font-semibold mb-1">Height (cm) *</label>
+              <label className="block font-semibold mb-1">{t("heightCm")} *</label>
               <input
                 type="number"
                 step="0.5"
@@ -154,7 +155,7 @@ export const AnthropometricsView: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block font-semibold mb-1">Weight (kg) *</label>
+              <label className="block font-semibold mb-1">{t("weightKg")} *</label>
               <input
                 type="number"
                 step="0.1"
@@ -169,7 +170,7 @@ export const AnthropometricsView: React.FC = () => {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block font-semibold mb-1">Waist Circumference (cm)</label>
+              <label className="block font-semibold mb-1">{t("waistCm")}</label>
               <input
                 type="number"
                 step="0.5"
@@ -179,7 +180,7 @@ export const AnthropometricsView: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block font-semibold mb-1">Hip Circumference (cm)</label>
+              <label className="block font-semibold mb-1">{t("hipCm")}</label>
               <input
                 type="number"
                 step="0.5"
@@ -191,7 +192,7 @@ export const AnthropometricsView: React.FC = () => {
           </div>
 
           <div>
-            <label className="block font-semibold mb-1">Assessment Date *</label>
+            <label className="block font-semibold mb-1">{t("assessmentDate")} *</label>
             <input
               type="date"
               value={assessmentDate}
@@ -201,7 +202,7 @@ export const AnthropometricsView: React.FC = () => {
           </div>
 
           <div>
-            <label className="block font-semibold mb-1">Clinical / Research Notes</label>
+            <label className="block font-semibold mb-1">{t("notes")}</label>
             <input
               type="text"
               value={notes}
@@ -212,10 +213,10 @@ export const AnthropometricsView: React.FC = () => {
 
           <button
             type="submit"
-            className="w-full py-2.5 bg-[#174C3A] hover:bg-[#123C2E] text-white font-bold rounded-lg shadow-xs flex items-center justify-center space-x-1.5 transition"
+            className="w-full py-2.5 bg-[#174C3A] hover:bg-[#123C2E] text-white font-bold rounded-lg shadow-xs flex items-center justify-center gap-1.5 transition"
           >
             <Save className="w-4 h-4 text-[#84CC16]" />
-            <span>{savedSuccess ? "Record Saved!" : "Save Physical Record"}</span>
+            <span>{savedSuccess ? "Record Saved!" : t("save")}</span>
           </button>
         </form>
 
@@ -228,104 +229,106 @@ export const AnthropometricsView: React.FC = () => {
                 {/* BMI Card */}
                 <div className="bg-white p-5 rounded-xl border border-[#E2E8E2] shadow-xs space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-[11px] font-semibold text-[#52635C] uppercase">Body Mass Index (BMI)</span>
+                    <span className="text-[11px] font-semibold text-[#52635C] uppercase">{t("bmiValue")}</span>
                     <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-[#174C3A]">
                       {computed.who_category}
                     </span>
                   </div>
-                  <div className="text-3xl font-extrabold text-[#174C3A]">
-                    {computed.bmi} <span className="text-sm font-normal text-[#52635C]">kg/m²</span>
+                  <div className="text-3xl font-extrabold text-[#174C3A] ltr-only">
+                    {formatNumber(computed.bmi, 2)} <span className="text-sm font-normal text-[#52635C]">kg/m²</span>
                   </div>
 
                   <div className="pt-2 border-t border-[#E2E8E2] text-[11px] space-y-1">
                     <div className="flex justify-between">
-                      <span className="text-[#7D9087]">Asian Risk Standard:</span>
-                      <span className="font-semibold text-[#192520]">{computed.asian_category}</span>
+                      <span className="text-[#7D9087]">{t("whoCategory")}:</span>
+                      <span className="font-semibold text-[#192520]">{computed.who_category}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-[#7D9087]">Standard Method:</span>
-                      <span className="text-[#52635C]">WHO TRS 854</span>
+                      <span className="text-[#7D9087]">{t("asianRiskStandard")}:</span>
+                      <span className="font-semibold text-[#2D8C83]">{computed.asian_category}</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Waist-to-Height Ratio Card */}
+                {/* WHtR Card */}
                 <div className="bg-white p-5 rounded-xl border border-[#E2E8E2] shadow-xs space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-[11px] font-semibold text-[#52635C] uppercase">Waist-to-Height Ratio</span>
-                    {computed.waist_to_height_ratio && (
-                      <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-teal-50 text-[#2D8C83]">
-                        {computed.waist_to_height_ratio < 0.5 ? "Healthy (<0.5)" : "Elevated Risk"}
-                      </span>
-                    )}
+                    <span className="text-[11px] font-semibold text-[#52635C] uppercase">{t("waistToHeightRatio")}</span>
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-teal-50 text-[#2D8C83]">
+                      {computed.whtr_status}
+                    </span>
                   </div>
-                  <div className="text-3xl font-extrabold text-[#2D8C83]">
-                    {computed.waist_to_height_ratio || "N/A"}
+                  <div className="text-3xl font-extrabold text-[#2D8C83] ltr-only">
+                    {computed.waist_to_height_ratio ? formatNumber(computed.waist_to_height_ratio, 3) : "—"}
                   </div>
 
                   <div className="pt-2 border-t border-[#E2E8E2] text-[11px] space-y-1">
                     <div className="flex justify-between">
-                      <span className="text-[#7D9087]">Cardiometabolic Risk:</span>
-                      <span className="font-semibold text-[#192520]">
-                        {computed.waist_to_height_status || "Waist circumference required"}
-                      </span>
+                      <span className="text-[#7D9087]">{t("cardiometabolicRisk")}:</span>
+                      <span className="font-semibold text-[#192520]">{computed.whtr_status}</span>
                     </div>
-                    {computed.waist_hip_ratio && (
+                    {computed.waist_to_hip_ratio && (
                       <div className="flex justify-between">
                         <span className="text-[#7D9087]">Waist-to-Hip Ratio:</span>
-                        <span className="font-semibold text-[#192520]">{computed.waist_hip_ratio}</span>
+                        <span className="font-semibold text-[#192520] ltr-only">{formatNumber(computed.waist_to_hip_ratio, 2)}</span>
                       </div>
                     )}
                   </div>
                 </div>
               </div>
 
-              {/* Pediatric Warning Alert */}
-              {computed.is_pediatric && (
-                <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl flex items-start space-x-2 text-xs text-amber-800">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <strong>Pediatric Assessment Notice:</strong> For children and adolescents under 18 years, adult BMI categories are not clinically valid. Interpretation requires age-and-sex-specific WHO Growth Reference Z-Scores (percentiles).
-                  </div>
+              {/* Reference Standards Explanatory Card */}
+              <div className="p-4 bg-[#F1F5F2] rounded-xl border border-[#E2E8E2] text-xs space-y-1.5">
+                <div className="flex items-center gap-1.5 font-bold text-[#174C3A]">
+                  <HeartPulse className="w-4 h-4 text-[#2D8C83]" />
+                  <span>WHO TRS 854 & Asian-Pacific WHO Cutoffs</span>
                 </div>
-              )}
+                <p className="text-[#52635C] text-[11px] leading-relaxed">
+                  WHO standard defines normal BMI as 18.5 – 24.9 kg/m². For Asian populations, elevated cardiometabolic risk occurs at lower adiposity levels (overweight &ge; 23.0 kg/m²; obesity &ge; 25.0 kg/m²). Waist-to-height ratio values &ge; 0.5 indicate centralized adiposity.
+                </p>
+                <p className="text-[#7D9087] text-[10px] italic">
+                  {t("pediatricNotice")}
+                </p>
+              </div>
             </div>
           )}
 
-          {/* Longitudinal History Table */}
+          {/* Historical Assessments Table */}
           <div className="bg-white rounded-xl border border-[#E2E8E2] shadow-xs overflow-hidden">
-            <div className="p-4 border-b border-[#E2E8E2] bg-[#F7F9F7] flex items-center justify-between">
-              <h3 className="text-sm font-bold text-[#174C3A]">Recorded Physical Assessments</h3>
-              <span className="text-xs text-[#7D9087]">{records.length} records</span>
+            <div className="px-5 py-3 border-b border-[#E2E8E2] bg-[#F7F9F7] flex justify-between items-center text-xs">
+              <span className="font-bold text-[#174C3A]">{t("recordedAssessments")}</span>
+              <span className="text-[#7D9087]">{records.length} records</span>
             </div>
 
             <div className="overflow-x-auto text-xs">
-              <table className="w-full text-left">
+              <table className="w-full text-left rtl:text-right">
                 <thead className="bg-[#F1F5F2] text-[#192520] font-semibold border-b border-[#E2E8E2]">
                   <tr>
-                    <th className="py-2.5 px-4">Subject</th>
-                    <th className="py-2.5 px-4">Date</th>
-                    <th className="py-2.5 px-4">Age / Sex</th>
-                    <th className="py-2.5 px-4">Ht / Wt</th>
-                    <th className="py-2.5 px-4">BMI</th>
-                    <th className="py-2.5 px-4">WHO Classification</th>
-                    <th className="py-2.5 px-4">WHtR</th>
+                    <th className="py-2.5 px-3">Subject ID</th>
+                    <th className="py-2.5 px-3">{t("date")}</th>
+                    <th className="py-2.5 px-3 text-right rtl:text-left">{t("heightCm")}</th>
+                    <th className="py-2.5 px-3 text-right rtl:text-left">{t("weightKg")}</th>
+                    <th className="py-2.5 px-3 text-right rtl:text-left">BMI</th>
+                    <th className="py-2.5 px-3">{t("whoCategory")}</th>
+                    <th className="py-2.5 px-3 text-right rtl:text-left">WHtR</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#E2E8E2]">
                   {records.map((r) => (
                     <tr key={r.id} className="hover:bg-[#F7F9F7]">
-                      <td className="py-2.5 px-4 font-mono font-bold text-[#174C3A]">{r.subject_identifier}</td>
-                      <td className="py-2.5 px-4 text-[#52635C]">{r.assessment_date}</td>
-                      <td className="py-2.5 px-4 text-[#7D9087]">{r.age_years}y &bull; {r.sex}</td>
-                      <td className="py-2.5 px-4 text-[#192520]">{r.height_cm}cm &bull; {r.weight_kg}kg</td>
-                      <td className="py-2.5 px-4 font-bold text-[#192520]">{r.bmi}</td>
-                      <td className="py-2.5 px-4">
-                        <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-emerald-50 text-emerald-800">
+                      <td className="py-2 px-3 font-mono font-semibold text-[#174C3A]">{r.subject_identifier}</td>
+                      <td className="py-2 px-3 text-[#52635C]">{formatDate(r.assessment_date)}</td>
+                      <td className="py-2 px-3 text-right rtl:text-left ltr-only">{formatNumber(r.height_cm)}</td>
+                      <td className="py-2 px-3 text-right rtl:text-left ltr-only">{formatNumber(r.weight_kg)}</td>
+                      <td className="py-2 px-3 text-right rtl:text-left font-bold text-[#192520] ltr-only">{formatNumber(r.bmi, 2)}</td>
+                      <td className="py-2 px-3">
+                        <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-50 text-[#174C3A] font-medium">
                           {r.bmi_category}
                         </span>
                       </td>
-                      <td className="py-2.5 px-4 text-[#2D8C83] font-semibold">{r.waist_to_height_ratio || "—"}</td>
+                      <td className="py-2 px-3 text-right rtl:text-left text-[#52635C] ltr-only">
+                        {r.waist_to_height_ratio ? formatNumber(r.waist_to_height_ratio, 3) : "—"}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

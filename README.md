@@ -109,6 +109,26 @@ NutriNexa Platform
 - Organizes research protocols by study code (e.g. `NUTRI-2026-A`).
 - Upload study matrices and automatically computes **Mean, Median, Standard Deviation (SD), Minimum, Maximum, and Sample Size (N)** without data fabrication.
 
+#### 🌐 Multilingual Interface & Script Localization (Section 19)
+- **12 Full-Platform Languages:**
+  1. English — `en`
+  2. Malayalam — `ml` (മലയാളം)
+  3. Indonesian — `id` (Bahasa Indonesia)
+  4. Russian — `ru` (Русский)
+  5. Arabic — `ar` (العربية — with complete Right-to-Left RTL mirroring)
+  6. Hindi — `hi` (हिन्दी)
+  7. Tamil — `ta` (தமிழ்)
+  8. Kannada — `kn` (ಕನ್ನಡ)
+  9. Telugu — `te` (తెలుగు)
+  10. Bengali — `bn` (বাংলা)
+  11. French — `fr` (Français)
+  12. Spanish — `es` (Español)
+- **Native Language Selector:** Clearly visible in both website header and user settings with instant in-place switching without reload or data loss.
+- **Full Right-to-Left (RTL) Support:** When Arabic is selected, navigations, form layouts, cards, and toolbars automatically mirror directionally while keeping numbers, chemical symbols, and scientific formulas strictly Left-to-Right (`ltr-only`).
+- **Centralized Scientific Glossary:** Standardized nutrition terminology across all 12 dictionaries (Energy, Protein, Total Fat, Saturated Fat, Carbohydrates, Dietary Fiber, Sugars, Micronutrients, Serving Size, Edible Portion, DRI Benchmarks).
+- **Multilingual Food Search:** Search foods using regional names and transliterations (e.g., searching for `ഓട്സ്`, `الشوفان`, `Овсянка`, `दूध`, or `Susu` finds the corresponding standardized nutrient record).
+- **Multilingual Reports & Exports:** Printable PDF reports and CSV exports support choosing report language independently of interface language.
+
 ---
 
 ## 🗄️ 4. Database Schema & Architecture

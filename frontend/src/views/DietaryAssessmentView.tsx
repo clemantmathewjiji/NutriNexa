@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { dietaryApi, foodsApi, recipesApi } from "../api";
 import { FoodItem, RecipeRecord, DRVComparisonItem } from "../types";
 import {
-  CalendarCheck, Plus, Trash2, ShieldCheck, AlertTriangle,
-  CheckCircle2, Info, ChevronDown, Sparkles
+  CalendarCheck, Plus, Trash2, X
 } from "lucide-react";
+import { useTranslation } from "../i18n/LanguageContext";
 
 export const DietaryAssessmentView: React.FC = () => {
+  const { t, formatNumber, formatDate } = useTranslation();
   const [diaries, setDiaries] = useState<any[]>([]);
   const [selectedDiaryId, setSelectedDiaryId] = useState<number | null>(null);
   const [diaryDetail, setDiaryDetail] = useState<any>(null);
@@ -130,21 +131,21 @@ export const DietaryAssessmentView: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-[#E2E8E2] shadow-xs">
         <div>
-          <h1 className="text-xl font-bold text-[#174C3A] flex items-center space-x-2">
+          <h1 className="text-xl font-bold text-[#174C3A] flex items-center gap-2">
             <CalendarCheck className="w-5 h-5 text-[#2D8C83]" />
-            <span>Dietary Assessment & Food Recall</span>
+            <span>{t("dietaryTitle")}</span>
           </h1>
           <p className="text-xs text-[#52635C] mt-1">
-            24-hour food recalls, meal diaries, and nutrient adequacy benchmarking against DRI/RDA reference standards.
+            {t("dietarySubtitle")}
           </p>
         </div>
 
         <button
           onClick={() => setShowNewDiaryModal(true)}
-          className="bg-[#174C3A] hover:bg-[#123C2E] text-white text-xs font-semibold px-4 py-2 rounded-lg shadow-xs flex items-center space-x-1.5 transition"
+          className="bg-[#174C3A] hover:bg-[#123C2E] text-white text-xs font-semibold px-4 py-2 rounded-lg shadow-xs flex items-center gap-1.5 transition"
         >
           <Plus className="w-4 h-4" />
-          <span>New Assessment</span>
+          <span>{t("newAssessment")}</span>
         </button>
       </div>
 
@@ -152,7 +153,7 @@ export const DietaryAssessmentView: React.FC = () => {
         {/* Left Column: Assessment Selector */}
         <div className="bg-white rounded-xl border border-[#E2E8E2] p-4 shadow-xs space-y-3">
           <div className="text-xs font-bold uppercase tracking-wider text-[#7D9087] pb-2 border-b border-[#E2E8E2]">
-            Dietary Records ({diaries.length})
+            {t("dietaryRecords")} ({diaries.length})
           </div>
 
           <div className="space-y-2">
@@ -173,7 +174,7 @@ export const DietaryAssessmentView: React.FC = () => {
                       selectedDiaryId === d.id ? "bg-white/20 text-white" : "bg-[#E2E8E2] text-[#52635C]"
                     }`}
                   >
-                    {d.diary_date}
+                    {formatDate(d.diary_date)}
                   </span>
                 </div>
                 <div
@@ -196,10 +197,10 @@ export const DietaryAssessmentView: React.FC = () => {
               <div className="bg-white rounded-xl border border-[#E2E8E2] p-5 shadow-xs flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <div className="text-xs font-semibold text-[#2D8C83]">
-                    Subject Record: {diaryDetail.diary.client_code}
+                    {t("subjectRecord")}: {diaryDetail.diary.client_code}
                   </div>
                   <h2 className="text-base font-bold text-[#192520] mt-0.5">
-                    {diaryDetail.diary.assessment_type} — {diaryDetail.diary.diary_date}
+                    {diaryDetail.diary.assessment_type} — {formatDate(diaryDetail.diary.diary_date)}
                   </h2>
                   <p className="text-xs text-[#52635C] mt-1">
                     Benchmark Reference Standard:{" "}
@@ -207,10 +208,10 @@ export const DietaryAssessmentView: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="text-right">
-                  <div className="text-xs text-[#7D9087]">Daily Energy Intake</div>
-                  <div className="text-xl font-bold text-[#174C3A]">
-                    {diaryDetail.daily_totals.totals.energy_kcal?.amount ?? 0} kcal
+                <div className="text-right rtl:text-left">
+                  <div className="text-xs text-[#7D9087]">{t("dailyEnergyIntake")}</div>
+                  <div className="text-xl font-bold text-[#174C3A] ltr-only">
+                    {formatNumber(diaryDetail.daily_totals.totals.energy_kcal?.amount ?? 0)} kcal
                   </div>
                 </div>
               </div>
@@ -222,7 +223,7 @@ export const DietaryAssessmentView: React.FC = () => {
                   return (
                     <div key={mealName} className="bg-white rounded-xl border border-[#E2E8E2] p-4 shadow-xs">
                       <div className="flex items-center justify-between pb-2 border-b border-[#E2E8E2]">
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center gap-2">
                           <span className="font-bold text-xs text-[#192520]">{mealName}</span>
                           <span className="text-[10px] text-[#7D9087]">({mealItems.length} items)</span>
                         </div>
@@ -231,10 +232,10 @@ export const DietaryAssessmentView: React.FC = () => {
                             setActiveMealType(mealName);
                             setSelectedItemId(allFoods[0]?.id || 1);
                           }}
-                          className="text-xs font-semibold text-[#2D8C83] hover:text-[#174C3A] flex items-center space-x-1"
+                          className="text-xs font-semibold text-[#2D8C83] hover:text-[#174C3A] flex items-center gap-1"
                         >
                           <Plus className="w-3.5 h-3.5" />
-                          <span>Add Item</span>
+                          <span>{t("addItemToMeal")}</span>
                         </button>
                       </div>
 
@@ -244,11 +245,11 @@ export const DietaryAssessmentView: React.FC = () => {
                             <div key={item.entry_id} className="py-2 flex items-center justify-between">
                               <div>
                                 <span className="font-semibold text-[#192520]">{item.food_name}</span>
-                                <span className="text-[#7D9087] ml-2">({item.quantity_grams}g)</span>
+                                <span className="text-[#7D9087] mx-2">({formatNumber(item.quantity_grams)}g)</span>
                               </div>
-                              <div className="flex items-center space-x-3">
-                                <span className="font-bold text-[#174C3A]">
-                                  {item.nutrients?.energy_kcal?.amount ?? 0} kcal
+                              <div className="flex items-center gap-3">
+                                <span className="font-bold text-[#174C3A] ltr-only">
+                                  {formatNumber(item.nutrients?.energy_kcal?.amount ?? 0)} kcal
                                 </span>
                                 <button
                                   onClick={() => handleRemoveEntry(item.entry_id)}
@@ -274,10 +275,10 @@ export const DietaryAssessmentView: React.FC = () => {
               <div className="bg-white rounded-xl border border-[#E2E8E2] shadow-xs overflow-hidden">
                 <div className="p-4 border-b border-[#E2E8E2] bg-[#F7F9F7]">
                   <h3 className="text-sm font-bold text-[#174C3A]">
-                    Nutrient Intake vs. Dietary Reference Values (DRV / RDA)
+                    {t("drvIntakeVsReference")}
                   </h3>
                   <p className="text-xs text-[#52635C]">
-                    Scientific screening evaluation. Shortfalls flagged when intake is below 70% of target; excess flagged if above Upper Limit (UL).
+                    {t("drvShortfallNotice")}
                   </p>
                 </div>
 
@@ -286,7 +287,6 @@ export const DietaryAssessmentView: React.FC = () => {
                     const pct = comp.percentage_of_target ?? 0;
                     const isShortfall = comp.status === "Potential Shortfall";
                     const isExcess = comp.status === "Excess (Above UL)";
-                    const isMet = comp.status === "Target Met";
 
                     return (
                       <div key={comp.nutrient_code} className="space-y-1">
@@ -294,8 +294,8 @@ export const DietaryAssessmentView: React.FC = () => {
                           <span className="font-bold text-[#192520] capitalize">
                             {comp.nutrient_code.replace(/_/g, " ")}:
                           </span>
-                          <span className="text-[#52635C]">
-                            <strong>{comp.actual_intake !== null ? comp.actual_intake : "0"}</strong> / {comp.target_value} {comp.unit} ({pct}%)
+                          <span className="text-[#52635C] ltr-only">
+                            <strong>{comp.actual_intake !== null ? formatNumber(comp.actual_intake) : "0"}</strong> / {formatNumber(comp.target_value)} {comp.unit} ({formatNumber(pct, 0)}%)
                           </span>
                         </div>
 
@@ -316,10 +316,10 @@ export const DietaryAssessmentView: React.FC = () => {
                         {/* Status Label */}
                         <div className="flex justify-between text-[10px]">
                           <span className={isExcess ? "text-red-600 font-bold" : isShortfall ? "text-amber-700 font-semibold" : "text-emerald-700 font-medium"}>
-                            {comp.status}
+                            {isExcess ? t("excessAboveUl") : isShortfall ? t("potentialShortfall") : t("targetMet")}
                           </span>
                           {comp.upper_limit && (
-                            <span className="text-[#7D9087]">UL: {comp.upper_limit} {comp.unit}</span>
+                            <span className="text-[#7D9087] ltr-only">UL: {formatNumber(comp.upper_limit)} {comp.unit}</span>
                           )}
                         </div>
                       </div>
@@ -340,11 +340,16 @@ export const DietaryAssessmentView: React.FC = () => {
       {activeMealType && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
           <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-[#E2E8E2] p-5 space-y-4 text-xs animate-in fade-in zoom-in-95">
-            <h3 className="text-sm font-bold text-[#174C3A]">
-              Add Food or Recipe to {activeMealType}
-            </h3>
+            <div className="flex justify-between items-center">
+              <h3 className="text-sm font-bold text-[#174C3A]">
+                {t("addItemToMeal")}: {activeMealType}
+              </h3>
+              <button onClick={() => setActiveMealType(null)} className="text-[#7D9087] hover:text-[#192520]">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
-            <div className="flex border rounded-lg overflow-hidden">
+            <div className="flex border border-[#E2E8E2] rounded-lg overflow-hidden">
               <button
                 type="button"
                 onClick={() => setItemType("food")}
@@ -384,30 +389,29 @@ export const DietaryAssessmentView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-semibold mb-1">Quantity (Grams) *</label>
+                <label className="block font-semibold mb-1">Portion Weight (g)</label>
                 <input
                   type="number"
                   min="1"
-                  required
                   value={itemGrams}
                   onChange={(e) => setItemGrams(parseFloat(e.target.value) || 0)}
-                  className="w-full px-3 py-2 border rounded-lg"
+                  className="w-full px-3 py-2 border rounded-lg text-right rtl:text-left"
                 />
               </div>
 
-              <div className="flex justify-end space-x-2 pt-2">
+              <div className="flex justify-end gap-2 pt-2">
                 <button
                   type="button"
                   onClick={() => setActiveMealType(null)}
                   className="px-3 py-1.5 border rounded-lg"
                 >
-                  Cancel
+                  {t("cancel")}
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-1.5 bg-[#174C3A] text-white font-bold rounded-lg"
+                  className="px-4 py-1.5 bg-[#174C3A] text-white rounded-lg font-bold"
                 >
-                  Add to Meal
+                  {t("save")}
                 </button>
               </div>
             </form>
@@ -415,19 +419,23 @@ export const DietaryAssessmentView: React.FC = () => {
         </div>
       )}
 
-      {/* NEW DIARY MODAL */}
+      {/* NEW RECALL MODAL */}
       {showNewDiaryModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-[#E2E8E2] p-6 space-y-4 text-xs animate-in fade-in zoom-in-95">
-            <h3 className="text-sm font-bold text-[#174C3A]">Create New Dietary Assessment</h3>
+          <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-[#E2E8E2] p-5 space-y-4 text-xs animate-in fade-in zoom-in-95">
+            <div className="flex justify-between items-center">
+              <h3 className="text-sm font-bold text-[#174C3A]">{t("newAssessment")}</h3>
+              <button onClick={() => setShowNewDiaryModal(false)} className="text-[#7D9087] hover:text-[#192520]">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
             <form onSubmit={handleCreateDiary} className="space-y-3">
               <div>
-                <label className="block font-semibold mb-1">Subject / Patient Identifier *</label>
+                <label className="block font-semibold mb-1">Subject Code / ID *</label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. SUBJ-412"
                   value={clientCode}
                   onChange={(e) => setClientCode(e.target.value)}
                   className="w-full px-3 py-2 border rounded-lg"
@@ -435,7 +443,7 @@ export const DietaryAssessmentView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-semibold mb-1">Assessment Date *</label>
+                <label className="block font-semibold mb-1">{t("date")} *</label>
                 <input
                   type="date"
                   required
@@ -446,46 +454,56 @@ export const DietaryAssessmentView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-semibold mb-1">Assessment Protocol</label>
+                <label className="block font-semibold mb-1">Assessment Type</label>
                 <select
                   value={assessmentType}
                   onChange={(e) => setAssessmentType(e.target.value)}
                   className="w-full px-3 py-2 border rounded-lg bg-white"
                 >
-                  <option value="24-Hour Recall">24-Hour Dietary Recall</option>
-                  <option value="3-Day Weighed Food Record">3-Day Weighed Food Record</option>
-                  <option value="Food Frequency Screening">Food Frequency Screening</option>
+                  <option value="24-Hour Recall">24-Hour Recall</option>
+                  <option value="3-Day Food Record">3-Day Food Record</option>
+                  <option value="Food Frequency (FFQ)">Food Frequency (FFQ)</option>
+                  <option value="Clinical Metabolic Diet">Clinical Metabolic Diet</option>
                 </select>
               </div>
 
               <div>
-                <label className="block font-semibold mb-1">Target DRV Standard</label>
+                <label className="block font-semibold mb-1">{t("configuredDrvStandards")}</label>
                 <select
                   value={selectedProfileId}
                   onChange={(e) => setSelectedProfileId(parseInt(e.target.value))}
                   className="w-full px-3 py-2 border rounded-lg bg-white"
                 >
                   {drvProfiles.map((p) => (
-                    <option key={p.id} value={p.id}>
-                      {p.profile_name} ({p.target_group})
-                    </option>
+                    <option key={p.id} value={p.id}>{p.profile_name} ({p.authority})</option>
                   ))}
                 </select>
               </div>
 
-              <div className="flex justify-end space-x-2 pt-2">
+              <div>
+                <label className="block font-semibold mb-1">{t("notes")}</label>
+                <textarea
+                  value={diaryNotes}
+                  onChange={(e) => setDiaryNotes(e.target.value)}
+                  rows={2}
+                  className="w-full px-3 py-2 border rounded-lg"
+                  placeholder="Clinical observation, baseline or intervention day notes..."
+                ></textarea>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2">
                 <button
                   type="button"
                   onClick={() => setShowNewDiaryModal(false)}
                   className="px-3 py-1.5 border rounded-lg"
                 >
-                  Cancel
+                  {t("cancel")}
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-1.5 bg-[#174C3A] text-white font-bold rounded-lg"
+                  className="px-4 py-1.5 bg-[#174C3A] text-white rounded-lg font-bold"
                 >
-                  Initialize Assessment
+                  {t("save")}
                 </button>
               </div>
             </form>
