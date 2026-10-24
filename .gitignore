@@ -1,18 +1,37 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.sqlite3
-.env
-venv/
-ENV/
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
 
-# Node
-node_modules/
+# Testing
+/coverage
+
+# Next.js build output
+/.next/
+/out/
+
+# Production build
+/build
+/dist
+
+# Environment files
+.env*.local
+.env
+!.env.example
+
+# Debug logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.pnpm-debug.log*
 
-# Builds
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# OS files
 .DS_Store
-*.log
+Thumbs.db
