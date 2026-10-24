@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --primary: #174c3a;
+    --primary-hover: #123c2e;
+    --secondary: #2d8c83;
+    --secondary-hover: #237069;
+    --accent: #84cc16;
+    --accent-muted: #65a30d;
+    --bg-page: #f7f9f7;
+    --card-bg: #ffffff;
+    --border-subtle: #e2e8e2;
+    --text-primary: #192520;
+    --text-secondary: #52635c;
+    --text-muted: #7d9087;
+  }
+
+  body {
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+/* Custom scrollbars for data tables and sidebars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f2;
+}
+::-webkit-scrollbar-thumb {
+  background: #c3d2ca;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9ab4a7;
+}
+
+/* Print Styles for Research Reports */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .no-print, header, aside, button:not(.print-allow), .sidebar {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .page-break {
+    page-break-before: always;
+  }
+  .shadow-sm, .shadow-md, .shadow-lg {
+    box-shadow: none !important;
+  }
+}
