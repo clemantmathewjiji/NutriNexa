@@ -5,12 +5,20 @@ import { eq } from "drizzle-orm";
 import { calculateSingleFoodNutrients, calculateRecipeBreakdown } from "@/lib/calculator";
 import { STANDARD_NUTRIENTS } from "@/lib/seedData";
 import { mockStore } from "@/lib/mockStore";
+import { getCurrentUser } from "@/lib/auth";
+
+export const dynamic = "force-dynamic";
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const user = await getCurrentUser(request);
+    if (!user) {
+      return NextResponse.json({ detail: "Authentication required to view recipe details." }, { status: 401 });
+    }
+
     const { id } = await params;
     const recipeId = parseInt(id, 10);
     if (isNaN(recipeId)) {
@@ -24,6 +32,10 @@ export async function GET(
           const rows = await db.select().from(recipes).where(eq(recipes.id, recipeId)).limit(1);
           if (rows.length > 0) {
             const recipe = rows[0];
+            if (recipe.userId !== user.id) {
+              return NextResponse.json({ detail: "Forbidden: You do not own this recipe." }, { status: 403 });
+            }
+
             const ingredients = await db
               .select()
               .from(recipeIngredients)
@@ -87,6 +99,10 @@ export async function GET(
       return NextResponse.json({ detail: "Recipe not found." }, { status: 404 });
     }
 
+    if (mock.user_id !== user.id) {
+      return NextResponse.json({ detail: "Forbidden: You do not own this recipe." }, { status: 403 });
+    }
+
     const ingredientCalculations: any[] = [];
     for (const ing of mock.ingredients) {
       const f = mockStore.foods.find((food) => food.id === ing.food_id);
@@ -130,10 +146,15 @@ export async function GET(
 }
 
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const user = await getCurrentUser(request);
+    if (!user) {
+      return NextResponse.json({ detail: "Authentication required." }, { status: 401 });
+    }
+
     const { id } = await params;
     const recipeId = parseInt(id, 10);
     if (isNaN(recipeId)) {
@@ -144,12 +165,21 @@ export async function DELETE(
       const db = getDb();
       if (db) {
         try {
+          const rows = await db.select().from(recipes).where(eq(recipes.id, recipeId)).limit(1);
+          if (rows.length > 0 && rows[0].userId !== user.id) {
+            return NextResponse.json({ detail: "Forbidden: You cannot delete another user's recipe." }, { status: 403 });
+          }
           await db.delete(recipes).where(eq(recipes.id, recipeId));
           return NextResponse.json({ message: "Recipe deleted successfully." });
         } catch (dbErr) {
           console.warn("DB delete recipe error, falling back to mock:", dbErr);
         }
       }
+    }
+
+    const mock = mockStore.recipes.find((r) => r.id === recipeId);
+    if (mock && mock.user_id !== user.id) {
+      return NextResponse.json({ detail: "Forbidden: You cannot delete another user's recipe." }, { status: 403 });
     }
 
     mockStore.recipes = mockStore.recipes.filter((r) => r.id !== recipeId);

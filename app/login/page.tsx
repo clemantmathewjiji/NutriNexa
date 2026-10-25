@@ -211,11 +211,18 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <div className="text-center text-xs text-[#52635C] pt-2 border-t border-[#E2E8E2]">
-          New investigator?{" "}
-          <Link href="/register" className="font-semibold text-[#2D8C83] hover:underline">
-            Register academic profile
-          </Link>
+        <div className="text-center text-xs text-[#52635C] pt-2 border-t border-[#E2E8E2] space-y-2">
+          <div>
+            New investigator?{" "}
+            <Link href="/signup" className="font-semibold text-[#2D8C83] hover:underline">
+              Register academic profile
+            </Link>
+          </div>
+          <div>
+            <Link href="/" className="inline-flex items-center gap-1.5 text-[#7D9087] hover:text-[#192520] hover:underline font-medium">
+              <span>&larr; Continue Exploring as Guest</span>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

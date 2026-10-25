@@ -5,12 +5,20 @@ import { eq } from "drizzle-orm";
 import { calculateSingleFoodNutrients, aggregateNutrientCalculation } from "@/lib/calculator";
 import { STANDARD_NUTRIENTS } from "@/lib/seedData";
 import { mockStore } from "@/lib/mockStore";
+import { getCurrentUser } from "@/lib/auth";
+
+export const dynamic = "force-dynamic";
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const user = await getCurrentUser(request);
+    if (!user) {
+      return NextResponse.json({ detail: "Authentication required." }, { status: 401 });
+    }
+
     const { id } = await params;
     const calcId = parseInt(id, 10);
     if (isNaN(calcId)) {
@@ -24,6 +32,10 @@ export async function GET(
           const rows = await db.select().from(calculations).where(eq(calculations.id, calcId)).limit(1);
           if (rows.length > 0) {
             const calc = rows[0];
+            if (calc.userId !== user.id) {
+              return NextResponse.json({ detail: "Forbidden: You do not own this calculation." }, { status: 403 });
+            }
+
             const items = await db.select().from(calculationItems).where(eq(calculationItems.calculationId, calcId));
             const dbNuts = await db.select().from(nutrients).orderBy(nutrients.displayOrder);
             const allNuts = dbNuts.map((n) => ({
@@ -77,6 +89,10 @@ export async function GET(
       return NextResponse.json({ detail: "Calculation not found." }, { status: 404 });
     }
 
+    if (mock.user_id !== user.id) {
+      return NextResponse.json({ detail: "Forbidden: You do not own this calculation." }, { status: 403 });
+    }
+
     const itemResults: any[] = [];
     for (const it of mock.items) {
       const f = mockStore.foods.find((food) => food.id === it.food_id);
@@ -113,10 +129,15 @@ export async function GET(
 }
 
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const user = await getCurrentUser(request);
+    if (!user) {
+      return NextResponse.json({ detail: "Authentication required." }, { status: 401 });
+    }
+
     const { id } = await params;
     const calcId = parseInt(id, 10);
     if (isNaN(calcId)) {
@@ -127,12 +148,21 @@ export async function DELETE(
       const db = getDb();
       if (db) {
         try {
+          const rows = await db.select().from(calculations).where(eq(calculations.id, calcId)).limit(1);
+          if (rows.length > 0 && rows[0].userId !== user.id) {
+            return NextResponse.json({ detail: "Forbidden: You cannot delete another user's calculation." }, { status: 403 });
+          }
           await db.delete(calculations).where(eq(calculations.id, calcId));
           return NextResponse.json({ message: "Calculation deleted successfully." });
         } catch (dbErr) {
           console.warn("DB delete calculation error, falling back to mock:", dbErr);
         }
       }
+    }
+
+    const mock = mockStore.calculations.find((c) => c.id === calcId);
+    if (mock && mock.user_id !== user.id) {
+      return NextResponse.json({ detail: "Forbidden: You cannot delete another user's calculation." }, { status: 403 });
     }
 
     mockStore.calculations = mockStore.calculations.filter((c) => c.id !== calcId);

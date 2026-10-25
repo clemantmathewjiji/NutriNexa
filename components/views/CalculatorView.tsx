@@ -7,6 +7,7 @@ import {
   PieChart as PieIcon, FolderOpen, X
 } from "lucide-react";
 import { useTranslation } from "@/i18n/LanguageContext";
+import { useAuth } from "@/context/AuthContext";
 
 interface ItemSlot {
   food_id: number;
@@ -17,6 +18,7 @@ interface ItemSlot {
 
 export const CalculatorView: React.FC = () => {
   const { t, formatNumber } = useTranslation();
+  const { requireAuth } = useAuth();
   const [allFoods, setAllFoods] = useState<FoodItem[]>([]);
   const [slots, setSlots] = useState<ItemSlot[]>([]);
   const [calcResult, setCalcResult] = useState<AggregatedCalculation | null>(null);
@@ -118,6 +120,10 @@ export const CalculatorView: React.FC = () => {
   };
 
   const handleSaveCalculation = async () => {
+    if (!requireAuth({ reason: "Create an account or sign in to save your calculations, manage personal nutrition records, and access research tools." })) {
+      return;
+    }
+
     const valid = slots.filter((s) => s.food_id > 0 && s.quantity_grams > 0);
     if (valid.length === 0) {
       alert("Add at least one food item with quantity.");

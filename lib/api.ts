@@ -6,6 +6,8 @@ import {
 
 const API_BASE = "/api";
 
+import { createClient } from "@/src/lib/supabase/client";
+
 export function getStoredToken(): string | null {
   if (typeof window === "undefined") return null;
   return localStorage.getItem("nutrinexa_auth_token");
@@ -21,7 +23,21 @@ export function setStoredToken(token: string | null) {
 }
 
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-  const token = getStoredToken();
+  let token = getStoredToken();
+  if (!token && typeof window !== "undefined") {
+    try {
+      const supabase = createClient();
+      if (supabase) {
+        const { data } = await supabase.auth.getSession();
+        if (data?.session?.access_token) {
+          token = data.session.access_token;
+        }
+      }
+    } catch {
+      // fallback gracefully
+    }
+  }
+
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
     ...(options.headers as Record<string, string> || {}),
@@ -75,12 +91,18 @@ export const authApi = {
   },
 
   getMe: async () => {
-    return request<{ user: User }>("/auth/me");
+    return request<{ user: User; isGuest?: boolean }>("/auth/me");
   },
 
   logout: async () => {
     try {
+      const supabase = createClient();
+      if (supabase) {
+        await supabase.auth.signOut();
+      }
       await request("/auth/logout", { method: "POST" });
+    } catch {
+      // Continue cleanup
     } finally {
       setStoredToken(null);
     }

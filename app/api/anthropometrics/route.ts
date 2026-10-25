@@ -6,12 +6,18 @@ import { computeAnthropometrics } from "@/lib/calculator";
 import { getCurrentUser } from "@/lib/auth";
 import { mockStore } from "@/lib/mockStore";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   try {
     const user = await getCurrentUser(request);
-    const userId = user?.id || 1;
+    if (!user) {
+      return NextResponse.json({ records: [] });
+    }
 
-    if (isDbConnected()) {
+    const userId = user.id;
+
+    if (isDbConnected() && typeof userId === "number") {
       const db = getDb();
       if (db) {
         try {
@@ -27,7 +33,8 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({ records: mockStore.anthropometrics });
+    const userAnthros = mockStore.anthropometrics.filter((a) => a.user_id === userId);
+    return NextResponse.json({ records: userAnthros });
   } catch (err: any) {
     return NextResponse.json({ detail: err.message || "Failed to list anthropometrics." }, { status: 500 });
   }
@@ -36,7 +43,11 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const user = await getCurrentUser(request);
-    const userId = user?.id || 1;
+    if (!user) {
+      return NextResponse.json({ detail: "Authentication required to save anthropometric records." }, { status: 401 });
+    }
+
+    const userId = user.id;
     const body = await request.json();
 
     const {
@@ -65,7 +76,7 @@ export async function POST(request: NextRequest) {
 
     const computed = computeAnthropometrics(w, h, age, sex, waist, hip);
 
-    if (isDbConnected()) {
+    if (isDbConnected() && typeof userId === "number") {
       const db = getDb();
       if (db) {
         try {

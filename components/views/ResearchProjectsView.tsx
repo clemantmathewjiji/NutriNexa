@@ -7,9 +7,11 @@ import {
   BarChart2, X
 } from "lucide-react";
 import { useTranslation } from "@/i18n/LanguageContext";
+import { useAuth } from "@/context/AuthContext";
 
 export const ResearchProjectsView: React.FC = () => {
   const { t, formatNumber, formatDate } = useTranslation();
+  const { requireAuth, isGuest } = useAuth();
   const [projects, setProjects] = useState<ProjectRecord[]>([]);
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
   const [projectDetail, setProjectDetail] = useState<any>(null);
@@ -55,48 +57,52 @@ export const ResearchProjectsView: React.FC = () => {
 
   const handleCreateProject = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const res = await projectsApi.create({
-        title,
-        code,
-        objectives,
-        methodology_notes: methodology,
-        tags,
-      });
-      setShowNewProjModal(false);
-      loadProjects();
-      handleSelectProject(res.project_id);
-    } catch (err) {
-      alert("Failed to create project.");
-    }
+    requireAuth(async () => {
+      try {
+        const res = await projectsApi.create({
+          title,
+          code,
+          objectives,
+          methodology_notes: methodology,
+          tags,
+        });
+        setShowNewProjModal(false);
+        loadProjects();
+        handleSelectProject(res.project_id);
+      } catch (err) {
+        alert("Failed to create project.");
+      }
+    });
   };
 
   const handleSimulateDatasetUpload = async () => {
     if (!selectedProjectId) return;
-    const mockData = [
-      { subject: "S01", energy_kcal: 2150, protein_g: 72.5, fiber_g: 22.0, bmi: 23.4 },
-      { subject: "S02", energy_kcal: 1890, protein_g: 65.0, fiber_g: 18.5, bmi: 21.8 },
-      { subject: "S03", energy_kcal: 2640, protein_g: 94.0, fiber_g: 31.0, bmi: 26.2 },
-      { subject: "S04", energy_kcal: 2020, protein_g: 68.0, fiber_g: 20.4, bmi: 22.1 },
-      { subject: "S05", energy_kcal: 2310, protein_g: 81.5, fiber_g: 25.8, bmi: 24.5 },
-      { subject: "S06", energy_kcal: 1780, protein_g: 58.0, fiber_g: 16.2, bmi: 20.5 },
-      { subject: "S07", energy_kcal: 2450, protein_g: 88.0, fiber_g: 29.5, bmi: 25.1 },
-      { subject: "S08", energy_kcal: 2200, protein_g: 76.0, fiber_g: 24.0, bmi: 23.9 },
-      { subject: "S09", energy_kcal: 1950, protein_g: 63.5, fiber_g: 19.8, bmi: 22.7 },
-      { subject: "S10", energy_kcal: 2750, protein_g: 102.0, fiber_g: 34.0, bmi: 27.0 },
-    ];
+    requireAuth(async () => {
+      const mockData = [
+        { subject: "S01", energy_kcal: 2150, protein_g: 72.5, fiber_g: 22.0, bmi: 23.4 },
+        { subject: "S02", energy_kcal: 1890, protein_g: 65.0, fiber_g: 18.5, bmi: 21.8 },
+        { subject: "S03", energy_kcal: 2640, protein_g: 94.0, fiber_g: 31.0, bmi: 26.2 },
+        { subject: "S04", energy_kcal: 2020, protein_g: 68.0, fiber_g: 20.4, bmi: 22.1 },
+        { subject: "S05", energy_kcal: 2310, protein_g: 81.5, fiber_g: 25.8, bmi: 24.5 },
+        { subject: "S06", energy_kcal: 1780, protein_g: 58.0, fiber_g: 16.2, bmi: 20.5 },
+        { subject: "S07", energy_kcal: 2450, protein_g: 88.0, fiber_g: 29.5, bmi: 25.1 },
+        { subject: "S08", energy_kcal: 2200, protein_g: 76.0, fiber_g: 24.0, bmi: 23.9 },
+        { subject: "S09", energy_kcal: 1950, protein_g: 63.5, fiber_g: 19.8, bmi: 22.7 },
+        { subject: "S10", energy_kcal: 2750, protein_g: 102.0, fiber_g: 34.0, bmi: 27.0 },
+      ];
 
-    try {
-      await projectsApi.addDataset(selectedProjectId, {
-        dataset_name: datasetName,
-        description: datasetDesc,
-        raw_data: mockData,
-      });
-      setShowDatasetModal(false);
-      handleSelectProject(selectedProjectId);
-    } catch (err) {
-      alert("Failed to upload dataset.");
-    }
+      try {
+        await projectsApi.addDataset(selectedProjectId, {
+          dataset_name: datasetName,
+          description: datasetDesc,
+          raw_data: mockData,
+        });
+        setShowDatasetModal(false);
+        handleSelectProject(selectedProjectId);
+      } catch (err) {
+        alert("Failed to upload dataset.");
+      }
+    });
   };
 
   return (
@@ -114,7 +120,7 @@ export const ResearchProjectsView: React.FC = () => {
         </div>
 
         <button
-          onClick={() => setShowNewProjModal(true)}
+          onClick={() => requireAuth(() => setShowNewProjModal(true))}
           className="bg-[#174C3A] hover:bg-[#123C2E] text-white text-xs font-semibold px-4 py-2 rounded-lg shadow-xs flex items-center gap-1.5 transition"
         >
           <Plus className="w-4 h-4" />
@@ -174,7 +180,7 @@ export const ResearchProjectsView: React.FC = () => {
                     Protocol: {projectDetail.project.code}
                   </span>
                   <button
-                    onClick={() => setShowDatasetModal(true)}
+                    onClick={() => requireAuth(() => setShowDatasetModal(true))}
                     className="bg-[#2D8C83] hover:bg-[#237069] text-white text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition"
                   >
                     <Upload className="w-3.5 h-3.5" />

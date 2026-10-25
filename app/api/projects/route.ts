@@ -5,12 +5,18 @@ import { eq, desc } from "drizzle-orm";
 import { getCurrentUser } from "@/lib/auth";
 import { mockStore } from "@/lib/mockStore";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   try {
     const user = await getCurrentUser(request);
-    const userId = user?.id || 1;
+    if (!user) {
+      return NextResponse.json({ projects: [] });
+    }
 
-    if (isDbConnected()) {
+    const userId = user.id;
+
+    if (isDbConnected() && typeof userId === "number") {
       const db = getDb();
       if (db) {
         try {
@@ -26,7 +32,8 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({ projects: mockStore.projects });
+    const userProjects = mockStore.projects.filter((p) => p.user_id === userId);
+    return NextResponse.json({ projects: userProjects });
   } catch (err: any) {
     return NextResponse.json({ detail: err.message || "Failed to list projects." }, { status: 500 });
   }
@@ -35,7 +42,11 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const user = await getCurrentUser(request);
-    const userId = user?.id || 1;
+    if (!user) {
+      return NextResponse.json({ detail: "Authentication required to create research projects." }, { status: 401 });
+    }
+
+    const userId = user.id;
     const body = await request.json();
 
     const { title, code, objectives, methodology_notes, lead_researcher, status, tags } = body;
@@ -44,7 +55,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ detail: "Project title and research code are required." }, { status: 400 });
     }
 
-    if (isDbConnected()) {
+    if (isDbConnected() && typeof userId === "number") {
       const db = getDb();
       if (db) {
         try {
@@ -56,7 +67,7 @@ export async function POST(request: NextRequest) {
               code: code.trim(),
               objectives: objectives || "",
               methodologyNotes: methodology_notes || "",
-              leadResearcher: lead_researcher || user?.name || "Lead Researcher",
+              leadResearcher: lead_researcher || user.name || "Lead Researcher",
               status: status || "Active",
               tags: tags || "",
             })
@@ -87,7 +98,7 @@ export async function POST(request: NextRequest) {
       code,
       objectives: objectives || "",
       methodology_notes: methodology_notes || "",
-      lead_researcher: lead_researcher || user?.name || "Lead Researcher",
+      lead_researcher: lead_researcher || user.name || "Lead Researcher",
       status: status || "Active",
       tags: tags || "",
       created_at: new Date().toISOString(),

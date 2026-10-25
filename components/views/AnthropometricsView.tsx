@@ -6,9 +6,11 @@ import {
   Activity, Save, Info, HeartPulse
 } from "lucide-react";
 import { useTranslation } from "@/i18n/LanguageContext";
+import { useAuth } from "@/context/AuthContext";
 
 export const AnthropometricsView: React.FC = () => {
   const { t, formatNumber, formatDate } = useTranslation();
+  const { requireAuth } = useAuth();
   const [records, setRecords] = useState<AnthropometricRecord[]>([]);
 
   // Calculation inputs
@@ -63,24 +65,26 @@ export const AnthropometricsView: React.FC = () => {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      await anthropometricsApi.save({
-        subject_identifier: subjectId,
-        age_years: ageYears,
-        sex,
-        assessment_date: assessmentDate,
-        height_cm: heightCm,
-        weight_kg: weightKg,
-        waist_cm: waistCm,
-        hip_cm: hipCm,
-        notes,
-      });
-      setSavedSuccess(true);
-      setTimeout(() => setSavedSuccess(false), 3000);
-      loadRecords();
-    } catch (err) {
-      alert("Failed to save anthropometric record.");
-    }
+    requireAuth(async () => {
+      try {
+        await anthropometricsApi.save({
+          subject_identifier: subjectId,
+          age_years: ageYears,
+          sex,
+          assessment_date: assessmentDate,
+          height_cm: heightCm,
+          weight_kg: weightKg,
+          waist_cm: waistCm,
+          hip_cm: hipCm,
+          notes,
+        });
+        setSavedSuccess(true);
+        setTimeout(() => setSavedSuccess(false), 3000);
+        loadRecords();
+      } catch (err) {
+        alert("Failed to save anthropometric record.");
+      }
+    });
   };
 
   return (

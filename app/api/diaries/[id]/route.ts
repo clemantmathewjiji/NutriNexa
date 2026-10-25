@@ -5,12 +5,20 @@ import { eq } from "drizzle-orm";
 import { calculateSingleFoodNutrients, aggregateNutrientCalculation, compareIntakeToDrv } from "@/lib/calculator";
 import { STANDARD_NUTRIENTS, DRV_PROFILES } from "@/lib/seedData";
 import { mockStore } from "@/lib/mockStore";
+import { getCurrentUser } from "@/lib/auth";
+
+export const dynamic = "force-dynamic";
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const user = await getCurrentUser(request);
+    if (!user) {
+      return NextResponse.json({ detail: "Authentication required to view dietary diary." }, { status: 401 });
+    }
+
     const { id } = await params;
     const diaryId = parseInt(id, 10);
     if (isNaN(diaryId)) {
@@ -24,6 +32,10 @@ export async function GET(
           const diaryRows = await db.select().from(foodDiaries).where(eq(foodDiaries.id, diaryId)).limit(1);
           if (diaryRows.length > 0) {
             const diary = diaryRows[0];
+            if (diary.userId !== user.id) {
+              return NextResponse.json({ detail: "Forbidden: You do not own this dietary assessment." }, { status: 403 });
+            }
+
             const entries = await db.select().from(diaryEntries).where(eq(diaryEntries.diaryId, diaryId));
 
             const profileRows = await db
@@ -104,7 +116,7 @@ export async function GET(
             });
           }
         } catch (dbErr) {
-          console.warn("DB get diary error, falling back to mock:", dbErr);
+          console.warn("DB get diary detail error, falling back to mock:", dbErr);
         }
       }
     }
@@ -112,6 +124,10 @@ export async function GET(
     const mock = mockStore.diaries.find((d) => d.id === diaryId);
     if (!mock) {
       return NextResponse.json({ detail: "Diary not found." }, { status: 404 });
+    }
+
+    if (mock.user_id !== user.id) {
+      return NextResponse.json({ detail: "Forbidden: You do not own this dietary assessment." }, { status: 403 });
     }
 
     const calculatedItems: any[] = [];
@@ -152,21 +168,22 @@ export async function GET(
     }
 
     const dailyTotals = aggregateNutrientCalculation(calculatedItems, STANDARD_NUTRIENTS);
-    const profile = DRV_PROFILES[0];
+    const mappedProfiles = DRV_PROFILES.map((p, idx) => ({ id: idx + 1, ...p }));
+    const refProfile = mappedProfiles.find((p) => p.id === mock.reference_profile_id) || mappedProfiles[0];
     const drvComparison = compareIntakeToDrv(
       dailyTotals.totals,
-      profile.values.map((v) => ({
-        nutrient_code: v.code,
-        target_value: v.target,
-        unit: v.unit,
-        target_type: v.type,
-        upper_limit: v.ul,
+      refProfile.values.map((n) => ({
+        nutrient_code: n.code,
+        target_value: n.target,
+        unit: n.unit,
+        target_type: n.type,
+        upper_limit: n.ul,
       }))
     );
 
     return NextResponse.json({
       diary: mock,
-      reference_profile: profile,
+      reference_profile: refProfile,
       items: calculatedItems,
       meals: mealsMap,
       daily_totals: dailyTotals,
@@ -178,10 +195,15 @@ export async function GET(
 }
 
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const user = await getCurrentUser(request);
+    if (!user) {
+      return NextResponse.json({ detail: "Authentication required." }, { status: 401 });
+    }
+
     const { id } = await params;
     const diaryId = parseInt(id, 10);
     if (isNaN(diaryId)) {
@@ -192,12 +214,21 @@ export async function DELETE(
       const db = getDb();
       if (db) {
         try {
+          const diaryRows = await db.select().from(foodDiaries).where(eq(foodDiaries.id, diaryId)).limit(1);
+          if (diaryRows.length > 0 && diaryRows[0].userId !== user.id) {
+            return NextResponse.json({ detail: "Forbidden: You cannot delete another user's diary." }, { status: 403 });
+          }
           await db.delete(foodDiaries).where(eq(foodDiaries.id, diaryId));
           return NextResponse.json({ message: "Diary deleted successfully." });
         } catch (dbErr) {
           console.warn("DB delete diary error, falling back to mock:", dbErr);
         }
       }
+    }
+
+    const mock = mockStore.diaries.find((d) => d.id === diaryId);
+    if (mock && mock.user_id !== user.id) {
+      return NextResponse.json({ detail: "Forbidden: You cannot delete another user's diary." }, { status: 403 });
     }
 
     mockStore.diaries = mockStore.diaries.filter((d) => d.id !== diaryId);

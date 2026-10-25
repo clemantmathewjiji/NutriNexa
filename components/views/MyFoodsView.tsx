@@ -5,6 +5,7 @@ import { RecipeRecord } from "@/lib/types";
 import { BookOpen, UtensilsCrossed, Plus } from "lucide-react";
 import { NavSection } from "@/components/Sidebar";
 import { useTranslation } from "@/i18n/LanguageContext";
+import { useAuth } from "@/context/AuthContext";
 
 interface MyFoodsViewProps {
   onNavigate: (section: NavSection) => void;
@@ -12,6 +13,7 @@ interface MyFoodsViewProps {
 
 export const MyFoodsView: React.FC<MyFoodsViewProps> = ({ onNavigate }) => {
   const { t, formatNumber } = useTranslation();
+  const { requireAuth } = useAuth();
   const [recipes, setRecipes] = useState<RecipeRecord[]>([]);
 
   useEffect(() => {
@@ -42,14 +44,14 @@ export const MyFoodsView: React.FC<MyFoodsViewProps> = ({ onNavigate }) => {
 
         <div className="flex gap-2">
           <button
-            onClick={() => onNavigate("foods")}
+            onClick={() => requireAuth(() => onNavigate("foods"))}
             className="bg-[#2D8C83] hover:bg-[#237069] text-white text-xs font-semibold px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition"
           >
             <Plus className="w-4 h-4" />
             <span>{t("addCustomFood")}</span>
           </button>
           <button
-            onClick={() => onNavigate("recipes")}
+            onClick={() => requireAuth(() => onNavigate("recipes"))}
             className="bg-[#174C3A] hover:bg-[#123C2E] text-white text-xs font-semibold px-3.5 py-2 rounded-lg flex items-center gap-1.5 transition"
           >
             <Plus className="w-4 h-4" />

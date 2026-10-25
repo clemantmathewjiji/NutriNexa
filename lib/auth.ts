@@ -4,9 +4,10 @@ import { getDb, isDbConnected } from "./db";
 import { users, authTokens } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
 import { mockStore } from "./mockStore";
+import { createServerSupabaseClient } from "@/src/lib/supabase/server";
 
 export interface AuthUser {
-  id: number;
+  id: number | string;
   name: string;
   email: string;
   role: string;
@@ -33,11 +34,11 @@ export function verifyPassword(password: string, salt: string, expectedHash: str
 /**
  * Creates and persists a secure session token.
  */
-export async function createSessionToken(userId: number): Promise<string> {
+export async function createSessionToken(userId: number | string): Promise<string> {
   const token = crypto.randomBytes(32).toString("base64url");
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
 
-  if (isDbConnected()) {
+  if (isDbConnected() && typeof userId === "number") {
     try {
       const db = getDb();
       if (db) {
@@ -54,8 +55,25 @@ export async function createSessionToken(userId: number): Promise<string> {
   }
 
   // Fallback to memory mockStore
-  mockStore.tokens.set(token, { userId, expiresAt });
+  mockStore.tokens.set(token, { userId: typeof userId === "number" ? userId : 1, expiresAt });
   return token;
+}
+
+/**
+ * Invalidates and deletes a session token upon logout.
+ */
+export async function invalidateSessionToken(token: string): Promise<void> {
+  if (isDbConnected()) {
+    try {
+      const db = getDb();
+      if (db) {
+        await db.delete(authTokens).where(eq(authTokens.token, token));
+      }
+    } catch (err) {
+      console.warn("DB token invalidation error:", err);
+    }
+  }
+  mockStore.tokens.delete(token);
 }
 
 /**
@@ -70,12 +88,57 @@ export function extractBearerToken(request: NextRequest): string | null {
 }
 
 /**
- * Validates the token and returns the authenticated user, or null.
+ * Validates the token or Supabase session and returns the authenticated user, or null for guests.
+ * NEVER returns a default or fallback profile.
  */
 export async function getCurrentUser(request: NextRequest): Promise<AuthUser | null> {
-  const token = extractBearerToken(request);
-  if (!token) return null;
+  // 1. Check Supabase SSR session via cookies
+  try {
+    const supabase = await createServerSupabaseClient();
+    if (supabase) {
+      const { data: { user: sbUser }, error: sbErr } = await supabase.auth.getUser();
+      if (!sbErr && sbUser) {
+        const metadata = sbUser.user_metadata || {};
+        return {
+          id: sbUser.id,
+          name: metadata.full_name || metadata.display_name || metadata.name || sbUser.email?.split("@")[0] || "Researcher",
+          email: sbUser.email || "",
+          role: metadata.role || metadata.designation || "Researcher",
+          institution: metadata.institution || "",
+        };
+      }
+    }
+  } catch {
+    // Supabase client not configured or no active session cookie
+  }
 
+  // 2. Check Bearer token in headers
+  const token = extractBearerToken(request);
+  if (!token) {
+    return null;
+  }
+
+  // 2a. If bearer token is a Supabase JWT
+  try {
+    const supabase = await createServerSupabaseClient();
+    if (supabase) {
+      const { data: { user: sbUser }, error: jwtErr } = await supabase.auth.getUser(token);
+      if (!jwtErr && sbUser) {
+        const metadata = sbUser.user_metadata || {};
+        return {
+          id: sbUser.id,
+          name: metadata.full_name || metadata.display_name || metadata.name || sbUser.email?.split("@")[0] || "Researcher",
+          email: sbUser.email || "",
+          role: metadata.role || metadata.designation || "Researcher",
+          institution: metadata.institution || "",
+        };
+      }
+    }
+  } catch {
+    // Ignore and proceed to internal token check
+  }
+
+  // 2b. Check Postgres DB authTokens
   if (isDbConnected()) {
     try {
       const db = getDb();
@@ -112,7 +175,7 @@ export async function getCurrentUser(request: NextRequest): Promise<AuthUser | n
     }
   }
 
-  // Check mock store fallback
+  // 2c. Check mock store fallback
   const mockToken = mockStore.tokens.get(token);
   if (mockToken && new Date() <= mockToken.expiresAt) {
     const user = mockStore.users.find((u) => u.id === mockToken.userId);

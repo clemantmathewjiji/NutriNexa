@@ -5,12 +5,19 @@ import { eq, desc } from "drizzle-orm";
 import { getCurrentUser } from "@/lib/auth";
 import { mockStore } from "@/lib/mockStore";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   try {
     const user = await getCurrentUser(request);
-    const userId = user?.id || 1;
+    if (!user) {
+      // Guests have no saved calculations
+      return NextResponse.json({ calculations: [] });
+    }
 
-    if (isDbConnected()) {
+    const userId = user.id;
+
+    if (isDbConnected() && typeof userId === "number") {
       const db = getDb();
       if (db) {
         try {
@@ -26,7 +33,8 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({ calculations: mockStore.calculations });
+    const userCalcs = mockStore.calculations.filter((c) => c.user_id === userId);
+    return NextResponse.json({ calculations: userCalcs });
   } catch (err: any) {
     return NextResponse.json({ detail: err.message || "Failed to list calculations." }, { status: 500 });
   }
@@ -35,7 +43,11 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const user = await getCurrentUser(request);
-    const userId = user?.id || 1;
+    if (!user) {
+      return NextResponse.json({ detail: "Authentication required to save calculations." }, { status: 401 });
+    }
+
+    const userId = user.id;
     const body = await request.json();
     const { name, description, notes, project_id, items } = body;
 
@@ -43,7 +55,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ detail: "Calculation name and at least one item are required." }, { status: 400 });
     }
 
-    if (isDbConnected()) {
+    if (isDbConnected() && typeof userId === "number") {
       const db = getDb();
       if (db) {
         try {

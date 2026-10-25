@@ -4,7 +4,7 @@ import { authApi } from "@/lib/api";
 import { User } from "@/lib/types";
 import {
   X, Lock, Mail, User as UserIcon, Building2, KeyRound, AlertCircle,
-  Eye, EyeOff, CheckCircle2, ShieldCheck, ArrowRight, HelpCircle
+  Eye, EyeOff, CheckCircle2, ShieldCheck, ArrowRight, HelpCircle, Compass
 } from "lucide-react";
 import { useTranslation } from "@/i18n/LanguageContext";
 import { createClient } from "@/lib/supabase/client";
@@ -13,6 +13,7 @@ interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAuthSuccess: (user: User) => void;
+  initialMode?: "login" | "register";
 }
 
 type AuthMode = "login" | "register" | "forgot_password" | "reset_sent";
@@ -21,9 +22,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   isOpen,
   onClose,
   onAuthSuccess,
+  initialMode = "login",
 }) => {
   const { t } = useTranslation();
-  const [mode, setMode] = useState<AuthMode>("login");
+  const [mode, setMode] = useState<AuthMode>(initialMode);
+
+  React.useEffect(() => {
+    if (isOpen && initialMode) {
+      setMode(initialMode);
+    }
+  }, [isOpen, initialMode]);
 
   // Form Fields
   const [name, setName] = useState("");
@@ -525,6 +533,18 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     Back to Sign In
                   </button>
                 )}
+              </div>
+
+              {/* Continue Exploring as Guest */}
+              <div className="pt-2 text-center border-t border-[#E2E8E2]/60">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="inline-flex items-center gap-1.5 text-xs text-[#7D9087] hover:text-[#192520] font-medium py-1 px-3 rounded hover:bg-gray-100 transition cursor-pointer"
+                >
+                  <Compass className="w-3.5 h-3.5" />
+                  <span>Continue Exploring as Guest</span>
+                </button>
               </div>
             </form>
           )}

@@ -8,6 +8,7 @@ import {
   Info
 } from "lucide-react";
 import { useTranslation } from "@/i18n/LanguageContext";
+import { useAuth } from "@/context/AuthContext";
 
 interface DashboardViewProps {
   onNavigate: (section: NavSection) => void;
@@ -18,6 +19,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onNavigate,
 }) => {
   const { t, formatNumber, formatDate } = useTranslation();
+  const { isGuest, requireAuth } = useAuth();
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -99,6 +101,38 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </svg>
         </div>
       </div>
+
+      {/* Guest Exploration Mode Banner */}
+      {(isGuest || stats?.is_guest) && (
+        <div className="bg-[#F1F5F2] border border-[#2D8C83]/30 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs">
+          <div className="flex items-start gap-3">
+            <div className="p-2 rounded-lg bg-[#2D8C83]/15 text-[#174C3A] mt-0.5">
+              <Info className="w-5 h-5 text-[#2D8C83]" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="text-xs font-bold text-[#174C3A] uppercase tracking-wide">
+                  Guest Exploration Mode Active
+                </h3>
+                <span className="text-[10px] font-semibold bg-[#2D8C83]/20 text-[#174C3A] px-2 py-0.5 rounded-full">
+                  Public Access
+                </span>
+              </div>
+              <p className="text-xs text-[#52635C] mt-1 leading-relaxed">
+                You are currently exploring NutriNexa as a Guest. You can freely query the food composition databases, test nutrient calculations, review recipe models, and access scientific visual portions. To permanently save your research data, cohorts, and custom recipes, sign in or create an account.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={() => requireAuth()}
+              className="px-4 py-2 bg-[#174C3A] hover:bg-[#123C2E] text-white text-xs font-semibold rounded-lg shadow-xs transition"
+            >
+              Sign In / Register
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Summary Stat Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5">
@@ -229,7 +263,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </div>
             ) : (
               <div className="text-center py-8 text-[#7D9087] text-xs">
-                No calculations recorded yet. Start with "+ New Analysis".
+                {(isGuest || stats?.is_guest)
+                  ? "No calculations saved yet. You are browsing in Guest mode. Sign in to save and preserve your research calculations."
+                  : "No calculations recorded yet. Start with '+ New Analysis'."}
               </div>
             )}
           </div>
@@ -270,7 +306,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </div>
             ) : (
               <div className="text-center py-8 text-[#7D9087] text-xs">
-                No research projects created.
+                {(isGuest || stats?.is_guest)
+                  ? "Sign in to manage private academic research cohorts, projects, and statistical datasets."
+                  : "No research projects created."}
               </div>
             )}
           </div>

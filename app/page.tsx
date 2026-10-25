@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { authApi } from "@/lib/api";
-import { User } from "@/lib/types";
+import React, { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Sidebar, NavSection } from "@/components/Sidebar";
 import { NewAnalysisModal } from "@/components/NewAnalysisModal";
 import { AuthModal } from "@/components/AuthModal";
 import { useTranslation } from "@/i18n/LanguageContext";
+import { useAuth } from "@/context/AuthContext";
 
 // Academic Domain Views
 import { DashboardView } from "@/components/views/DashboardView";
@@ -26,40 +25,26 @@ import { HelpDocsView } from "@/components/views/HelpDocsView";
 
 export default function NutriNexaApp() {
   const { dir } = useTranslation();
-  const [user, setUser] = useState<User | null>(null);
+  const {
+    user,
+    isLoading,
+    isGuest,
+    logout,
+    openAuthModal,
+    authModalOpen,
+    authModalMode,
+    closeAuthModal,
+    refreshUser,
+  } = useAuth();
+
   const [currentSection, setCurrentSection] = useState<NavSection>("dashboard");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   // Modals
-  const [showAuthModal, setShowAuthModal] = useState(false);
   const [showNewAnalysisModal, setShowNewAnalysisModal] = useState(false);
 
   // Global search query
   const [searchTerm, setSearchTerm] = useState("");
-
-  useEffect(() => {
-    checkCurrentUser();
-  }, []);
-
-  const checkCurrentUser = async () => {
-    try {
-      const res = await authApi.getMe();
-      setUser(res.user);
-    } catch {
-      // Default to demo researcher profile for immediate exploratory access
-      try {
-        const loginRes = await authApi.login("demo@nutrinexa.org", "NutriNexa2026!");
-        setUser(loginRes.user);
-      } catch {
-        setUser(null);
-      }
-    }
-  };
-
-  const handleLogout = async () => {
-    await authApi.logout();
-    setUser(null);
-  };
 
   const handleGlobalSearch = (term: string) => {
     setSearchTerm(term);
@@ -82,10 +67,10 @@ export default function NutriNexaApp() {
       case "portions":
         return (
           <VisualPortionView
-            onSendToCalculator={(foodName, edibleGrams) => {
+            onSendToCalculator={() => {
               setCurrentSection("calculator");
             }}
-            onSendToRecall={(foodName, edibleGrams, portionDesc) => {
+            onSendToRecall={() => {
               setCurrentSection("dietary");
             }}
           />
@@ -110,9 +95,10 @@ export default function NutriNexaApp() {
         return (
           <SettingsView
             user={user}
-            onProfileUpdated={(updatedUser) => {
-              setUser(updatedUser);
+            onProfileUpdated={() => {
+              refreshUser();
             }}
+            onOpenAuth={(mode) => openAuthModal(mode)}
           />
         );
       case "help":
@@ -132,8 +118,9 @@ export default function NutriNexaApp() {
       {/* Top Navigation */}
       <Navbar
         user={user}
-        onOpenAuth={() => setShowAuthModal(true)}
-        onLogout={handleLogout}
+        isLoading={isLoading}
+        onOpenAuth={(mode) => openAuthModal(mode || "login")}
+        onLogout={logout}
         onOpenNewAnalysis={() => setShowNewAnalysisModal(true)}
         onSearch={handleGlobalSearch}
         searchTerm={searchTerm}
@@ -169,11 +156,12 @@ export default function NutriNexaApp() {
       />
 
       <AuthModal
-        isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-        onAuthSuccess={(loggedUser) => {
-          setUser(loggedUser);
-          setShowAuthModal(false);
+        isOpen={authModalOpen}
+        initialMode={authModalMode}
+        onClose={closeAuthModal}
+        onAuthSuccess={async () => {
+          await refreshUser();
+          closeAuthModal();
         }}
       />
     </div>

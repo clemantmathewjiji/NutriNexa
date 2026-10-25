@@ -5,23 +5,33 @@ import { eq } from "drizzle-orm";
 import { getCurrentUser } from "@/lib/auth";
 import { mockStore } from "@/lib/mockStore";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const user = await getCurrentUser(request);
+    if (!user) {
+      return NextResponse.json({ detail: "Authentication required to duplicate calculations." }, { status: 401 });
+    }
+
     const { id } = await params;
     const calcId = parseInt(id, 10);
-    const user = await getCurrentUser(request);
-    const userId = user?.id || 1;
+    const userId = user.id;
 
-    if (isDbConnected()) {
+    if (isDbConnected() && typeof userId === "number") {
       const db = getDb();
       if (db) {
         try {
           const rows = await db.select().from(calculations).where(eq(calculations.id, calcId)).limit(1);
           if (rows.length > 0) {
             const orig = rows[0];
+            if (orig.userId !== userId) {
+              return NextResponse.json({ detail: "Forbidden: Cannot duplicate another user's calculation." }, { status: 403 });
+            }
+
             const items = await db.select().from(calculationItems).where(eq(calculationItems.calculationId, calcId));
 
             const dupCalc = await db
@@ -59,10 +69,15 @@ export async function POST(
       return NextResponse.json({ detail: "Calculation not found." }, { status: 404 });
     }
 
+    if (mock.user_id !== userId) {
+      return NextResponse.json({ detail: "Forbidden: Cannot duplicate another user's calculation." }, { status: 403 });
+    }
+
     const newId = mockStore.calculations.length + 1;
     mockStore.calculations.unshift({
       ...mock,
       id: newId,
+      user_id: userId,
       name: `${mock.name} (Copy)`,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),

@@ -1,19 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDb, isDbConnected } from "@/lib/db";
-import { projectDatasets, auditLogs } from "@/drizzle/schema";
+import { projects, projectDatasets, auditLogs } from "@/drizzle/schema";
+import { eq } from "drizzle-orm";
 import { computeDescriptiveStats } from "@/lib/calculator";
 import { getCurrentUser } from "@/lib/auth";
 import { mockStore } from "@/lib/mockStore";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const user = await getCurrentUser(request);
+    if (!user) {
+      return NextResponse.json({ detail: "Authentication required to upload dataset." }, { status: 401 });
+    }
+
     const { id } = await params;
     const projId = parseInt(id, 10);
-    const user = await getCurrentUser(request);
-    const userId = user?.id || 1;
+    const userId = user.id;
     const body = await request.json();
 
     const { dataset_name, description, raw_data } = body;
@@ -35,10 +42,19 @@ export async function POST(
       }
     }
 
-    if (isDbConnected()) {
+    if (isDbConnected() && typeof userId === "number") {
       const db = getDb();
       if (db) {
         try {
+          // Verify project ownership
+          const projRows = await db.select().from(projects).where(eq(projects.id, projId)).limit(1);
+          if (projRows.length === 0) {
+            return NextResponse.json({ detail: "Project not found." }, { status: 404 });
+          }
+          if (projRows[0].userId !== userId) {
+            return NextResponse.json({ detail: "Forbidden: You are not authorized to add datasets to this project." }, { status: 403 });
+          }
+
           const inserted = await db
             .insert(projectDatasets)
             .values({
@@ -75,7 +91,14 @@ export async function POST(
     }
 
     const project = mockStore.projects.find((p) => p.id === projId);
-    const newDatasetId = (project?.datasets?.length || 0) + 1;
+    if (!project) {
+      return NextResponse.json({ detail: "Project not found." }, { status: 404 });
+    }
+    if (project.user_id !== userId) {
+      return NextResponse.json({ detail: "Forbidden: You are not authorized to add datasets to this project." }, { status: 403 });
+    }
+
+    const newDatasetId = (project.datasets?.length || 0) + 1;
     const newDataset = {
       id: newDatasetId,
       project_id: projId,
@@ -88,10 +111,8 @@ export async function POST(
       created_at: new Date().toISOString(),
     };
 
-    if (project) {
-      if (!project.datasets) project.datasets = [];
-      project.datasets.push(newDataset);
-    }
+    if (!project.datasets) project.datasets = [];
+    project.datasets.push(newDataset);
 
     return NextResponse.json({
       message: "Dataset added and descriptive statistics calculated.",

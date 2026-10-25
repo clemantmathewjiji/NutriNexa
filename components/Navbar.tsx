@@ -2,14 +2,15 @@
 import React from "react";
 import { User } from "@/lib/types";
 import {
-  Search, Plus, LogOut, LogIn
+  Search, Plus, LogOut, LogIn, UserPlus, UserCircle
 } from "lucide-react";
 import { useTranslation } from "@/i18n/LanguageContext";
 import { LanguageSelector } from "./LanguageSelector";
 
 interface NavbarProps {
   user: User | null;
-  onOpenAuth: () => void;
+  isLoading?: boolean;
+  onOpenAuth: (mode?: "login" | "register") => void;
   onLogout: () => void;
   onOpenNewAnalysis: () => void;
   onSearch: (term: string) => void;
@@ -18,6 +19,7 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({
   user,
+  isLoading = false,
   onOpenAuth,
   onLogout,
   onOpenNewAnalysis,
@@ -71,43 +73,64 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* New Analysis Button */}
         <button
           onClick={onOpenNewAnalysis}
-          className="flex items-center gap-1.5 bg-[#174C3A] hover:bg-[#123C2E] text-white text-xs sm:text-sm font-medium px-3.5 py-2 rounded-lg shadow-sm transition active:scale-95"
+          className="flex items-center gap-1.5 bg-[#174C3A] hover:bg-[#123C2E] text-white text-xs sm:text-sm font-medium px-3.5 py-2 rounded-lg shadow-sm transition active:scale-95 cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span className="font-semibold hidden sm:inline">{t("newAnalysis")}</span>
         </button>
 
-        {/* User Profile or Login Trigger */}
-        {user ? (
+        {/* Access State Area */}
+        {isLoading ? (
+          /* Loading State: Subtle Skeleton */
+          <div className="flex items-center gap-2 border-l border-[#E2E8E2] pl-2.5 rtl:border-l-0 rtl:border-r rtl:pr-2.5 rtl:pl-0">
+            <div className="w-24 h-4 bg-gray-200 animate-pulse rounded hidden lg:block"></div>
+            <div className="w-9 h-9 rounded-full bg-gray-200 animate-pulse"></div>
+          </div>
+        ) : user ? (
+          /* Authenticated State: Displays actual logged-in user profile */
           <div className="flex items-center gap-2 border-l border-[#E2E8E2] pl-2.5 rtl:border-l-0 rtl:border-r rtl:pr-2.5 rtl:pl-0">
             <div className="text-right rtl:text-left hidden lg:block">
               <div className="text-xs font-semibold text-[#192520]">{user.displayName || user.name}</div>
               <div className="text-[11px] text-[#52635C]">
-                {user.designation || user.role} &bull; {user.institution || "Research Faculty"}
+                {user.designation || user.role || "Investigator"} &bull; {user.institution || "Research Institution"}
               </div>
             </div>
             <div
               className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#2D8C83]/15 text-[#174C3A] font-bold flex items-center justify-center text-sm border border-[#2D8C83]/30"
-              title={`${user.displayName || user.name} (${user.designation || user.role})`}
+              title={`${user.displayName || user.name} (${user.designation || user.role || "Investigator"})`}
             >
               {(user.displayName || user.name || "U").charAt(0).toUpperCase()}
             </div>
             <button
               onClick={onLogout}
               title={t("signOut")}
-              className="p-1.5 sm:p-2 text-[#7D9087] hover:text-red-600 hover:bg-red-50 rounded-lg transition"
+              className="p-1.5 sm:p-2 text-[#7D9087] hover:text-red-600 hover:bg-red-50 rounded-lg transition cursor-pointer"
             >
               <LogOut className="w-4 h-4" />
             </button>
           </div>
         ) : (
-          <button
-            onClick={onOpenAuth}
-            className="flex items-center gap-1 text-xs font-semibold text-[#174C3A] hover:bg-[#174C3A]/10 px-3 py-2 rounded-lg transition"
-          >
-            <LogIn className="w-4 h-4" />
-            <span>{t("signIn")}</span>
-          </button>
+          /* Guest State: Neutral indicator with Login & Sign Up */
+          <div className="flex items-center gap-2 border-l border-[#E2E8E2] pl-2.5 rtl:border-l-0 rtl:border-r rtl:pr-2.5 rtl:pl-0">
+            <div className="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#174C3A]/10 text-[#174C3A] text-xs font-medium">
+              <UserCircle className="w-3.5 h-3.5 text-[#2D8C83]" />
+              <span>Guest User</span>
+            </div>
+            <button
+              onClick={() => onOpenAuth("login")}
+              className="flex items-center gap-1 text-xs font-semibold text-[#174C3A] hover:bg-[#174C3A]/10 px-3 py-2 rounded-lg transition cursor-pointer"
+            >
+              <LogIn className="w-4 h-4" />
+              <span>{t("signIn") || "Log In"}</span>
+            </button>
+            <button
+              onClick={() => onOpenAuth("register")}
+              className="hidden sm:flex items-center gap-1.5 text-xs font-semibold bg-[#2D8C83] hover:bg-[#236F68] text-white px-3 py-2 rounded-lg shadow-2xs transition active:scale-98 cursor-pointer"
+            >
+              <UserPlus className="w-3.5 h-3.5" />
+              <span>Sign Up</span>
+            </button>
+          </div>
         )}
       </div>
     </header>

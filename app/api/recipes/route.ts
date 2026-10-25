@@ -5,12 +5,18 @@ import { eq, desc } from "drizzle-orm";
 import { getCurrentUser } from "@/lib/auth";
 import { mockStore } from "@/lib/mockStore";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   try {
     const user = await getCurrentUser(request);
-    const userId = user?.id || 1;
+    if (!user) {
+      return NextResponse.json({ recipes: [] });
+    }
 
-    if (isDbConnected()) {
+    const userId = user.id;
+
+    if (isDbConnected() && typeof userId === "number") {
       const db = getDb();
       if (db) {
         try {
@@ -26,7 +32,8 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({ recipes: mockStore.recipes });
+    const userRecipes = mockStore.recipes.filter((r) => r.user_id === userId);
+    return NextResponse.json({ recipes: userRecipes });
   } catch (err: any) {
     return NextResponse.json({ detail: err.message || "Failed to list recipes." }, { status: 500 });
   }
@@ -35,7 +42,11 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const user = await getCurrentUser(request);
-    const userId = user?.id || 1;
+    if (!user) {
+      return NextResponse.json({ detail: "Authentication required to create recipes." }, { status: 401 });
+    }
+
+    const userId = user.id;
     const body = await request.json();
 
     const {
@@ -55,7 +66,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ detail: "Recipe name and ingredients are required." }, { status: 400 });
     }
 
-    if (isDbConnected()) {
+    if (isDbConnected() && typeof userId === "number") {
       const db = getDb();
       if (db) {
         try {

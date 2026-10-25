@@ -5,6 +5,8 @@ import { profiles } from "@/src/db/schema";
 import { eq } from "drizzle-orm";
 import { mockStore } from "@/lib/mockStore";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   try {
     const user = await getCurrentUser(request);
@@ -107,7 +109,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Mock Store update
-    const mockUser = mockStore.users.find((u) => u.id === (typeof user.id === "number" ? user.id : 1));
+    const mockUser = mockStore.users.find((u) => u.id === user.id || u.email.toLowerCase() === user.email.toLowerCase());
     if (mockUser) {
       mockUser.name = display_name?.trim() || full_name.trim();
       mockUser.role = designation?.trim() || mockUser.role;

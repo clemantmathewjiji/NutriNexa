@@ -7,21 +7,33 @@ import { useTranslation } from "@/i18n/LanguageContext";
 import { LanguageCode, SUPPORTED_LANGUAGES } from "@/i18n/types";
 import { getTranslation } from "@/i18n/locales";
 import { User } from "@/lib/types";
+import { useAuth } from "@/context/AuthContext";
 
 interface ReportsViewProps {
   user?: User | null;
 }
 
-export const ReportsView: React.FC<ReportsViewProps> = ({ user }) => {
+export const ReportsView: React.FC<ReportsViewProps> = ({ user: propUser }) => {
   const { language, formatDate } = useTranslation();
+  const { user: authUser, requireAuth, isGuest } = useAuth();
+  const user = propUser || authUser;
+
   const [reportLang, setReportLang] = useState<LanguageCode>(language);
   const [reportType, setReportType] = useState("Nutrient Calculation Report");
 
   // Investigator Identity State (Defaults to authenticated profile, editable per report)
-  const [investigatorName, setInvestigatorName] = useState(user?.displayName || user?.name || "Investigator");
-  const [investigatorDesignation, setInvestigatorDesignation] = useState(user?.designation || user?.role || "Principal Investigator");
-  const [investigatorInstitution, setInvestigatorInstitution] = useState(user?.institution || "Nutrition Science & Informatics Laboratory");
-  const [investigatorDepartment, setInvestigatorDepartment] = useState(user?.department || "Department of Food & Clinical Nutrition");
+  const [investigatorName, setInvestigatorName] = useState(
+    user?.displayName || user?.name || (isGuest ? "Guest Investigator" : "Investigator")
+  );
+  const [investigatorDesignation, setInvestigatorDesignation] = useState(
+    user?.designation || user?.role || (isGuest ? "Visiting Researcher" : "Principal Investigator")
+  );
+  const [investigatorInstitution, setInvestigatorInstitution] = useState(
+    user?.institution || "Nutrition Science & Informatics Laboratory"
+  );
+  const [investigatorDepartment, setInvestigatorDepartment] = useState(
+    user?.department || "Department of Food & Clinical Nutrition"
+  );
   const [projectCode, setProjectCode] = useState("NUTRI-2026-A");
   const [reportId] = useState(`NNX-REP-2026-${Math.floor(1000 + Math.random() * 9000)}`);
 
@@ -35,6 +47,10 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ user }) => {
       if (user.designation) setInvestigatorDesignation(user.designation);
       if (user.institution) setInvestigatorInstitution(user.institution);
       if (user.department) setInvestigatorDepartment(user.department);
+    } else {
+      setInvestigatorName("Guest Investigator");
+      setInvestigatorDesignation("Visiting Researcher");
+      setInvestigatorInstitution("NutriNexa Research Portal");
     }
   }, [user]);
 
@@ -46,8 +62,10 @@ export const ReportsView: React.FC<ReportsViewProps> = ({ user }) => {
   };
 
   const handleSaveSnapshot = () => {
-    setSnapshotSaved(true);
-    setTimeout(() => setSnapshotSaved(false), 4000);
+    requireAuth(() => {
+      setSnapshotSaved(true);
+      setTimeout(() => setSnapshotSaved(false), 4000);
+    });
   };
 
   const handleExportCsv = () => {

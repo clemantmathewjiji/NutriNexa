@@ -7,6 +7,8 @@ import {
 } from "lucide-react";
 import { useTranslation } from "@/i18n/LanguageContext";
 
+import { useAuth } from "@/context/AuthContext";
+
 interface IngredientSlot {
   food_id: number;
   quantity_grams: number;
@@ -15,6 +17,7 @@ interface IngredientSlot {
 
 export const RecipeAnalysisView: React.FC = () => {
   const { t, formatNumber } = useTranslation();
+  const { requireAuth, isGuest } = useAuth();
   const [recipes, setRecipes] = useState<RecipeRecord[]>([]);
   const [allFoods, setAllFoods] = useState<FoodItem[]>([]);
   const [selectedRecipeId, setSelectedRecipeId] = useState<number | null>(null);
@@ -82,23 +85,25 @@ export const RecipeAnalysisView: React.FC = () => {
       alert("Please add at least one ingredient.");
       return;
     }
-    try {
-      const res = await recipesApi.create({
-        name,
-        description,
-        category,
-        servings,
-        total_weight_grams: totalWeightGrams,
-        cooking_instructions: cookingInstructions,
-        allergens,
-        ingredients,
-      });
-      setIsCreating(false);
-      loadRecipes();
-      handleSelectRecipe(res.recipe_id);
-    } catch (err) {
-      alert("Failed to create recipe.");
-    }
+    requireAuth(async () => {
+      try {
+        const res = await recipesApi.create({
+          name,
+          description,
+          category,
+          servings,
+          total_weight_grams: totalWeightGrams,
+          cooking_instructions: cookingInstructions,
+          allergens,
+          ingredients,
+        });
+        setIsCreating(false);
+        loadRecipes();
+        handleSelectRecipe(res.recipe_id);
+      } catch (err) {
+        alert("Failed to create recipe.");
+      }
+    });
   };
 
   return (
@@ -117,10 +122,12 @@ export const RecipeAnalysisView: React.FC = () => {
 
         <button
           onClick={() => {
-            setIsCreating(true);
-            setIngredients([
-              { food_id: allFoods[0]?.id || 1, quantity_grams: 150, preparation_note: "Prepped fresh" }
-            ]);
+            requireAuth(() => {
+              setIsCreating(true);
+              setIngredients([
+                { food_id: allFoods[0]?.id || 1, quantity_grams: 150, preparation_note: "Prepped fresh" }
+              ]);
+            });
           }}
           className="bg-[#174C3A] hover:bg-[#123C2E] text-white text-xs font-semibold px-4 py-2 rounded-lg shadow-xs flex items-center gap-1.5 transition"
         >

@@ -6,9 +6,11 @@ import {
   CalendarCheck, Plus, Trash2, X
 } from "lucide-react";
 import { useTranslation } from "@/i18n/LanguageContext";
+import { useAuth } from "@/context/AuthContext";
 
 export const DietaryAssessmentView: React.FC = () => {
   const { t, formatNumber, formatDate } = useTranslation();
+  const { requireAuth, isGuest } = useAuth();
   const [diaries, setDiaries] = useState<any[]>([]);
   const [selectedDiaryId, setSelectedDiaryId] = useState<number | null>(null);
   const [diaryDetail, setDiaryDetail] = useState<any>(null);
@@ -80,49 +82,55 @@ export const DietaryAssessmentView: React.FC = () => {
 
   const handleCreateDiary = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const res = await dietaryApi.create({
-        client_code: clientCode,
-        diary_date: diaryDate,
-        assessment_type: assessmentType,
-        reference_profile_id: selectedProfileId,
-        notes: diaryNotes,
-      });
-      setShowNewDiaryModal(false);
-      loadDiaries();
-      handleSelectDiary(res.diary_id);
-    } catch (err) {
-      alert("Failed to create dietary diary.");
-    }
+    requireAuth(async () => {
+      try {
+        const res = await dietaryApi.create({
+          client_code: clientCode,
+          diary_date: diaryDate,
+          assessment_type: assessmentType,
+          reference_profile_id: selectedProfileId,
+          notes: diaryNotes,
+        });
+        setShowNewDiaryModal(false);
+        loadDiaries();
+        handleSelectDiary(res.diary_id);
+      } catch (err) {
+        alert("Failed to create dietary diary.");
+      }
+    });
   };
 
   const handleAddEntry = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedDiaryId || !activeMealType) return;
-    try {
-      await dietaryApi.addEntry(selectedDiaryId, {
-        meal_type: activeMealType,
-        item_type: itemType,
-        food_id: itemType === "food" ? selectedItemId : null,
-        recipe_id: itemType === "recipe" ? selectedItemId : null,
-        quantity_grams: itemGrams,
-        portion_description: `${itemGrams}g portion`,
-      });
-      setActiveMealType(null);
-      handleSelectDiary(selectedDiaryId);
-    } catch (err) {
-      alert("Failed to add meal item.");
-    }
+    requireAuth(async () => {
+      try {
+        await dietaryApi.addEntry(selectedDiaryId, {
+          meal_type: activeMealType,
+          item_type: itemType,
+          food_id: itemType === "food" ? selectedItemId : null,
+          recipe_id: itemType === "recipe" ? selectedItemId : null,
+          quantity_grams: itemGrams,
+          portion_description: `${itemGrams}g portion`,
+        });
+        setActiveMealType(null);
+        handleSelectDiary(selectedDiaryId);
+      } catch (err) {
+        alert("Failed to add meal item.");
+      }
+    });
   };
 
   const handleRemoveEntry = async (entryId: number) => {
     if (!selectedDiaryId) return;
-    try {
-      await dietaryApi.removeEntry(selectedDiaryId, entryId);
-      handleSelectDiary(selectedDiaryId);
-    } catch (err) {
-      alert("Failed to remove item.");
-    }
+    requireAuth(async () => {
+      try {
+        await dietaryApi.removeEntry(selectedDiaryId, entryId);
+        handleSelectDiary(selectedDiaryId);
+      } catch (err) {
+        alert("Failed to remove item.");
+      }
+    });
   };
 
   const meals = ["Breakfast", "Lunch", "Dinner", "Morning Snack", "Evening Snack"];
@@ -142,7 +150,7 @@ export const DietaryAssessmentView: React.FC = () => {
         </div>
 
         <button
-          onClick={() => setShowNewDiaryModal(true)}
+          onClick={() => requireAuth(() => setShowNewDiaryModal(true))}
           className="bg-[#174C3A] hover:bg-[#123C2E] text-white text-xs font-semibold px-4 py-2 rounded-lg shadow-xs flex items-center gap-1.5 transition"
         >
           <Plus className="w-4 h-4" />

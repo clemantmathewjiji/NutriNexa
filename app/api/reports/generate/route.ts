@@ -4,13 +4,19 @@ import { reports, auditLogs } from "@/drizzle/schema";
 import { getCurrentUser } from "@/lib/auth";
 import { mockStore } from "@/lib/mockStore";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(request: NextRequest) {
   try {
     const user = await getCurrentUser(request);
-    const userId = user?.id || 1;
+    if (!user) {
+      return NextResponse.json({ detail: "Authentication required to generate and persist reports." }, { status: 401 });
+    }
+
+    const userId = user.id;
     const body = await request.json();
 
-    const { report_type, title, project_id, parameters } = body;
+    const { report_type, title, project_id, parameters, investigator_name, institution_name } = body;
 
     if (!title || !report_type) {
       return NextResponse.json({ detail: "Report title and type are required." }, { status: 400 });
@@ -20,13 +26,13 @@ export async function POST(request: NextRequest) {
       generated_at: new Date().toISOString(),
       report_type,
       title,
-      investigator: user?.name || "Dr. Clemant Mathew Jiji",
-      institution: user?.institution || "SJCET Palai Nutrition Science & Computational Lab",
+      investigator: investigator_name || user.name || "Principal Investigator",
+      institution: institution_name || user.institution || "Academic Research Laboratory",
       status: "Finalized Academic Document",
       metadata: parameters || {},
     };
 
-    if (isDbConnected()) {
+    if (isDbConnected() && typeof userId === "number") {
       const db = getDb();
       if (db) {
         try {

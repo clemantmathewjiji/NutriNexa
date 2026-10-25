@@ -4,10 +4,16 @@ import { foods, foodNutrients, portionUnits, auditLogs } from "@/drizzle/schema"
 import { getCurrentUser } from "@/lib/auth";
 import { mockStore } from "@/lib/mockStore";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(request: NextRequest) {
   try {
     const user = await getCurrentUser(request);
-    const userId = user?.id || null;
+    if (!user) {
+      return NextResponse.json({ detail: "Authentication required to create custom food records." }, { status: 401 });
+    }
+    const userId = user.id;
+    const numericUserId = typeof user.id === "number" ? user.id : null;
     const body = await request.json();
 
     const {
@@ -47,7 +53,7 @@ export async function POST(request: NextRequest) {
               preparationState: "Custom Prepared",
               dataQualityGrade: "User Provided",
               isCustom: 1,
-              userId: userId,
+              userId: numericUserId,
             })
             .returning();
 
@@ -79,7 +85,7 @@ export async function POST(request: NextRequest) {
           }
 
           await db.insert(auditLogs).values({
-            userId,
+            userId: numericUserId,
             action: "FOOD_CUSTOM_CREATED",
             entityType: "foods",
             entityId: newFood.id,
@@ -118,7 +124,7 @@ export async function POST(request: NextRequest) {
       preparation_state: "Custom Prepared",
       data_quality_grade: "User Provided",
       is_custom: 1,
-      user_id: userId,
+      user_id: numericUserId,
       portions: (portions || []).map((p: any, idx: number) => ({
         id: idx + 1,
         unit_name: p.unit_name,
