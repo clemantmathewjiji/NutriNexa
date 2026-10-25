@@ -32,6 +32,7 @@ export const id: TranslationDictionary = {
 
   navDashboard: "Dasbor",
   navFoods: "Basis Data Pangan",
+  navPortions: "Porsi Pangan Visual",
   navCalculator: "Kalkulator Zat Gizi",
   navRecipes: "Analisis Resep",
   navDietary: "Penilaian Konsumsi Pangan",

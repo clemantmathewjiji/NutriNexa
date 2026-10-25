@@ -1,0 +1,13 @@
+import { createBrowserClient } from "@supabase/ssr";
+
+export function createClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
+
+  if (!supabaseUrl || !supabaseAnonKey || supabaseUrl.includes("[YOUR-PROJECT-REF]")) {
+    // Return null or client with dummy url for safe fallback
+    return null;
+  }
+
+  return createBrowserClient(supabaseUrl, supabaseAnonKey);
+}

@@ -1,18 +1,18 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { authApi, systemApi } from "@/lib/api";
+import { authApi } from "@/lib/api";
 import { User } from "@/lib/types";
 import { Navbar } from "@/components/Navbar";
 import { Sidebar, NavSection } from "@/components/Sidebar";
 import { NewAnalysisModal } from "@/components/NewAnalysisModal";
 import { AuthModal } from "@/components/AuthModal";
 import { useTranslation } from "@/i18n/LanguageContext";
-import { Database, CheckCircle2, AlertCircle, RefreshCw } from "lucide-react";
 
-// Views
+// Academic Domain Views
 import { DashboardView } from "@/components/views/DashboardView";
 import { FoodsDatabaseView } from "@/components/views/FoodsDatabaseView";
+import { VisualPortionView } from "@/components/views/VisualPortionView";
 import { CalculatorView } from "@/components/views/CalculatorView";
 import { RecipeAnalysisView } from "@/components/views/RecipeAnalysisView";
 import { DietaryAssessmentView } from "@/components/views/DietaryAssessmentView";
@@ -34,42 +34,19 @@ export default function NutriNexaApp() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showNewAnalysisModal, setShowNewAnalysisModal] = useState(false);
 
-  // Global search
+  // Global search query
   const [searchTerm, setSearchTerm] = useState("");
-
-  // Database status banner
-  const [dbStatus, setDbStatus] = useState<{
-    connected: boolean;
-    source: string;
-    message: string;
-  } | null>(null);
-  const [isSeeding, setIsSeeding] = useState(false);
-  const [seedNotice, setSeedNotice] = useState<string | null>(null);
 
   useEffect(() => {
     checkCurrentUser();
-    checkHealth();
   }, []);
-
-  const checkHealth = async () => {
-    try {
-      const res = await systemApi.getHealth();
-      setDbStatus(res.database);
-    } catch {
-      setDbStatus({
-        connected: false,
-        source: "memory-mock",
-        message: "Supabase DATABASE_URL not yet configured in .env.local",
-      });
-    }
-  };
 
   const checkCurrentUser = async () => {
     try {
       const res = await authApi.getMe();
       setUser(res.user);
     } catch {
-      // Default to demo researcher user for immediate exploratory access
+      // Default to demo researcher profile for immediate exploratory access
       try {
         const loginRes = await authApi.login("demo@nutrinexa.org", "NutriNexa2026!");
         setUser(loginRes.user);
@@ -91,20 +68,6 @@ export default function NutriNexaApp() {
     }
   };
 
-  const handleTriggerSeed = async () => {
-    setIsSeeding(true);
-    setSeedNotice(null);
-    try {
-      const res = await systemApi.seedDatabase();
-      setSeedNotice(res.message);
-      await checkHealth();
-    } catch (err: any) {
-      setSeedNotice(`Seed error: ${err.message || String(err)}`);
-    } finally {
-      setIsSeeding(false);
-    }
-  };
-
   const renderActiveView = () => {
     switch (currentSection) {
       case "dashboard":
@@ -116,6 +79,17 @@ export default function NutriNexaApp() {
         );
       case "foods":
         return <FoodsDatabaseView initialSearch={searchTerm} />;
+      case "portions":
+        return (
+          <VisualPortionView
+            onSendToCalculator={(foodName, edibleGrams) => {
+              setCurrentSection("calculator");
+            }}
+            onSendToRecall={(foodName, edibleGrams, portionDesc) => {
+              setCurrentSection("dietary");
+            }}
+          />
+        );
       case "calculator":
         return <CalculatorView />;
       case "recipes":
@@ -129,11 +103,18 @@ export default function NutriNexaApp() {
       case "projects":
         return <ResearchProjectsView />;
       case "reports":
-        return <ReportsView />;
+        return <ReportsView user={user} />;
       case "my-foods":
         return <MyFoodsView onNavigate={(sec) => setCurrentSection(sec)} />;
       case "settings":
-        return <SettingsView user={user} />;
+        return (
+          <SettingsView
+            user={user}
+            onProfileUpdated={(updatedUser) => {
+              setUser(updatedUser);
+            }}
+          />
+        );
       case "help":
         return <HelpDocsView />;
       default:
@@ -148,40 +129,6 @@ export default function NutriNexaApp() {
 
   return (
     <div dir={dir} className="min-h-screen flex flex-col bg-[#F7F9F7] text-[#192520]">
-      {/* Top Database Sync Banner */}
-      <div className="bg-white border-b border-[#E2E8E2] px-4 py-1.5 text-xs flex flex-wrap items-center justify-between gap-2 text-[#52635C]">
-        <div className="flex items-center gap-2">
-          <Database className="w-3.5 h-3.5 text-[#174C3A]" />
-          <span className="font-semibold text-[#174C3A]">NutriNexa Engine:</span>
-          <span>Next.js 15 Full-Stack • Drizzle ORM</span>
-          <span className="text-[#C3D2CA]">|</span>
-          {dbStatus?.connected ? (
-            <span className="inline-flex items-center gap-1 text-emerald-700 font-medium">
-              <CheckCircle2 className="w-3.5 h-3.5" />
-              Supabase PostgreSQL Connected
-            </span>
-          ) : (
-            <span className="inline-flex items-center gap-1 text-amber-700 font-medium">
-              <AlertCircle className="w-3.5 h-3.5" />
-              Active Local Fallback Store (Ready for Supabase credentials in .env.local)
-            </span>
-          )}
-        </div>
-
-        <div className="flex items-center gap-3">
-          {seedNotice && <span className="text-emerald-700 font-medium">{seedNotice}</span>}
-          <button
-            onClick={handleTriggerSeed}
-            disabled={isSeeding}
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-[#F1F5F2] hover:bg-[#E2E8E2] text-[#174C3A] transition-colors disabled:opacity-50"
-            title="Seed/Sync database with USDA reference foods and DRV standards"
-          >
-            <RefreshCw className={`w-3 h-3 ${isSeeding ? "animate-spin" : ""}`} />
-            {isSeeding ? "Migrating DB..." : "Seed Supabase DB"}
-          </button>
-        </div>
-      </div>
-
       {/* Top Navigation */}
       <Navbar
         user={user}
@@ -192,7 +139,7 @@ export default function NutriNexaApp() {
         searchTerm={searchTerm}
       />
 
-      {/* Main Body with Sidebar and Content View */}
+      {/* Main Body with Sidebar and Active Module */}
       <div className="flex-1 flex overflow-hidden">
         <Sidebar
           currentSection={currentSection}

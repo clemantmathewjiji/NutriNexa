@@ -69,6 +69,7 @@ export interface TranslationDictionary {
   // Nav Items
   navDashboard: string;
   navFoods: string;
+  navPortions?: string;
   navCalculator: string;
   navRecipes: string;
   navDietary: string;

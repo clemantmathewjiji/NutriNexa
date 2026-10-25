@@ -4,6 +4,8 @@
  */
 
 import { STANDARD_NUTRIENTS, FOOD_RECORDS, DRV_PROFILES } from "./seedData";
+import { TKPI_FOOD_RECORDS } from "@/data/tkpi2017";
+import { BUKU_FOTO_MAKANAN_CATALOG } from "@/data/bukuFotoMakanan2014";
 
 export interface MockUser {
   id: number;
@@ -55,21 +57,21 @@ class MockStore {
 
   private init() {
     // 1. Initial Demo User
-    // NutriNexa2026! with salt 00112233445566778899aabbccddeeff
     this.users.push({
       id: 1,
-      name: "Dr. Clemant Mathew Jiji",
+      name: "Amal Krishna",
       email: "demo@nutrinexa.org",
       password_hash: "3139fcbfaec2b55776d6ec555bc0d1eb9f02931db6fb9c0715d9cf2813dfd597",
       salt: "00112233445566778899aabbccddeeff",
       role: "Principal Investigator",
-      institution: "SJCET Palai Nutrition Science & Computational Lab",
+      institution: "Nutrition Science & Computational Lab",
     });
 
-    // 2. Initial Reference Foods
+    // 2. Initial Reference Foods (USDA + Indonesian TKPI 2017)
     let foodIdCounter = 1;
     let portionIdCounter = 1;
 
+    // Load USDA Reference Foods
     for (const record of FOOD_RECORDS) {
       const foodId = foodIdCounter++;
       const portions = record.portions.map((p) => ({
@@ -112,6 +114,58 @@ class MockStore {
       });
     }
 
+    // Load Indonesian TKPI 2017 Reference Foods & Buku Foto Makanan 2014 Portions
+    for (const tkpi of TKPI_FOOD_RECORDS) {
+      const foodId = foodIdCounter++;
+      const bfmMatch = BUKU_FOTO_MAKANAN_CATALOG.find((b) => b.food_code_ref === tkpi.code);
+
+      const portions = bfmMatch
+        ? [
+            { id: portionIdCounter++, unit_name: `${bfmMatch.portions.kecil.label_id} (${bfmMatch.portions.kecil.household_desc})`, gram_weight: bfmMatch.portions.kecil.raw_weight_grams },
+            { id: portionIdCounter++, unit_name: `${bfmMatch.portions.sedang.label_id} (${bfmMatch.portions.sedang.household_desc})`, gram_weight: bfmMatch.portions.sedang.raw_weight_grams },
+            { id: portionIdCounter++, unit_name: `${bfmMatch.portions.besar.label_id} (${bfmMatch.portions.besar.household_desc})`, gram_weight: bfmMatch.portions.besar.raw_weight_grams },
+          ]
+        : [
+            { id: portionIdCounter++, unit_name: "100g Porsi Edible", gram_weight: 100.0 },
+            { id: portionIdCounter++, unit_name: "1 Porsi Sedang", gram_weight: 75.0 },
+          ];
+
+      const nutrientsMap: Record<string, any> = {
+        energy_kcal: { amount_per_100g: tkpi.nutrients.energy_kcal, unit: "kcal", is_missing: 0, is_trace: 0 },
+        protein: { amount_per_100g: tkpi.nutrients.protein_g, unit: "g", is_missing: 0, is_trace: 0 },
+        fat: { amount_per_100g: tkpi.nutrients.fat_g, unit: "g", is_missing: 0, is_trace: 0 },
+        carbs: { amount_per_100g: tkpi.nutrients.carbs_g, unit: "g", is_missing: 0, is_trace: 0 },
+        fiber: { amount_per_100g: tkpi.nutrients.fiber_g, unit: "g", is_missing: 0, is_trace: 0 },
+        calcium: { amount_per_100g: tkpi.nutrients.calcium_mg, unit: "mg", is_missing: 0, is_trace: 0 },
+        iron: { amount_per_100g: tkpi.nutrients.iron_mg, unit: "mg", is_missing: 0, is_trace: 0 },
+        sodium: { amount_per_100g: tkpi.nutrients.sodium_mg, unit: "mg", is_missing: 0, is_trace: 0 },
+        potassium: { amount_per_100g: tkpi.nutrients.potassium_mg, unit: "mg", is_missing: 0, is_trace: 0 },
+        vit_c: { amount_per_100g: tkpi.nutrients.vit_c_mg, unit: "mg", is_missing: 0, is_trace: 0 },
+      };
+
+      this.foods.push({
+        id: foodId,
+        code: tkpi.code,
+        name: tkpi.name_id,
+        alt_names: `${tkpi.name_en}, ${tkpi.synonyms.join(", ")}`,
+        food_group: tkpi.food_group,
+        category: tkpi.food_group,
+        scientific_name: tkpi.scientific_name || "",
+        description: `Tabel Komposisi Pangan Indonesia (TKPI) 2017. BDD: ${tkpi.bdd_percentage}%. ${tkpi.refuse_description ? "Refuse: " + tkpi.refuse_description : ""}`,
+        source_name: "TKPI 2017 (Kemenkes RI)",
+        source_citation: "Kementerian Kesehatan RI. Tabel Komposisi Pangan Indonesia (TKPI) 2017. Jakarta, 2018.",
+        source_year: "2018",
+        standard_quantity: 100.0,
+        standard_unit: "g",
+        preparation_state: tkpi.preparation_state,
+        data_quality_grade: "Kemenkes TKPI Grade A",
+        is_custom: 0,
+        user_id: null,
+        portions,
+        nutrients: nutrientsMap,
+      });
+    }
+
     // 3. Initial Project
     this.projects.push({
       id: 1,
@@ -120,7 +174,7 @@ class MockStore {
       code: "NUTRI-2026-A",
       objectives: "Assess micronutrient adequacy, omega-3 to omega-6 ratio, and dietary fiber intake across 120 undergraduate students.",
       methodology_notes: "Repeated 24-hour recalls analyzed against US DRI and ICMR-NIN 2020 standards using NutriNexa calculation engine.",
-      lead_researcher: "Dr. Clemant Mathew Jiji",
+      lead_researcher: "Amal Krishna",
       status: "Active",
       tags: "Micronutrients, University Cohort, Dietary Recall, Bioavailability",
       created_at: new Date().toISOString(),

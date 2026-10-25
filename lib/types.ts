@@ -1,9 +1,14 @@
 export interface User {
-  id: number;
+  id: number | string;
   name: string;
+  displayName?: string;
+  fullName?: string;
   email: string;
   role: string;
+  designation?: string;
   institution?: string;
+  department?: string;
+  preferredLanguage?: string;
 }
 
 export interface NutrientDefinition {

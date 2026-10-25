@@ -81,11 +81,16 @@ export const Navbar: React.FC<NavbarProps> = ({
         {user ? (
           <div className="flex items-center gap-2 border-l border-[#E2E8E2] pl-2.5 rtl:border-l-0 rtl:border-r rtl:pr-2.5 rtl:pl-0">
             <div className="text-right rtl:text-left hidden lg:block">
-              <div className="text-xs font-semibold text-[#192520]">{user.name}</div>
-              <div className="text-[11px] text-[#52635C]">{user.role} &bull; {user.institution || "Research Faculty"}</div>
+              <div className="text-xs font-semibold text-[#192520]">{user.displayName || user.name}</div>
+              <div className="text-[11px] text-[#52635C]">
+                {user.designation || user.role} &bull; {user.institution || "Research Faculty"}
+              </div>
             </div>
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#2D8C83]/15 text-[#174C3A] font-bold flex items-center justify-center text-sm border border-[#2D8C83]/30">
-              {user.name.charAt(0)}
+            <div
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#2D8C83]/15 text-[#174C3A] font-bold flex items-center justify-center text-sm border border-[#2D8C83]/30"
+              title={`${user.displayName || user.name} (${user.designation || user.role})`}
+            >
+              {(user.displayName || user.name || "U").charAt(0).toUpperCase()}
             </div>
             <button
               onClick={onLogout}

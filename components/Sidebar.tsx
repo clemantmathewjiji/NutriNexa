@@ -3,6 +3,7 @@ import React from "react";
 import {
   LayoutDashboard,
   Database,
+  Camera,
   Calculator,
   UtensilsCrossed,
   CalendarCheck,
@@ -23,6 +24,7 @@ import { TranslationDictionary } from "@/i18n/types";
 export type NavSection =
   | "dashboard"
   | "foods"
+  | "portions"
   | "calculator"
   | "recipes"
   | "dietary"
@@ -50,7 +52,8 @@ interface NavItemConfig {
 
 const NAV_CONFIGS: NavItemConfig[] = [
   { id: "dashboard", key: "navDashboard", icon: LayoutDashboard },
-  { id: "foods", key: "navFoods", icon: Database, tag: "USDA FDC" },
+  { id: "foods", key: "navFoods", icon: Database, tag: "TKPI/USDA" },
+  { id: "portions", key: "navPortions", icon: Camera, tag: "Buku Foto" },
   { id: "calculator", key: "navCalculator", icon: Calculator },
   { id: "recipes", key: "navRecipes", icon: UtensilsCrossed },
   { id: "dietary", key: "navDietary", icon: CalendarCheck, tag: "Recall" },

@@ -32,6 +32,7 @@ export const en: TranslationDictionary = {
 
   navDashboard: "Dashboard",
   navFoods: "Food Database",
+  navPortions: "Visual Portions",
   navCalculator: "Nutrient Calculator",
   navRecipes: "Recipe Analysis",
   navDietary: "Dietary Assessment",
