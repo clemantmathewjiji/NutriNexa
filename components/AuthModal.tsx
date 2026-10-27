@@ -145,6 +145,18 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       }
     }
 
+    // Direct Google OAuth 2.0 initiation with configured Google Client ID
+    const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID?.trim();
+
+    if (googleClientId) {
+      const redirectUri = `${window.location.origin}/auth/callback`;
+      const googleOAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleClientId}&redirect_uri=${encodeURIComponent(
+        redirectUri
+      )}&response_type=code&scope=openid%20email%20profile&access_type=offline&prompt=consent`;
+      window.location.href = googleOAuthUrl;
+      return;
+    }
+
     // Attempt Supabase Google OAuth if configured
     try {
       const supabase = createClient();
