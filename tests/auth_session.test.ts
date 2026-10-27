@@ -22,7 +22,7 @@ function createNextRequest(url: string, options: { method?: string; headers?: Re
     reqInit.body = JSON.stringify(options.body);
     (reqInit.headers as Record<string, string>)["content-type"] = "application/json";
   }
-  return new NextRequest(new URL(url, "http://localhost:3000"), reqInit);
+  return new NextRequest(new URL(url, "http://localhost:3000"), reqInit as any);
 }
 
 describe("NutriNexa Authentication, Guest Mode, and Session Security", () => {

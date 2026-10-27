@@ -1,0 +1,1640 @@
+[
+  {
+    "page": 21,
+    "title": "Nasi Putih",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "AP001"
+  },
+  {
+    "page": 22,
+    "title": "Nasi Putih",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "AP001"
+  },
+  {
+    "page": 23,
+    "title": "Nasi Tim",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "AP001"
+  },
+  {
+    "page": 24,
+    "title": "Nasi Tim Ayam",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "AP001"
+  },
+  {
+    "page": 25,
+    "title": "Bubur Nasi Kental",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "AP001"
+  },
+  {
+    "page": 26,
+    "title": "Bubur Nasi Encer",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "AP001"
+  },
+  {
+    "page": 27,
+    "title": "Lontong Polos",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": null
+  },
+  {
+    "page": 28,
+    "title": "Ketupat",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "AP014"
+  },
+  {
+    "page": 29,
+    "title": "Nasi Jagung",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "AP001"
+  },
+  {
+    "page": 30,
+    "title": "Jagung Rebus",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "AP010"
+  },
+  {
+    "page": 31,
+    "title": "Jagung Pop Corn",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "AR005"
+  },
+  {
+    "page": 32,
+    "title": "Papeda",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "BP054"
+  },
+  {
+    "page": 33,
+    "title": "Kentang Rebus",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "AP010"
+  },
+  {
+    "page": 34,
+    "title": "Perkedel Kentang",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "BR013"
+  },
+  {
+    "page": 35,
+    "title": "Kentang Balado",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "BR013"
+  },
+  {
+    "page": 36,
+    "title": "Kentang Goreng Stick",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "AP007"
+  },
+  {
+    "page": 37,
+    "title": "Talas Kukus",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "BP004"
+  },
+  {
+    "page": 38,
+    "title": "Talas Goreng",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "AP007"
+  },
+  {
+    "page": 39,
+    "title": "Talas Belitung",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "BR004"
+  },
+  {
+    "page": 40,
+    "title": "Ubi Jalar Putih Rebus",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "BR031"
+  },
+  {
+    "page": 41,
+    "title": "Ubi Jalar Merah Rebus",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "BR030"
+  },
+  {
+    "page": 42,
+    "title": "Singkong Rebus",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "DP008"
+  },
+  {
+    "page": 43,
+    "title": "Singkong Parut",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "BR016"
+  },
+  {
+    "page": 44,
+    "title": "Mie Basah Rebus",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "AP010"
+  },
+  {
+    "page": 45,
+    "title": "Mie Kering Rebus",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "CP008"
+  },
+  {
+    "page": 46,
+    "title": "Bihun Rebus",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "AP006"
+  },
+  {
+    "page": 47,
+    "title": "Mie Aci / Glosor Goreng",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "AP007"
+  },
+  {
+    "page": 48,
+    "title": "Roti Tawar / Gandum",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "AP024"
+  },
+  {
+    "page": 49,
+    "title": "Roti Manis",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "AP024"
+  },
+  {
+    "page": 50,
+    "title": "Roti Tawar",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "AP024"
+  },
+  {
+    "page": 51,
+    "title": "Pisang Kepok Rebus",
+    "category": "A. Sumber Karbohidrat",
+    "utensil": "Centong plastik / piring ceper",
+    "matched_food_code": "ER081"
+  },
+  {
+    "page": 53,
+    "title": "Daging Sapi Goreng / Empal",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "FP046"
+  },
+  {
+    "page": 54,
+    "title": "Daging Sapi Rendang",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "FR001"
+  },
+  {
+    "page": 55,
+    "title": "Semur Daging Sapi",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "FR001"
+  },
+  {
+    "page": 56,
+    "title": "Tumis Sawi",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "DR042"
+  },
+  {
+    "page": 57,
+    "title": "Daging Burger",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "ER046"
+  },
+  {
+    "page": 58,
+    "title": "Bakso Rebus",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "AP010"
+  },
+  {
+    "page": 59,
+    "title": "Abon Sapi",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "FP011"
+  },
+  {
+    "page": 60,
+    "title": "Daging Rebus",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "AP010"
+  },
+  {
+    "page": 61,
+    "title": "Ayam Goreng Dada",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "FP021"
+  },
+  {
+    "page": 62,
+    "title": "Ayam Goreng Paha",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "FP022"
+  },
+  {
+    "page": 63,
+    "title": "Ayam Goreng Kepala",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "FP001"
+  },
+  {
+    "page": 64,
+    "title": "Ayam Ceker Rebus",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "DP002"
+  },
+  {
+    "page": 65,
+    "title": "Rempela Hati Ayam Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "FR007"
+  },
+  {
+    "page": 66,
+    "title": "Nugget Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "AP007"
+  },
+  {
+    "page": 67,
+    "title": "Sate Hati Ayam",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "FR007"
+  },
+  {
+    "page": 68,
+    "title": "Ayam Suir",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "AP085"
+  },
+  {
+    "page": 69,
+    "title": "Sate Usus Ayam",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "FP002"
+  },
+  {
+    "page": 70,
+    "title": "Ikan Mas Pepes",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GP019"
+  },
+  {
+    "page": 71,
+    "title": "Ikan Mas Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GP013"
+  },
+  {
+    "page": 72,
+    "title": "Ikan Kakap Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GR030"
+  },
+  {
+    "page": 73,
+    "title": "Ikan Kakap Kuah",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GR030"
+  },
+  {
+    "page": 74,
+    "title": "Ikan Bandeng Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GR007"
+  },
+  {
+    "page": 75,
+    "title": "Ikan Bandeng Kuah",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GR007"
+  },
+  {
+    "page": 76,
+    "title": "Ikan Kembung Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GR050"
+  },
+  {
+    "page": 77,
+    "title": "Ikan Belut Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GP002"
+  },
+  {
+    "page": 78,
+    "title": "Ikan Belut Goreng Kecil",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GP002"
+  },
+  {
+    "page": 79,
+    "title": "Ikan Bilih Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GP013"
+  },
+  {
+    "page": 80,
+    "title": "Ikan Nila / Mujair Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GP013"
+  },
+  {
+    "page": 81,
+    "title": "Ikan Gurame Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GP013"
+  },
+  {
+    "page": 82,
+    "title": "Ikan Tenggiri Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GP013"
+  },
+  {
+    "page": 83,
+    "title": "Ikan Tenggiri Kuah",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "BP041"
+  },
+  {
+    "page": 84,
+    "title": "Ikan Lele Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GP013"
+  },
+  {
+    "page": 85,
+    "title": "Ikan Tongkol Segar Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GR070"
+  },
+  {
+    "page": 86,
+    "title": "Ikan Pari Segar Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "DR131"
+  },
+  {
+    "page": 87,
+    "title": "Cumi Kuah Sero / Panjang",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": null
+  },
+  {
+    "page": 88,
+    "title": "Cumi Sotong Rebus",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "AP010"
+  },
+  {
+    "page": 89,
+    "title": "Udang Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "BP045"
+  },
+  {
+    "page": 90,
+    "title": "Ikan Baronang Bakar",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GR009"
+  },
+  {
+    "page": 91,
+    "title": "Ikan Bawal Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GR012"
+  },
+  {
+    "page": 92,
+    "title": "Ikan Patin Kuah",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GR053"
+  },
+  {
+    "page": 93,
+    "title": "Ikan Teri Segar Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GR068"
+  },
+  {
+    "page": 94,
+    "title": "Bandeng Presto",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GP005"
+  },
+  {
+    "page": 95,
+    "title": "Ikan Tenggiri Bumbu Kuning",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GR024"
+  },
+  {
+    "page": 96,
+    "title": "Cumi Gulai",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "BP040"
+  },
+  {
+    "page": 97,
+    "title": "Ikan Sarden Kalengan",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GR057"
+  },
+  {
+    "page": 98,
+    "title": "Ikan Tongkol Pindang Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GR070"
+  },
+  {
+    "page": 99,
+    "title": "Ikan Tongkol Pindang Balado",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GR070"
+  },
+  {
+    "page": 100,
+    "title": "Ikan Asin Japuh Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "CP048"
+  },
+  {
+    "page": 101,
+    "title": "Ikan Asin Peda Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "CP048"
+  },
+  {
+    "page": 102,
+    "title": "Ikan Teri Padang Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "GR068"
+  },
+  {
+    "page": 103,
+    "title": "Ikan Asin Selar Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "CP048"
+  },
+  {
+    "page": 104,
+    "title": "Ikan Asin Sepat Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "CP048"
+  },
+  {
+    "page": 105,
+    "title": "Ikan Asin Gabus Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "CP048"
+  },
+  {
+    "page": 106,
+    "title": "Ikan Asin Pepetek Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "CP048"
+  },
+  {
+    "page": 107,
+    "title": "Ikan Asin Teri Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "CP048"
+  },
+  {
+    "page": 108,
+    "title": "Ikan Asin Gabus Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "CP048"
+  },
+  {
+    "page": 109,
+    "title": "Telur Ceplok Balado",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "CP044"
+  },
+  {
+    "page": 110,
+    "title": "Telur Dadar",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "HP001"
+  },
+  {
+    "page": 111,
+    "title": "Telur Rebus Balado",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "AP010"
+  },
+  {
+    "page": 112,
+    "title": "Telur Puyuh Rebus",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "HR011"
+  },
+  {
+    "page": 113,
+    "title": "Daging Kornet",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "FP015"
+  },
+  {
+    "page": 114,
+    "title": "Kikil Gulai",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "DP033"
+  },
+  {
+    "page": 115,
+    "title": "Tahu Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "CP062"
+  },
+  {
+    "page": 116,
+    "title": "Semur Tahu",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "CP016"
+  },
+  {
+    "page": 117,
+    "title": "Tempe Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "CP076"
+  },
+  {
+    "page": 118,
+    "title": "Tempe Orek",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "CP040"
+  },
+  {
+    "page": 119,
+    "title": "Bubur Kacang Hijau",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "CR012"
+  },
+  {
+    "page": 120,
+    "title": "Kacang Tanah Goreng",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "CP012"
+  },
+  {
+    "page": 121,
+    "title": "Kacang Tanah Rebus",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "CP011"
+  },
+  {
+    "page": 122,
+    "title": "Kacang Merah / Jogo",
+    "category": "B. Sumber Protein",
+    "utensil": "Piring ceper sedang / mangkok sedang",
+    "matched_food_code": "CR024"
+  },
+  {
+    "page": 124,
+    "title": "Sayur Asem",
+    "category": "C. Sayuran",
+    "utensil": "Mangkok sedang / sendok sayur",
+    "matched_food_code": "DP047"
+  },
+  {
+    "page": 125,
+    "title": "Sayur Sop",
+    "category": "C. Sayuran",
+    "utensil": "Mangkok sedang / sendok sayur",
+    "matched_food_code": "DP053"
+  },
+  {
+    "page": 126,
+    "title": "Sayur Bayam Bening",
+    "category": "C. Sayuran",
+    "utensil": "Mangkok sedang / sendok sayur",
+    "matched_food_code": "CP058"
+  },
+  {
+    "page": 127,
+    "title": "Sayur Lodeh",
+    "category": "C. Sayuran",
+    "utensil": "Mangkok sedang / sendok sayur",
+    "matched_food_code": "CP058"
+  },
+  {
+    "page": 128,
+    "title": "Tumis Sawi",
+    "category": "C. Sayuran",
+    "utensil": "Mangkok sedang / sendok sayur",
+    "matched_food_code": "DR042"
+  },
+  {
+    "page": 129,
+    "title": "Tumis Kacang Panjang",
+    "category": "C. Sayuran",
+    "utensil": "Mangkok sedang / sendok sayur",
+    "matched_food_code": "CR029"
+  },
+  {
+    "page": 130,
+    "title": "Gulai Daun Singkong",
+    "category": "C. Sayuran",
+    "utensil": "Mangkok sedang / sendok sayur",
+    "matched_food_code": "DR034"
+  },
+  {
+    "page": 131,
+    "title": "Tumis Kangkung",
+    "category": "C. Sayuran",
+    "utensil": "Mangkok sedang / sendok sayur",
+    "matched_food_code": "DR100"
+  },
+  {
+    "page": 132,
+    "title": "Tumis Tauge",
+    "category": "C. Sayuran",
+    "utensil": "Mangkok sedang / sendok sayur",
+    "matched_food_code": "DP059"
+  },
+  {
+    "page": 133,
+    "title": "Balado Terong",
+    "category": "C. Sayuran",
+    "utensil": "Mangkok sedang / sendok sayur",
+    "matched_food_code": "DR154"
+  },
+  {
+    "page": 134,
+    "title": "Urap",
+    "category": "C. Sayuran",
+    "utensil": "Mangkok sedang / sendok sayur",
+    "matched_food_code": null
+  },
+  {
+    "page": 135,
+    "title": "Oyong Rebus",
+    "category": "C. Sayuran",
+    "utensil": "Mangkok sedang / sendok sayur",
+    "matched_food_code": "AP010"
+  },
+  {
+    "page": 136,
+    "title": "Wortel Rebus",
+    "category": "C. Sayuran",
+    "utensil": "Mangkok sedang / sendok sayur",
+    "matched_food_code": "DP020"
+  },
+  {
+    "page": 137,
+    "title": "Buncis Rebus",
+    "category": "C. Sayuran",
+    "utensil": "Mangkok sedang / sendok sayur",
+    "matched_food_code": "DP003"
+  },
+  {
+    "page": 138,
+    "title": "Nangka Muda Rebus",
+    "category": "C. Sayuran",
+    "utensil": "Mangkok sedang / sendok sayur",
+    "matched_food_code": "AP010"
+  },
+  {
+    "page": 139,
+    "title": "Labu Siam Rebus",
+    "category": "C. Sayuran",
+    "utensil": "Mangkok sedang / sendok sayur",
+    "matched_food_code": "DR046"
+  },
+  {
+    "page": 140,
+    "title": "Ketimun Mentah",
+    "category": "C. Sayuran",
+    "utensil": "Mangkok sedang / sendok sayur",
+    "matched_food_code": "AR001"
+  },
+  {
+    "page": 141,
+    "title": "Terong Ungu Bulat",
+    "category": "C. Sayuran",
+    "utensil": "Mangkok sedang / sendok sayur",
+    "matched_food_code": "BP072"
+  },
+  {
+    "page": 142,
+    "title": "Terong Bulat Hijau",
+    "category": "C. Sayuran",
+    "utensil": "Mangkok sedang / sendok sayur",
+    "matched_food_code": "AP099"
+  },
+  {
+    "page": 144,
+    "title": "Alpukat",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "ER001"
+  },
+  {
+    "page": 145,
+    "title": "Anggur",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "ER002"
+  },
+  {
+    "page": 146,
+    "title": "Apel Manalagi",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "ER003"
+  },
+  {
+    "page": 147,
+    "title": "Apel Fuji",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "ER003"
+  },
+  {
+    "page": 148,
+    "title": "Apel Merah Royal Gala",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": null
+  },
+  {
+    "page": 149,
+    "title": "Bengkuang",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "BR005"
+  },
+  {
+    "page": 150,
+    "title": "Belimbing",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "CR003"
+  },
+  {
+    "page": 151,
+    "title": "Duku",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "ER022"
+  },
+  {
+    "page": 152,
+    "title": "Durian Lokal",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "CR049"
+  },
+  {
+    "page": 153,
+    "title": "Durian Montong",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "ER023"
+  },
+  {
+    "page": 154,
+    "title": "Jambu Air",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "ER030"
+  },
+  {
+    "page": 155,
+    "title": "Jambu Biji",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "ER031"
+  },
+  {
+    "page": 156,
+    "title": "Jeruk Bali",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "ER035"
+  },
+  {
+    "page": 157,
+    "title": "Jeruk Mandarin",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "ER035"
+  },
+  {
+    "page": 158,
+    "title": "Jeruk Medan",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "ER035"
+  },
+  {
+    "page": 159,
+    "title": "Kedondong",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "AP045"
+  },
+  {
+    "page": 160,
+    "title": "Klengkeng",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": null
+  },
+  {
+    "page": 161,
+    "title": "Kiwi",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": null
+  },
+  {
+    "page": 162,
+    "title": "Mangga Gedong",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "ER054"
+  },
+  {
+    "page": 163,
+    "title": "Mangga Harum Manis",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "ER058"
+  },
+  {
+    "page": 164,
+    "title": "Mangga Indramayu",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "ER059"
+  },
+  {
+    "page": 165,
+    "title": "Melon",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "ER067"
+  },
+  {
+    "page": 166,
+    "title": "Naga",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "ER012"
+  },
+  {
+    "page": 167,
+    "title": "Nanas",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "ER069"
+  },
+  {
+    "page": 168,
+    "title": "Nangka",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "BP022"
+  },
+  {
+    "page": 169,
+    "title": "Pear",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": null
+  },
+  {
+    "page": 170,
+    "title": "Pepaya",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "DR014"
+  },
+  {
+    "page": 171,
+    "title": "Pisang Ambon / Pisang Meja",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "ER074"
+  },
+  {
+    "page": 172,
+    "title": "Pisang Emas",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "DR092"
+  },
+  {
+    "page": 173,
+    "title": "Pisang Raja Sereh",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "ER088"
+  },
+  {
+    "page": 174,
+    "title": "Pisang Raja Bulu",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "ER088"
+  },
+  {
+    "page": 175,
+    "title": "Manggis",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "ER064"
+  },
+  {
+    "page": 176,
+    "title": "Rambutan",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "ER096"
+  },
+  {
+    "page": 177,
+    "title": "Salak",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "BP022"
+  },
+  {
+    "page": 178,
+    "title": "Sawo",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "AP104"
+  },
+  {
+    "page": 179,
+    "title": "Semangka",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "ER105"
+  },
+  {
+    "page": 180,
+    "title": "Sirsak",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": "ER106"
+  },
+  {
+    "page": 181,
+    "title": "Strawberry",
+    "category": "D. Buah",
+    "utensil": "Buah utuh / piring buah",
+    "matched_food_code": null
+  },
+  {
+    "page": 183,
+    "title": "Kue Apem",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "AP028"
+  },
+  {
+    "page": 184,
+    "title": "Bacang",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "ER025"
+  },
+  {
+    "page": 185,
+    "title": "Bakpia",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "AP030"
+  },
+  {
+    "page": 186,
+    "title": "Bakwan Sayuran",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "AP031"
+  },
+  {
+    "page": 187,
+    "title": "Barongko",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "EP001"
+  },
+  {
+    "page": 188,
+    "title": "Kue Bika Ambon",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "AP035"
+  },
+  {
+    "page": 189,
+    "title": "Bolu Keju",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "JP003"
+  },
+  {
+    "page": 190,
+    "title": "Bolu Kukus",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "AP027"
+  },
+  {
+    "page": 191,
+    "title": "Brownies",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": null
+  },
+  {
+    "page": 192,
+    "title": "Bubur Sumsum",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "AP040"
+  },
+  {
+    "page": 193,
+    "title": "Kue Carabikang",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": null
+  },
+  {
+    "page": 194,
+    "title": "Rempeyek Kacang",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "CP055"
+  },
+  {
+    "page": 195,
+    "title": "Dadar Gulung",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "HP001"
+  },
+  {
+    "page": 196,
+    "title": "Donat",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": null
+  },
+  {
+    "page": 197,
+    "title": "Getuk",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "BP025"
+  },
+  {
+    "page": 198,
+    "title": "Kue Ali",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "AP065"
+  },
+  {
+    "page": 199,
+    "title": "Kroket Kentang",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "BR013"
+  },
+  {
+    "page": 200,
+    "title": "Kue Lapis Pepe",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "AP078"
+  },
+  {
+    "page": 201,
+    "title": "Kue Lumpur",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "AP072"
+  },
+  {
+    "page": 202,
+    "title": "Kue Mangkok",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "DR053"
+  },
+  {
+    "page": 203,
+    "title": "Kue Lapis Legit",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "AP078"
+  },
+  {
+    "page": 204,
+    "title": "Lapis Surabaya",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "AP078"
+  },
+  {
+    "page": 205,
+    "title": "Lemper Ayam",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "AP085"
+  },
+  {
+    "page": 206,
+    "title": "Lontong Isi",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": null
+  },
+  {
+    "page": 207,
+    "title": "Lumpia",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": null
+  },
+  {
+    "page": 208,
+    "title": "Pempek",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "GP077"
+  },
+  {
+    "page": 209,
+    "title": "Papais Pisang (Naga Sari)",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": null
+  },
+  {
+    "page": 210,
+    "title": "Pastel",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "AP096"
+  },
+  {
+    "page": 211,
+    "title": "Pisang Goreng",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "AP007"
+  },
+  {
+    "page": 212,
+    "title": "Pisang Ijo",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "DR092"
+  },
+  {
+    "page": 213,
+    "title": "Pisang Molen",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "DR092"
+  },
+  {
+    "page": 214,
+    "title": "Kue Putri Ayu",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "AP099"
+  },
+  {
+    "page": 215,
+    "title": "Roti Goreng",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "AP007"
+  },
+  {
+    "page": 216,
+    "title": "Roti Manis Coklat",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "MP001"
+  },
+  {
+    "page": 217,
+    "title": "Risoles Sayuran",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "DP022"
+  },
+  {
+    "page": 218,
+    "title": "Singkong Goreng",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "BP033"
+  },
+  {
+    "page": 219,
+    "title": "Tahu Isi Daging",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "CP016"
+  },
+  {
+    "page": 220,
+    "title": "Tahu Isi Sayur",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "CP016"
+  },
+  {
+    "page": 221,
+    "title": "Kerupuk Udang",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "BP045"
+  },
+  {
+    "page": 222,
+    "title": "Tempe Goreng Tepung",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "CP076"
+  },
+  {
+    "page": 223,
+    "title": "Ubi Goreng",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "AP007"
+  },
+  {
+    "page": 224,
+    "title": "Gemblong",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "AP048"
+  },
+  {
+    "page": 225,
+    "title": "Kremes Singkong",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "BR016"
+  },
+  {
+    "page": 226,
+    "title": "Martabak Keju",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "JP003"
+  },
+  {
+    "page": 227,
+    "title": "Martabak Coklat Kacang",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "AP081"
+  },
+  {
+    "page": 228,
+    "title": "Martabak Telur",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "AP081"
+  },
+  {
+    "page": 229,
+    "title": "Keripik Talas",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "BR004"
+  },
+  {
+    "page": 230,
+    "title": "Keripik Pisang",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "BP035"
+  },
+  {
+    "page": 231,
+    "title": "Keripik Singkong",
+    "category": "E. Kue Jajanan",
+    "utensil": "Piring datar kecil / wadah kue",
+    "matched_food_code": "BP037"
+  },
+  {
+    "page": 233,
+    "title": "Ayam Goreng Tepung Dada Atas",
+    "category": "F. Siap Saji",
+    "utensil": "Mangkok besar / piring saji",
+    "matched_food_code": "FP021"
+  },
+  {
+    "page": 234,
+    "title": "Ayam Goreng Tepung Dada Mentok",
+    "category": "F. Siap Saji",
+    "utensil": "Mangkok besar / piring saji",
+    "matched_food_code": "FP021"
+  },
+  {
+    "page": 235,
+    "title": "Ayam Goreng Tepung Paha Atas",
+    "category": "F. Siap Saji",
+    "utensil": "Mangkok besar / piring saji",
+    "matched_food_code": "FP022"
+  },
+  {
+    "page": 236,
+    "title": "Ayam Goreng Tepung Paha Bawah",
+    "category": "F. Siap Saji",
+    "utensil": "Mangkok besar / piring saji",
+    "matched_food_code": "FP022"
+  },
+  {
+    "page": 237,
+    "title": "Ayam Goreng Tepung Sayap",
+    "category": "F. Siap Saji",
+    "utensil": "Mangkok besar / piring saji",
+    "matched_food_code": "FP023"
+  },
+  {
+    "page": 238,
+    "title": "Bihun Goreng",
+    "category": "F. Siap Saji",
+    "utensil": "Mangkok besar / piring saji",
+    "matched_food_code": "AP007"
+  },
+  {
+    "page": 239,
+    "title": "Bubur Ayam",
+    "category": "F. Siap Saji",
+    "utensil": "Mangkok besar / piring saji",
+    "matched_food_code": "AP040"
+  },
+  {
+    "page": 240,
+    "title": "Gado-gado",
+    "category": "F. Siap Saji",
+    "utensil": "Mangkok besar / piring saji",
+    "matched_food_code": "DP031"
+  },
+  {
+    "page": 241,
+    "title": "Ketupat Tahu / Doclang",
+    "category": "F. Siap Saji",
+    "utensil": "Mangkok besar / piring saji",
+    "matched_food_code": "AP014"
+  },
+  {
+    "page": 242,
+    "title": "Kuetiaw Goreng",
+    "category": "F. Siap Saji",
+    "utensil": "Mangkok besar / piring saji",
+    "matched_food_code": "AP007"
+  },
+  {
+    "page": 243,
+    "title": "Lontong Sayur",
+    "category": "F. Siap Saji",
+    "utensil": "Mangkok besar / piring saji",
+    "matched_food_code": "CP058"
+  },
+  {
+    "page": 244,
+    "title": "Mie Bakso",
+    "category": "F. Siap Saji",
+    "utensil": "Mangkok besar / piring saji",
+    "matched_food_code": "AP086"
+  },
+  {
+    "page": 245,
+    "title": "Mie Goreng",
+    "category": "F. Siap Saji",
+    "utensil": "Mangkok besar / piring saji",
+    "matched_food_code": "AP007"
+  },
+  {
+    "page": 246,
+    "title": "Pizza Iris Kotak Tipis",
+    "category": "F. Siap Saji",
+    "utensil": "Mangkok besar / piring saji",
+    "matched_food_code": null
+  },
+  {
+    "page": 247,
+    "title": "Pizza",
+    "category": "F. Siap Saji",
+    "utensil": "Mangkok besar / piring saji",
+    "matched_food_code": null
+  },
+  {
+    "page": 248,
+    "title": "Sate Ayam",
+    "category": "F. Siap Saji",
+    "utensil": "Mangkok besar / piring saji",
+    "matched_food_code": "AP085"
+  },
+  {
+    "page": 249,
+    "title": "Sate Kambing",
+    "category": "F. Siap Saji",
+    "utensil": "Mangkok besar / piring saji",
+    "matched_food_code": "FR019"
+  },
+  {
+    "page": 250,
+    "title": "Sate Padang",
+    "category": "F. Siap Saji",
+    "utensil": "Mangkok besar / piring saji",
+    "matched_food_code": "FP064"
+  },
+  {
+    "page": 251,
+    "title": "Siomay",
+    "category": "F. Siap Saji",
+    "utensil": "Mangkok besar / piring saji",
+    "matched_food_code": null
+  },
+  {
+    "page": 252,
+    "title": "Soto Mie",
+    "category": "F. Siap Saji",
+    "utensil": "Mangkok besar / piring saji",
+    "matched_food_code": "FP074"
+  },
+  {
+    "page": 254,
+    "title": "Teh Manis",
+    "category": "G. Minuman",
+    "utensil": "Gelas / cangkir",
+    "matched_food_code": "BR029"
+  },
+  {
+    "page": 255,
+    "title": "Kopi",
+    "category": "G. Minuman",
+    "utensil": "Gelas / cangkir",
+    "matched_food_code": "MP009"
+  },
+  {
+    "page": 256,
+    "title": "Kopi Susu",
+    "category": "G. Minuman",
+    "utensil": "Gelas / cangkir",
+    "matched_food_code": "CP060"
+  },
+  {
+    "page": 257,
+    "title": "Susu",
+    "category": "G. Minuman",
+    "utensil": "Gelas / cangkir",
+    "matched_food_code": "CP060"
+  },
+  {
+    "page": 258,
+    "title": "Kopi 1 Cangkir",
+    "category": "G. Minuman",
+    "utensil": "Gelas / cangkir",
+    "matched_food_code": "AP074"
+  },
+  {
+    "page": 259,
+    "title": "Susu Cair (Kemasan)",
+    "category": "G. Minuman",
+    "utensil": "Gelas / cangkir",
+    "matched_food_code": "CP060"
+  },
+  {
+    "page": 260,
+    "title": "Kementerian Kesehatan Indonesia",
+    "category": "G. Minuman",
+    "utensil": "Gelas / cangkir",
+    "matched_food_code": null
+  }
+]

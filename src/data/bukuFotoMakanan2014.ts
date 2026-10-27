@@ -46,7 +46,7 @@ export const BUKU_FOTO_MAKANAN_CATALOG: PhotoPortionItem[] = [
   // 1. NASI PUTIH (Cooked Rice)
   {
     id: "BFM-NASI-01",
-    food_code_ref: "AR002",
+    food_code_ref: "AP001",
     food_name_id: "Nasi Putih",
     food_name_en: "Cooked White Rice",
     category: "Nasi & Serealia",

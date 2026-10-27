@@ -15,6 +15,7 @@ export interface MockUser {
   salt: string;
   role: string;
   institution: string;
+  created_at?: string;
 }
 
 export interface MockFood {
@@ -118,29 +119,41 @@ class MockStore {
     for (const tkpi of TKPI_FOOD_RECORDS) {
       const foodId = foodIdCounter++;
       const bfmMatch = BUKU_FOTO_MAKANAN_CATALOG.find((b) => b.food_code_ref === tkpi.code);
-
-      const portions = bfmMatch
+      const portions = (tkpi.portions && tkpi.portions.length > 0)
+        ? tkpi.portions.map((p) => ({
+            id: portionIdCounter++,
+            unit_name: p.name,
+            gram_weight: p.weight,
+          }))
+        : bfmMatch
         ? [
             { id: portionIdCounter++, unit_name: `${bfmMatch.portions.kecil.label_id} (${bfmMatch.portions.kecil.household_desc})`, gram_weight: bfmMatch.portions.kecil.raw_weight_grams },
             { id: portionIdCounter++, unit_name: `${bfmMatch.portions.sedang.label_id} (${bfmMatch.portions.sedang.household_desc})`, gram_weight: bfmMatch.portions.sedang.raw_weight_grams },
             { id: portionIdCounter++, unit_name: `${bfmMatch.portions.besar.label_id} (${bfmMatch.portions.besar.household_desc})`, gram_weight: bfmMatch.portions.besar.raw_weight_grams },
           ]
         : [
-            { id: portionIdCounter++, unit_name: "100g Porsi Edible", gram_weight: 100.0 },
+            { id: portionIdCounter++, unit_name: "100g (Porsi Acuan / Standar)", gram_weight: 100.0 },
             { id: portionIdCounter++, unit_name: "1 Porsi Sedang", gram_weight: 75.0 },
           ];
 
       const nutrientsMap: Record<string, any> = {
-        energy_kcal: { amount_per_100g: tkpi.nutrients.energy_kcal, unit: "kcal", is_missing: 0, is_trace: 0 },
-        protein: { amount_per_100g: tkpi.nutrients.protein_g, unit: "g", is_missing: 0, is_trace: 0 },
-        fat: { amount_per_100g: tkpi.nutrients.fat_g, unit: "g", is_missing: 0, is_trace: 0 },
-        carbs: { amount_per_100g: tkpi.nutrients.carbs_g, unit: "g", is_missing: 0, is_trace: 0 },
-        fiber: { amount_per_100g: tkpi.nutrients.fiber_g, unit: "g", is_missing: 0, is_trace: 0 },
-        calcium: { amount_per_100g: tkpi.nutrients.calcium_mg, unit: "mg", is_missing: 0, is_trace: 0 },
-        iron: { amount_per_100g: tkpi.nutrients.iron_mg, unit: "mg", is_missing: 0, is_trace: 0 },
-        sodium: { amount_per_100g: tkpi.nutrients.sodium_mg, unit: "mg", is_missing: 0, is_trace: 0 },
-        potassium: { amount_per_100g: tkpi.nutrients.potassium_mg, unit: "mg", is_missing: 0, is_trace: 0 },
-        vit_c: { amount_per_100g: tkpi.nutrients.vit_c_mg, unit: "mg", is_missing: 0, is_trace: 0 },
+        energy_kcal: { amount_per_100g: tkpi.nutrients.energy_kcal || 0, unit: "kcal", is_missing: 0, is_trace: 0 },
+        protein: { amount_per_100g: tkpi.nutrients.protein_g || 0, unit: "g", is_missing: 0, is_trace: 0 },
+        fat: { amount_per_100g: tkpi.nutrients.fat_g || 0, unit: "g", is_missing: 0, is_trace: 0 },
+        carbs: { amount_per_100g: tkpi.nutrients.carbs_g || 0, unit: "g", is_missing: 0, is_trace: 0 },
+        fiber: { amount_per_100g: tkpi.nutrients.fiber_g || 0, unit: "g", is_missing: 0, is_trace: 0 },
+        calcium: { amount_per_100g: tkpi.nutrients.calcium_mg || 0, unit: "mg", is_missing: 0, is_trace: 0 },
+        phosphorus: { amount_per_100g: tkpi.nutrients.phosphorus_mg || 0, unit: "mg", is_missing: 0, is_trace: 0 },
+        iron: { amount_per_100g: tkpi.nutrients.iron_mg || 0, unit: "mg", is_missing: 0, is_trace: 0 },
+        sodium: { amount_per_100g: tkpi.nutrients.sodium_mg || 0, unit: "mg", is_missing: 0, is_trace: 0 },
+        potassium: { amount_per_100g: tkpi.nutrients.potassium_mg || 0, unit: "mg", is_missing: 0, is_trace: 0 },
+        copper: { amount_per_100g: tkpi.nutrients.copper_mg || 0, unit: "mg", is_missing: 0, is_trace: 0 },
+        zinc: { amount_per_100g: tkpi.nutrients.zinc_mg || 0, unit: "mg", is_missing: 0, is_trace: 0 },
+        vitamin_c: { amount_per_100g: tkpi.nutrients.vit_c_mg || 0, unit: "mg", is_missing: 0, is_trace: 0 },
+        thiamin: { amount_per_100g: tkpi.nutrients.thiamin_b1_mg || 0, unit: "mg", is_missing: 0, is_trace: 0 },
+        riboflavin: { amount_per_100g: tkpi.nutrients.riboflavin_b2_mg || 0, unit: "mg", is_missing: 0, is_trace: 0 },
+        niacin: { amount_per_100g: tkpi.nutrients.niacin_b3_mg || 0, unit: "mg", is_missing: 0, is_trace: 0 },
+        vitamin_a: { amount_per_100g: tkpi.nutrients.retinol_mcg || (tkpi.nutrients.beta_carotene_mcg ? Math.round(tkpi.nutrients.beta_carotene_mcg / 12) : 0), unit: "µg", is_missing: 0, is_trace: 0 },
       };
 
       this.foods.push({

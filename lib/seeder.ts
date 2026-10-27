@@ -7,6 +7,7 @@ import {
   foodDiaries, diaryEntries, anthropometrics, auditLogs, projectDatasets
 } from "@/drizzle/schema";
 import { STANDARD_NUTRIENTS, FOOD_RECORDS, DRV_PROFILES } from "./seedData";
+import { TKPI_FOOD_RECORDS } from "@/data/tkpi2017";
 import { hashPassword } from "./auth";
 
 /**
@@ -416,7 +417,7 @@ export async function seedSupabaseDatabase(): Promise<{
     success: true,
     message: "Supabase PostgreSQL database successfully migrated and seeded with master reference data.",
     nutrients_count: STANDARD_NUTRIENTS.length,
-    foods_count: FOOD_RECORDS.length,
+    foods_count: FOOD_RECORDS.length + TKPI_FOOD_RECORDS.length,
     drv_profiles_count: DRV_PROFILES.length,
   };
 }
