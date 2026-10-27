@@ -94,6 +94,15 @@ export const authApi = {
     return request<{ user: User; isGuest?: boolean }>("/auth/me");
   },
 
+  googleVerify: async (payload: { email?: string; name?: string; credential?: string; idToken?: string }) => {
+    const data = await request<{ token: string; user: User; message?: string }>("/auth/google", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+    setStoredToken(data.token);
+    return data;
+  },
+
   logout: async () => {
     try {
       const supabase = createClient();

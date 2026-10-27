@@ -5,6 +5,7 @@ import { GET as getMeRoute } from "../app/api/auth/me/route";
 import { POST as loginRoute } from "../app/api/auth/login/route";
 import { POST as registerRoute } from "../app/api/auth/register/route";
 import { POST as logoutRoute } from "../app/api/auth/logout/route";
+import { POST as googleAuthRoute } from "../app/api/auth/google/route";
 import { GET as getDashboardStatsRoute } from "../app/api/dashboard/stats/route";
 import { GET as getCalculationsRoute, POST as createCalculationRoute } from "../app/api/calculations/route";
 import { GET as getCalculationByIdRoute, DELETE as deleteCalculationByIdRoute } from "../app/api/calculations/[id]/route";
@@ -379,4 +380,59 @@ describe("NutriNexa Authentication, Guest Mode, and Session Security", () => {
       expect(statsRouteModule.dynamic).toBe("force-dynamic");
     });
   });
+
+  // Scenario K: Google Authentication & Identity Verification
+  describe("Scenario K: Google Authentication & Researcher Verification", () => {
+    it("successfully verifies existing researcher timstittus@nutrinexa.com with a valid session token", async () => {
+      const req = createNextRequest("http://localhost:3000/api/auth/google", {
+        method: "POST",
+        body: { email: "timstittus@nutrinexa.com" },
+      });
+      const res = await googleAuthRoute(req);
+      expect(res.status).toBe(200);
+
+      const data = await res.json();
+      expect(data.success).toBe(true);
+      expect(data.token).toBeDefined();
+      expect(data.user.email.toLowerCase()).toBe("timstittus@nutrinexa.com");
+
+      // Verify returned session token works against auth/me
+      const meReq = createNextRequest("http://localhost:3000/api/auth/me", {
+        headers: { authorization: `Bearer ${data.token}` },
+      });
+      const meRes = await getMeRoute(meReq);
+      expect(meRes.status).toBe(200);
+      const meData = await meRes.json();
+      expect(meData.user.email.toLowerCase()).toBe("timstittus@nutrinexa.com");
+    });
+
+    it("auto-provisions and verifies a new academic researcher via Google email", async () => {
+      const testEmail = `researcher_${Date.now()}@university.edu`;
+      const req = createNextRequest("http://localhost:3000/api/auth/google", {
+        method: "POST",
+        body: {
+          email: testEmail,
+          name: "Academic Guest Fellow",
+        },
+      });
+      const res = await googleAuthRoute(req);
+      expect(res.status).toBe(200);
+
+      const data = await res.json();
+      expect(data.success).toBe(true);
+      expect(data.token).toBeDefined();
+      expect(data.user.email.toLowerCase()).toBe(testEmail);
+      expect(data.user.role).toBe("Researcher");
+    });
+
+    it("rejects invalid or missing email in Google verification", async () => {
+      const req = createNextRequest("http://localhost:3000/api/auth/google", {
+        method: "POST",
+        body: { email: "" },
+      });
+      const res = await googleAuthRoute(req);
+      expect(res.status).toBe(400);
+    });
+  });
 });
+

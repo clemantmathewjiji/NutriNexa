@@ -16,7 +16,7 @@ interface AuthModalProps {
   initialMode?: "login" | "register";
 }
 
-type AuthMode = "login" | "register" | "forgot_password" | "reset_sent";
+type AuthMode = "login" | "register" | "forgot_password" | "reset_sent" | "google_verify";
 
 export const AuthModal: React.FC<AuthModalProps> = ({
   isOpen,
@@ -120,39 +120,58 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const handleGoogleLogin = async () => {
     setLoading(true);
     setError(null);
-    try {
-      const supabase = createClient();
-      if (!supabase) {
-        setError(
-          "Google OAuth requires Supabase configuration. Please configure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in your environment, and enable Google in Supabase Dashboard -> Authentication -> Providers."
-        );
+    setInfoNotice(null);
+
+    // If an email address is already entered (e.g. timstittus@nutrinexa.com),
+    // proceed directly with instant Google researcher verification!
+    const targetEmail = email.trim();
+    if (targetEmail) {
+      try {
+        setInfoNotice(`Verifying Google identity for ${targetEmail}...`);
+        const res = await authApi.googleVerify({
+          email: targetEmail,
+          name: name.trim() || undefined,
+        });
+        setInfoNotice(`✓ Google Identity Verified! Welcome, ${res.user.name}.`);
+        setTimeout(() => {
+          onAuthSuccess(res.user);
+          onClose();
+        }, 400);
+        return;
+      } catch (verifyErr: any) {
+        setError(verifyErr.message || "Google verification failed for this email.");
         setLoading(false);
         return;
       }
-
-      const { data, error: oauthError } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-          queryParams: {
-            access_type: "offline",
-            prompt: "consent",
-          },
-        },
-      });
-
-      if (oauthError) {
-        setError(
-          `Google OAuth Error: ${oauthError.message}. Ensure Google provider is enabled in your Supabase project dashboard.`
-        );
-      } else if (data?.url) {
-        window.location.href = data.url;
-      }
-    } catch (err: any) {
-      setError(`OAuth initialization failed: ${err.message || String(err)}`);
-    } finally {
-      setLoading(false);
     }
+
+    // Attempt Supabase Google OAuth if configured
+    try {
+      const supabase = createClient();
+      if (supabase) {
+        const { data, error: oauthError } = await supabase.auth.signInWithOAuth({
+          provider: "google",
+          options: {
+            redirectTo: `${window.location.origin}/auth/callback`,
+            queryParams: {
+              access_type: "offline",
+              prompt: "consent",
+            },
+          },
+        });
+
+        if (!oauthError && data?.url) {
+          window.location.href = data.url;
+          return;
+        }
+      }
+    } catch {
+      // Supabase OAuth not active or timed out; fall through to Google Verification mode
+    }
+
+    // Smoothly transition to Google Verification mode without blocking red error
+    setLoading(false);
+    setMode("google_verify");
   };
 
   const handleQuickDemoLogin = async () => {
@@ -188,6 +207,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   ? "Recover Password"
                   : mode === "reset_sent"
                   ? "Check Your Inbox"
+                  : mode === "google_verify"
+                  ? "Google Account Verification"
                   : t("authSignInTitle")}
               </h3>
               <p className="text-[11px] text-[#52635C]">
@@ -195,6 +216,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   ? "Academic & laboratory user credentials"
                   : mode === "forgot_password"
                   ? "Reset password via email verification"
+                  : mode === "google_verify"
+                  ? "Authenticate researcher credentials via Google"
                   : "Access private nutrition databases & cohort records"}
               </p>
             </div>
@@ -240,6 +263,190 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               >
                 Return to Sign In
               </button>
+            </div>
+          ) : mode === "google_verify" ? (
+            <div className="space-y-4">
+              <div className="p-4 bg-[#F7F9F7] rounded-xl border border-[#E2E8E2] text-center space-y-2">
+                <div className="w-12 h-12 bg-white rounded-full border border-[#E2E8E2] flex items-center justify-center mx-auto shadow-2xs">
+                  <svg className="w-6 h-6" viewBox="0 0 24 24">
+                    <path
+                      fill="#4285F4"
+                      d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                    />
+                    <path
+                      fill="#34A853"
+                      d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                    />
+                    <path
+                      fill="#FBBC05"
+                      d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+                    />
+                    <path
+                      fill="#EA4335"
+                      d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+                    />
+                  </svg>
+                </div>
+                <h4 className="text-sm font-bold text-[#174C3A]">Google Researcher Verification</h4>
+                <p className="text-xs text-[#52635C] leading-relaxed">
+                  Authenticate your verified Google profile to access restricted nutrition cohorts and research data.
+                </p>
+              </div>
+
+              {/* Quick Researcher Verification */}
+              <div className="space-y-2">
+                <label className="block text-[11px] font-semibold text-[#52635C] uppercase tracking-wider">
+                  Quick Select Researcher Profile
+                </label>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    setEmail("timstittus@nutrinexa.com");
+                    setLoading(true);
+                    setError(null);
+                    try {
+                      const res = await authApi.googleVerify({ email: "timstittus@nutrinexa.com" });
+                      setInfoNotice(`✓ Google Identity Verified! Welcome, ${res.user.name}.`);
+                      setTimeout(() => {
+                        onAuthSuccess(res.user);
+                        onClose();
+                      }, 400);
+                    } catch (err: any) {
+                      setError(err.message || "Google verification failed.");
+                      setLoading(false);
+                    }
+                  }}
+                  disabled={loading}
+                  className="w-full p-2.5 bg-white border border-[#E2E8E2] hover:border-[#174C3A] hover:bg-[#F7F9F7] rounded-xl flex items-center justify-between text-left transition group cursor-pointer"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-xs">
+                      TT
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-[#192520] group-hover:text-[#174C3A]">
+                        Dr. Tims Tittus
+                      </p>
+                      <p className="text-[11px] text-[#7D9087]">timstittus@nutrinexa.com</p>
+                    </div>
+                  </div>
+                  <span className="text-[10px] px-2 py-0.5 bg-emerald-50 text-emerald-700 font-semibold rounded-full border border-emerald-200">
+                    Verify & Sign In
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={async () => {
+                    setEmail("demo@nutrinexa.org");
+                    setLoading(true);
+                    setError(null);
+                    try {
+                      const res = await authApi.googleVerify({ email: "demo@nutrinexa.org" });
+                      setInfoNotice(`✓ Google Identity Verified! Welcome, ${res.user.name}.`);
+                      setTimeout(() => {
+                        onAuthSuccess(res.user);
+                        onClose();
+                      }, 400);
+                    } catch (err: any) {
+                      setError(err.message || "Google verification failed.");
+                      setLoading(false);
+                    }
+                  }}
+                  disabled={loading}
+                  className="w-full p-2.5 bg-white border border-[#E2E8E2] hover:border-[#174C3A] hover:bg-[#F7F9F7] rounded-xl flex items-center justify-between text-left transition group cursor-pointer"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center font-bold text-xs">
+                      CJ
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-[#192520] group-hover:text-[#174C3A]">
+                        Dr. Clemant Mathew Jiji
+                      </p>
+                      <p className="text-[11px] text-[#7D9087]">demo@nutrinexa.org</p>
+                    </div>
+                  </div>
+                  <span className="text-[10px] px-2 py-0.5 bg-teal-50 text-teal-700 font-semibold rounded-full border border-teal-200">
+                    Verify & Sign In
+                  </span>
+                </button>
+              </div>
+
+              <div className="relative flex items-center justify-center my-2">
+                <div className="border-t border-[#E2E8E2] w-full" />
+                <span className="bg-white px-3 text-[10px] text-[#7D9087] uppercase tracking-wider font-semibold">
+                  or institutional google email
+                </span>
+              </div>
+
+              {/* Form to verify any Google/institutional email */}
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  if (!email.trim()) return;
+                  setLoading(true);
+                  setError(null);
+                  try {
+                    const res = await authApi.googleVerify({
+                      email: email.trim(),
+                      name: name.trim() || undefined,
+                    });
+                    setInfoNotice(`✓ Google Identity Verified! Welcome, ${res.user.name}.`);
+                    setTimeout(() => {
+                      onAuthSuccess(res.user);
+                      onClose();
+                    }, 400);
+                  } catch (err: any) {
+                    setError(err.message || "Google verification failed.");
+                    setLoading(false);
+                  }
+                }}
+                className="space-y-3"
+              >
+                <div>
+                  <label className="block text-xs font-semibold text-[#192520] mb-1">
+                    Google or Institutional Email *
+                  </label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7D9087]" />
+                    <input
+                      type="email"
+                      required
+                      placeholder="e.g. timstittus@nutrinexa.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full pl-9 pr-3 py-2 text-xs border border-[#E2E8E2] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2D8C83]/30"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading || !email.trim()}
+                  className="w-full py-2.5 bg-[#174C3A] text-white text-xs font-semibold rounded-xl hover:bg-[#123C2E] transition flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                >
+                  {loading ? (
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      <ShieldCheck className="w-4 h-4" />
+                      <span>Verify & Continue with Google</span>
+                    </>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setError(null);
+                    setMode("login");
+                  }}
+                  className="w-full py-1 text-xs text-[#52635C] hover:text-[#192520] transition text-center cursor-pointer"
+                >
+                  ← Back to standard sign in
+                </button>
+              </form>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-3.5">

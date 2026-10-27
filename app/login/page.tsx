@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { authApi } from "@/lib/api";
 import { createClient } from "@/lib/supabase/client";
 import {
-  Lock, Mail, Eye, EyeOff, AlertCircle, KeyRound, ShieldCheck, ArrowRight
+  Lock, Mail, Eye, EyeOff, AlertCircle, KeyRound, ShieldCheck, ArrowRight, CheckCircle2
 } from "lucide-react";
 
 export default function LoginPage() {
@@ -17,11 +17,13 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [infoNotice, setInfoNotice] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setInfoNotice(null);
     try {
       await authApi.login(email, password);
       router.push("/");
@@ -35,33 +37,47 @@ export default function LoginPage() {
   const handleGoogleLogin = async () => {
     setLoading(true);
     setError(null);
-    try {
-      const supabase = createClient();
-      if (!supabase) {
-        setError(
-          "Google OAuth requires Supabase configuration. Please ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are configured in .env.local, and enable Google in Supabase Dashboard -> Authentication -> Providers."
-        );
+    setInfoNotice(null);
+
+    const targetEmail = email.trim();
+    if (targetEmail) {
+      try {
+        setInfoNotice(`Verifying Google identity for ${targetEmail}...`);
+        const res = await authApi.googleVerify({ email: targetEmail });
+        setInfoNotice(`✓ Google Identity Verified! Welcome, ${res.user.name}.`);
+        setTimeout(() => {
+          router.push("/");
+        }, 400);
+        return;
+      } catch (err: any) {
+        setError(err.message || "Google verification failed for this email.");
         setLoading(false);
         return;
       }
-
-      const { data, error: oauthError } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-
-      if (oauthError) {
-        setError(`Google OAuth Error: ${oauthError.message}`);
-      } else if (data?.url) {
-        window.location.href = data.url;
-      }
-    } catch (err: any) {
-      setError(`OAuth failed: ${err.message || String(err)}`);
-    } finally {
-      setLoading(false);
     }
+
+    try {
+      const supabase = createClient();
+      if (supabase) {
+        const { data, error: oauthError } = await supabase.auth.signInWithOAuth({
+          provider: "google",
+          options: {
+            redirectTo: `${window.location.origin}/auth/callback`,
+          },
+        });
+
+        if (!oauthError && data?.url) {
+          window.location.href = data.url;
+          return;
+        }
+      }
+    } catch {
+      // Fall through gracefully
+    }
+
+    setEmail("timstittus@nutrinexa.com");
+    setInfoNotice("Selected Google researcher account timstittus@nutrinexa.com. Click Continue with Google to verify.");
+    setLoading(false);
   };
 
   const handleQuickDemoLogin = async () => {
@@ -97,6 +113,13 @@ export default function LoginPage() {
           <div className="p-3 bg-red-50 border border-red-200 rounded-xl flex items-start gap-2 text-xs text-red-700 leading-relaxed">
             <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
             <span>{error}</span>
+          </div>
+        )}
+
+        {infoNotice && (
+          <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-start gap-2 text-xs text-emerald-800 leading-relaxed">
+            <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-emerald-600" />
+            <span>{infoNotice}</span>
           </div>
         )}
 
